@@ -1,3 +1,4 @@
+import BottomTabNav from "@component/components/bottomTabNav";
 import Card from "@component/components/card";
 import TagButton from "@component/components/tagButton";
 
@@ -19,7 +20,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full">
+      <div className="absolute bottom-[63px] left-0 w-full">
         <div className="flex flex-col pt-[6px] pb-[14px] h-[200px] rounded-t-[20px] bg-white shadow-t-gray">
           <div className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px]" />
           <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
@@ -33,6 +34,10 @@ export default function Home() {
             <Card />
           </div>
         </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 w-full">
+        <BottomTabNav />
       </div>
     </div>
   );
