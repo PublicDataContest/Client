@@ -9,9 +9,11 @@ module.exports = {
     extend: {
       boxShadow: {
         gray: "0px 2px 6px 0px rgba(0, 0, 0, 0.12)",
+        "t-gray": "0px -4px 8px 0px rgba(0, 0, 0, 0.12)",
       },
       content: {
         locationIcon: 'url("/images/location-orange.svg")',
+        starGrayIcon: 'url("/images/star-gray.svg")',
       },
     },
   },
