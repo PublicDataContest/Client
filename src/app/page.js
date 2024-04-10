@@ -7,7 +7,7 @@ export default function Home() {
         <span className="font-[Pretendard-Medium] text-[1.4rem] text-[#333333]">
           공무원 맛집 찾기
         </span>
-        <span className="font-[Pretendard-Bold] text-[4.2rem]">HELLO!</span>
+        <span className="font-[Pretendard-Bold] text-[4.2rem]">HELLO!!</span>
       </div>
       <Link className="w-full" href="/home">
         <button className="w-full disabled:bg-[#E5E5E5] disabled:text-[#999999] bg-[#FF823C] text-white text-[1.4rem] font-[Pretendard-Bold] h-[53px] rounded-[15px]">
