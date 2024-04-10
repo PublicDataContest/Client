@@ -1,5 +1,6 @@
 import BottomTabNav from "@component/components/bottomTabNav";
 import Card from "@component/components/card";
+import KakaoMap from "@component/components/kakaoMap";
 import TagButton from "@component/components/tagButton";
 import { useState } from "react";
 
@@ -17,7 +18,7 @@ export default function Home() {
 
   return (
     <div className="relative h-[100vh]">
-      <div className="absolute top-0 left-0 w-[375px] pt-[44px]">
+      <div className="absolute top-0 left-0 w-[375px] pt-[44px] z-10">
         <div className="pl-[16px] relative before:content-locationIcon before:absolute before:top-[10px] before:left-[28px]">
           <input className="w-[343px] h-[44px] pl-[38px] pr-[12px] px-[12px] text-[1.4rem] text-[#3B3F4A] bg-white rounded-[10px] shadow-gray" />
         </div>
@@ -33,7 +34,9 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="absolute bottom-[63px] left-0 w-full">
+      <KakaoMap />
+
+      <div className="absolute bottom-[63px] left-0 w-full z-10">
         <div className="flex flex-col pt-[6px] pb-[14px] h-[200px] rounded-t-[20px] bg-white shadow-t-gray">
           <div className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px]" />
           <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
@@ -49,7 +52,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full">
+      <div className="absolute bottom-0 left-0 w-full z-10">
         <BottomTabNav />
       </div>
     </div>
