@@ -42,6 +42,7 @@ export default function BottomTabNav() {
             src={v.paths.includes(router.pathname) ? v.imageOn : v.imageOff}
             width={24}
             height={24}
+            priority
           />
           <span
             className={`font-[Pretendard-Medium] text-[1.2rem] ${
