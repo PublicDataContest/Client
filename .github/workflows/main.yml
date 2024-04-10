@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "NEXT_PUBLIC_KAKAOMAP_APPKEY" >> .env
         env:
-          VITE_API_URL: ${{ secrets.NEXT_PUBLIC_KAKAOMAP_APPKEY }}
+          NEXT_PUBLIC_KAKAOMAP_APPKEY: ${{ secrets.NEXT_PUBLIC_KAKAOMAP_APPKEY }}
  
       - name: Cache node modules
         uses: actions/cache@v1
