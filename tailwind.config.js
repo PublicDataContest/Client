@@ -14,6 +14,7 @@ module.exports = {
       content: {
         locationIcon: 'url("/images/location-orange.svg")',
         starGrayIcon: 'url("/images/star-gray.svg")',
+        starRoundGrayIcon: 'url("/images/star-round-gray.svg")',
         searchIcon: 'url("/images/search-gray.svg")',
       },
     },

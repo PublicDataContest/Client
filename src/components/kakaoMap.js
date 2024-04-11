@@ -1,35 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-export default function KakaoMap() {
-  const [selectedMarker, setSelectedMarker] = useState(null);
+export default function KakaoMap({
+  selectedMarker,
+  setSelectedMarker,
+  positions,
+}) {
   const selectedCustomOverlay = useRef(null);
-  // 마커가 표시될 위치입니다
-  const positions = [
-    {
-      x: 33.450705,
-      y: 126.570677,
-      imgUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY0hN_nLSpS_aVeocPQehBsoYqLEOk1P48YGkziQj6Fg&s",
-    },
-    {
-      x: 33.450936,
-      y: 126.569477,
-      imgUrl:
-        "https://i.namu.wiki/i/8s7OaNPsZ8KC1e8RQ6QZEwgfFUoIVVOIm0jA72-UO6Imw0OgI1aEK_DulMeXWbg4tstts3IQFMJS0jmYKD9rzQ.webp",
-    },
-    {
-      x: 33.450879,
-      y: 126.56994,
-      imgUrl:
-        "https://i.namu.wiki/i/xT2u3IXASDp4OB4qkTn14yrtyb6qYcIpEJBvrCJ6EfWAA4NMlGKbxxZa42Yjt_j6eLdTmNzd_Z7dXpnU5RpSJg11JPwGXy0FYeM7e4O1N4KLCuHj8GrJF6l-xOfDvoEPGu9l2IG-UTw60Axb7O9jpA.webp",
-    },
-    {
-      x: 33.451393,
-      y: 126.570738,
-      imgUrl:
-        "https://i.namu.wiki/i/lP9fTPdfSfPobmhPua5FtkdR7-ufWmAn8DDayYdVRiEiZmal22ywpqV_BpNmI4Ti1qdqG4uYhheSH7WMAYFd3gKMohm9S437fjSFEy06SjMu5plpReMbrgD5M7jrndVtU2dAzpGZRNplfvtV4-nHOg.webp",
-    },
-  ];
 
   useEffect(() => {
     const kakaoMapScript = document.createElement("script");
