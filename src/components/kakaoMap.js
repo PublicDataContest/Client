@@ -39,12 +39,30 @@ export default function KakaoMap() {
 
         // 마커를 생성합니다
         for (const position of positions) {
-          const marker = new kakao.maps.Marker({
-            position, // 마커를 표시할 위치
-            image: markerImage, // 마커이미지 설정
-          });
+          // const marker = new kakao.maps.Marker({
+          //   position, // 마커를 표시할 위치
+          //   image: markerImage, // 마커이미지 설정
+          // });
+
           // 마커가 지도 위에 표시되도록 설정합니다
-          marker.setMap(map);
+          // marker.setMap(map);
+
+          // 커스텀 오버레이를 생성합니다
+          const customOverlay = new kakao.maps.CustomOverlay({
+            position,
+            content: `<div style='width: 22px; height: 30px; position: relative; bottom: 22px;'><img alt='marker' src='/images/marker-food.svg' /></div>`,
+          });
+
+          // const customOverlay = new kakao.maps.CustomOverlay({
+          //   position,
+          //   content: `<div style='width: 38px; height: 48px; position: relative; bottom: 22px;'>
+          //       <img alt='marker' src='/images/marker-selected.svg' />
+          //       <img style='position: absolute; top: 4px; left: 4px; border-radius: 50%; width: 30px; height: 30px;' alt='marker' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY0hN_nLSpS_aVeocPQehBsoYqLEOk1P48YGkziQj6Fg&s' />
+          //     </div>`,
+          // });
+
+          // 커스텀 오버레이를 지도에 표시합니다
+          customOverlay.setMap(map);
         }
       });
     };
