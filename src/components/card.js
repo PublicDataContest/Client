@@ -5,7 +5,7 @@ export default function Card() {
     <div className="shrink-0 pt-[12px] pb-[8px] px-[12px] w-[232px] h-[124px] rounded-[10px] bg-[#EFF1F4] flex flex-col justify-between relative before:content-starGrayIcon before:absolute before:top-[8px] before:right-[8px]">
       <div className="flex flex-col">
         <div className="flex gap-[4px] items-center">
-          <span className="font-[Pretendard-SemiBold] text-[1.4rem] text-[#3B3F4A]">
+          <span className="max-w-[180px] line-clamp-2 font-[Pretendard-SemiBold] text-[1.4rem] text-[#3B3F4A]">
             냉면맛집
           </span>
           <span className="font-[Pretendard-Medium] text-[1.2rem] text-[#7F828C]">
