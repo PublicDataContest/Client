@@ -30,17 +30,22 @@ export default function KakaoMap() {
         );
 
         // 마커가 표시될 위치입니다
-        const markerPosition = new window.kakao.maps.LatLng(
-          33.450701,
-          126.570667
-        );
+        const positions = [
+          new kakao.maps.LatLng(33.450705, 126.570677),
+          new kakao.maps.LatLng(33.450936, 126.569477),
+          new kakao.maps.LatLng(33.450879, 126.56994),
+          new kakao.maps.LatLng(33.451393, 126.570738),
+        ];
+
         // 마커를 생성합니다
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition,
-          image: markerImage, // 마커이미지 설정
-        });
-        // 마커가 지도 위에 표시되도록 설정합니다
-        marker.setMap(map);
+        for (const position of positions) {
+          const marker = new kakao.maps.Marker({
+            position, // 마커를 표시할 위치
+            image: markerImage, // 마커이미지 설정
+          });
+          // 마커가 지도 위에 표시되도록 설정합니다
+          marker.setMap(map);
+        }
       });
     };
     kakaoMapScript.addEventListener("load", onLoadKakaoAPI);
