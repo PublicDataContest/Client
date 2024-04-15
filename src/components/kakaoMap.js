@@ -61,6 +61,7 @@ export default function KakaoMap({
                   <img alt="" src="/images/marker-selected.svg" />
                   <img style="position: absolute; top: 4px; left: 4px; border-radius: 50%; width: 30px; height: 30px;" alt="marker" src="${pos.imgUrl}" />
                 </div>`,
+                clickable: true, // 컨텐츠 영역을 클릭했을 경우 지도 이벤트를 막아준다.
               });
 
               // 커스텀 오버레이를 지도에 표시합니다
@@ -69,6 +70,12 @@ export default function KakaoMap({
               setSelectedMarker(i);
               selectedCustomOverlay.current = customOverlay;
             }
+          });
+
+          // 커스텀 오버레이 아닌 영역 클릭 시 커스텀 오버레이 닫기
+          kakao.maps.event.addListener(map, "click", () => {
+            setSelectedMarker(null);
+            selectedCustomOverlay.current.setMap(null);
           });
         }
       });
