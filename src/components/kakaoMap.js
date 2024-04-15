@@ -75,7 +75,9 @@ export default function KakaoMap({
           // 커스텀 오버레이 아닌 영역 클릭 시 커스텀 오버레이 닫기
           kakao.maps.event.addListener(map, "click", () => {
             setSelectedMarker(null);
-            selectedCustomOverlay.current.setMap(null);
+            if (selectedCustomOverlay.current) {
+              selectedCustomOverlay.current.setMap(null);
+            }
           });
         }
       });
