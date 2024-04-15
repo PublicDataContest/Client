@@ -2,8 +2,7 @@ import Image from "next/image";
 
 export function CardDetail({ item }) {
   return (
-    <div className="overflow-hidden relative flex flex-col pb-[14px] rounded-t-[20px] bg-white shadow-t-gray">
-      <div className="absolute top-[4px] self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px]" />
+    <div className="h-[450px] overflow-y-auto relative flex flex-col pb-[14px] rounded-t-[20px] bg-white shadow-t-gray">
       <Image
         alt="대표"
         src={item.imgUrl}

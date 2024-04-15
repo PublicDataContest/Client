@@ -71,7 +71,6 @@ export default function DraggableCard() {
       onTouchStart={handleTouchStart}
       onMouseDown={handleMouseDown}
     >
-      <div className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px]" />
       <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
         내주변 공무원이 자주가는 맛집
       </span>

@@ -16,6 +16,7 @@ module.exports = {
         starGrayIcon: 'url("/images/star-gray.svg")',
         starRoundGrayIcon: 'url("/images/star-round-gray.svg")',
         searchIcon: 'url("/images/search-gray.svg")',
+        barGrayIcon: 'url("/images/bar-gray.svg")',
       },
     },
   },

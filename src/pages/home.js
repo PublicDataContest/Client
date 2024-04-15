@@ -102,12 +102,16 @@ export default function Home() {
       />
 
       {selectedMarker !== null ? (
-        <div className="absolute bottom-0 left-0 w-full h-[450px] z-20 overflow-y-auto">
-          <CardDetail item={positions[selectedMarker]} />
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <div className="relative before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-20">
+            <CardDetail item={positions[selectedMarker]} />
+          </div>
         </div>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
-          <DraggableCard />
+          <div className="relative before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-10">
+            <DraggableCard />
+          </div>
         </div>
       )}
 
