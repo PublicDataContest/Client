@@ -45,6 +45,7 @@ export default function BottomTabNav() {
             width={24}
             height={24}
             priority
+            className="w-[24px] h-[24px]"
           />
           <span
             className={`font-[Pretendard-Medium] text-[1.2rem] ${
