@@ -1,6 +1,6 @@
 import BottomTabNav from "@component/components/bottomTabNav";
-import Card from "@component/components/card";
 import { CardDetail } from "@component/components/cardDetail";
+import DraggableCard from "@component/components/draggableCard";
 import KakaoMap from "@component/components/kakaoMap";
 import TagButton from "@component/components/tagButton";
 import { useState } from "react";
@@ -107,19 +107,7 @@ export default function Home() {
         </div>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
-          <div className="flex flex-col pt-[6px] pb-[14px] h-[200px] rounded-t-[20px] bg-white shadow-t-gray">
-            <div className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px]" />
-            <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
-              내주변 공무원이 자주가는 맛집
-            </span>
-            <div className="pl-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide">
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-            </div>
-          </div>
+          <DraggableCard />
         </div>
       )}
 
