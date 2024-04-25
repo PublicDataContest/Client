@@ -60,7 +60,7 @@ export function DraggableCardDetail({ item }) {
 
   return (
     <div
-      className={`flex flex-col pb-[14px] relative ${
+      className={`flex flex-col pb-[69px] relative ${
         isFull ||
         "rounded-t-[20px] before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-20"
       } overflow-hidden bg-white shadow-t-gray transition-[height] duration-75`}

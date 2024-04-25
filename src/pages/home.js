@@ -4,8 +4,11 @@ import KakaoMap from "@components/kakaoMap";
 import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import ReviewWrite from "@components/reviewWrite";
 
 export default function Home() {
+  const [writeReview, setWriteReview] = useState(false);
   const [selectedTag, setSelectedTag] = useState(1);
   const TAG_MENU = [
     { idx: 1, label: "거리순" },
@@ -135,9 +138,31 @@ export default function Home() {
       />
 
       {selectedMarker !== null ? (
-        <div className="absolute bottom-0 left-0 w-full z-20">
-          <DraggableCardDetail item={positions[selectedMarker]} />
-        </div>
+        <>
+          <div className="absolute bottom-0 left-0 w-full z-20">
+            <DraggableCardDetail item={positions[selectedMarker]} />
+          </div>
+
+          <div className="absolute bottom-0 left-0 w-full z-20">
+            <div className="bg-white pt-[8px] pb-[18px] px-[16px]">
+              <button
+                className="w-full bg-[#FF823C] h-[43px] rounded-[10px] flex gap-[8px] items-center justify-center"
+                onClick={() => setWriteReview(true)}
+              >
+                <Image
+                  alt=""
+                  src={require("@images/pencil-white.svg")}
+                  width={16}
+                  height={16}
+                  priority
+                />
+                <span className="text-white font-[Pretendard-SemiBold]">
+                  리뷰 쓰기
+                </span>
+              </button>
+            </div>
+          </div>
+        </>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
           <DraggableCard />
@@ -147,6 +172,12 @@ export default function Home() {
       <div className="absolute bottom-0 left-0 w-full z-10">
         <BottomTabNav />
       </div>
+
+      {writeReview && (
+        <div className="absolute top-0 left-0 w-full z-30">
+          <ReviewWrite setWriteReview={setWriteReview} />
+        </div>
+      )}
     </div>
   );
 }
