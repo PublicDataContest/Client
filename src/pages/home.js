@@ -1,8 +1,8 @@
-import BottomTabNav from "@component/components/bottomTabNav";
-import { CardDetail } from "@component/components/cardDetail";
-import DraggableCard from "@component/components/draggableCard";
-import KakaoMap from "@component/components/kakaoMap";
-import TagButton from "@component/components/tagButton";
+import BottomTabNav from "@components/bottomTabNav";
+import DraggableCard from "@components/draggableCard";
+import KakaoMap from "@components/kakaoMap";
+import TagButton from "@components/tagButton";
+import { DraggableCardDetail } from "@components/draggableCardDetail";
 import { useState } from "react";
 
 export default function Home() {
@@ -103,15 +103,11 @@ export default function Home() {
 
       {selectedMarker !== null ? (
         <div className="absolute bottom-0 left-0 w-full z-20">
-          <div className="relative before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-20">
-            <CardDetail item={positions[selectedMarker]} />
-          </div>
+          <DraggableCardDetail item={positions[selectedMarker]} />
         </div>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
-          <div className="relative before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-10">
-            <DraggableCard />
-          </div>
+          <DraggableCard />
         </div>
       )}
 
