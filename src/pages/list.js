@@ -74,14 +74,7 @@ export default function List() {
   }, [filterOpen]);
 
   return (
-    <div className="flex flex-col gap-[14px] pt-[10px] pb-[80px] px-[16px] bg-[#EFF1F4] h-[100vh] overflow-y-auto">
-      <div className="relative before:content-searchIcon before:absolute before:top-[10px] before:left-[12px]">
-        <input
-          className="w-[343px] h-[44px] pl-[38px] pr-[12px] text-[1.4rem] text-[#3B3F4A] bg-white rounded-[10px]"
-          placeholder="찾고싶은 가게가 있으면 검색해보세요!"
-        />
-      </div>
-
+    <div className="flex flex-col gap-[14px] pt-[28px] pb-[80px] px-[16px] bg-[#EFF1F4] h-[100vh] overflow-y-auto">
       <div className="flex justify-between items-center">
         <button
           type="button"
