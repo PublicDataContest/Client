@@ -4,23 +4,74 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function List() {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const OPTION_MENU = [
+  const [sortOpen, setSortOpen] = useState(false);
+  const SORT_MENU = [
     { idx: 0, label: "매출수" },
     { idx: 1, label: "좋아요수" },
     { idx: 2, label: "최근방문수" },
     { idx: 3, label: "방문횟수" },
   ];
-  const [selectedOption, setSelectedOption] = useState(0);
+  const [selectedSort, setSelectedSort] = useState(0);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const FILTER_MENU = [
+    {
+      idx: 0,
+      label: "가격별",
+      option: ["만원 이하", "15000원", "20000원", "20000이상"],
+    },
+    { idx: 1, label: "계절별", option: ["봄", "여름", "가을", "겨울"] },
+    { idx: 2, label: "시간대별", option: ["아침", "점심", "저녁"] },
+    {
+      idx: 3,
+      label: "인원별",
+      option: ["5명이하", "10명이하", "20명이하", "20명이상"],
+    },
+  ];
+  const [selectedFilter, setSelectedFilter] = useState(
+    FILTER_MENU.map(() => [])
+  );
+  const [isFilterApply, setIsFilterApply] = useState(false);
 
   useEffect(() => {
-    const modal = document.querySelector("#modal");
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        setDropdownOpen(false);
+    const modalSort = document.querySelector("#modalSort");
+    modalSort.addEventListener("click", (e) => {
+      if (e.target === modalSort) {
+        setSortOpen(false);
+      }
+    });
+
+    const modalFilter = document.querySelector("#modalFilter");
+    modalFilter.addEventListener("click", (e) => {
+      if (e.target === modalFilter) {
+        setFilterOpen(false);
       }
     });
   }, []);
+
+  const handleSelectFilter = (labelIdx, optionIdx) => {
+    const newArr = JSON.parse(JSON.stringify(selectedFilter));
+    if (newArr[labelIdx].includes(optionIdx)) {
+      newArr[labelIdx] = newArr[labelIdx].filter((v) => v !== optionIdx);
+      setSelectedFilter(newArr);
+      return;
+    }
+    if (labelIdx === 0 || labelIdx === 3) {
+      // 중복 필터링 불가
+      newArr[labelIdx] = [optionIdx];
+    } else {
+      newArr[labelIdx].push(optionIdx);
+    }
+    setSelectedFilter(newArr);
+  };
+
+  useEffect(() => {
+    if (filterOpen) return;
+    const isOn = selectedFilter.some((arr) => arr.length);
+    setIsFilterApply(isOn);
+    if (isOn) {
+      console.log(selectedFilter);
+    }
+  }, [filterOpen]);
 
   return (
     <div className="flex flex-col gap-[14px] pt-[10px] pb-[80px] px-[16px] bg-[#EFF1F4] h-[100vh] overflow-y-auto">
@@ -37,30 +88,32 @@ export default function List() {
           id="dropdownDefaultButton"
           data-dropdown-toggle="dropdown"
           className="w-[103px] h-[34px] p-[8px] flex gap-[10px] justify-between items-center bg-white rounded-[5px]"
-          onClick={() => setDropdownOpen((prev) => !prev)}
+          onClick={() => setSortOpen((prev) => !prev)}
         >
           <span className="text-[1.4rem] font-[Pretendard-Meidum]">
-            {OPTION_MENU[selectedOption].label}
+            {SORT_MENU[selectedSort].label}
           </span>
           <Image
             alt="toggle"
-            src={require("../../public/images/arrow_down-gray.svg")}
+            src={require("@images/arrow_down-gray.svg")}
             width={16}
             height={16}
             priority
-            className={`transition-all transform ${
-              dropdownOpen && "-rotate-180"
-            }`}
+            className={`transition-all transform ${sortOpen && "-rotate-180"}`}
           />
         </button>
         <Image
           className="cursor-pointer"
           alt="filter"
-          src={require("../../public/images/filter-gray.svg")}
+          src={
+            isFilterApply
+              ? require("@images/filter-orange.svg")
+              : require("@images/filter-gray.svg")
+          }
           width={24}
           height={24}
           priority
-          onClick={() => setDropdownOpen((prev) => !prev)}
+          onClick={() => setFilterOpen((prev) => !prev)}
         />
       </div>
 
@@ -73,9 +126,9 @@ export default function List() {
       </div>
 
       <div
-        id="modal"
+        id="modalSort"
         className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
-          dropdownOpen || "hidden"
+          sortOpen || "hidden"
         }`}
       >
         <div id="dropdown" className="absolute bottom-0 left-0 w-full">
@@ -88,18 +141,60 @@ export default function List() {
               <li className="py-[7.5px] px-[22px] text-[1.3rem] font-[Pretendard-Medium] text-[#9E9E9E]">
                 정렬
               </li>
-              {OPTION_MENU.map((v) => (
+              {SORT_MENU.map((v) => (
                 <li key={v.idx}>
                   <button
                     className={`py-[12px] px-[22px] w-full text-start ${
-                      selectedOption === v.idx &&
+                      selectedSort === v.idx &&
                       "text-[#FF823C] font-[Pretendard-Bold]"
                     }`}
                     type="button"
-                    onClick={() => setSelectedOption(v.idx)}
+                    onClick={() => setSelectedSort(v.idx)}
                   >
                     {v.label}
                   </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="modalFilter"
+        className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
+          filterOpen || "hidden"
+        }`}
+      >
+        <div id="dropdown" className="absolute bottom-0 left-0 w-full">
+          <div className="flex flex-col gap-[16px] pt-[6px] pb-[14px] h-[432px] rounded-t-[20px] bg-white shadow-t-gray">
+            <div className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px]" />
+            <ul
+              aria-labelledby="dropdownDefaultButton"
+              className="flex flex-col gap-[24px] text-[1.4rem] px-[16px]"
+            >
+              {FILTER_MENU.map((v) => (
+                <li
+                  key={v.idx}
+                  className="flex flex-col gap-[8px] text-[1.4rem]"
+                >
+                  <span className="font-[Pretendard-Bold]">{v.label}</span>
+                  <div className="flex gap-x-[8px] gap-y-[10px] flex-wrap">
+                    {v.option.map((op, i) => (
+                      <button
+                        key={i}
+                        className={`shrink-0 min-w-[57px] h-[30px] px-[16px] rounded-full ${
+                          selectedFilter[v.idx].includes(i)
+                            ? "text-white font-[Pretendard-Medium] bg-[#FF823C]"
+                            : "bg-[#E4E6EA] text-[#9DA0A8]"
+                        }`}
+                        type="button"
+                        onClick={() => handleSelectFilter(v.idx, i)}
+                      >
+                        {op}
+                      </button>
+                    ))}
+                  </div>
                 </li>
               ))}
             </ul>
