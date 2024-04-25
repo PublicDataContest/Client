@@ -66,7 +66,7 @@ export default function DraggableCard() {
 
   return (
     <div
-      className="flex flex-col pt-[6px] pb-[14px] rounded-t-[20px] bg-white shadow-t-gray"
+      className="flex flex-col pt-[6px] pb-[14px] rounded-t-[20px] bg-white shadow-t-gray transition-[height] duration-75"
       style={{ height: `${LEVEL_HEIGHTS[level]}px` }}
       onTouchStart={handleTouchStart}
       onMouseDown={handleMouseDown}
