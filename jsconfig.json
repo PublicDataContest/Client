@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "paths": {
-      "@component/*": ["./src/*"]
+      "@components/*": ["./src/components/*"],
+      "@images/*": ["./public/images/*"]
     }
   }
 }

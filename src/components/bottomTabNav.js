@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function BottomTabNav() {
@@ -33,7 +34,8 @@ export default function BottomTabNav() {
   return (
     <div className="py-[10px] px-[20px] flex gap-[24px] justify-between bg-white border-t border-t-[#EFF1F4]">
       {MENU.map((v) => (
-        <div
+        <Link
+          href={v.paths[0]}
           key={v.label}
           className="flex flex-col gap-[2px] items-center w-full cursor-pointer"
         >
@@ -42,6 +44,8 @@ export default function BottomTabNav() {
             src={v.paths.includes(router.pathname) ? v.imageOn : v.imageOff}
             width={24}
             height={24}
+            priority
+            className="w-[24px] h-[24px]"
           />
           <span
             className={`font-[Pretendard-Medium] text-[1.2rem] ${
@@ -52,7 +56,7 @@ export default function BottomTabNav() {
           >
             {v.label}
           </span>
-        </div>
+        </Link>
       ))}
     </div>
   );
