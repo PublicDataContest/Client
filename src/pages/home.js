@@ -3,7 +3,7 @@ import DraggableCard from "@components/draggableCard";
 import KakaoMap from "@components/kakaoMap";
 import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [selectedTag, setSelectedTag] = useState(1);
@@ -76,6 +76,39 @@ export default function Home() {
       openTime: "매일 00:00 - 24:00",
     },
   ];
+
+  useEffect(() => {
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+    function success(pos) {
+      const { latitude, longitude } = pos.coords;
+      console.log("위도 : " + latitude);
+      console.log("경도: " + longitude);
+
+      fetch(
+        `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}`,
+        {
+          headers: {
+            authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          // console.log(res);
+          const { region_2depth_name } = res.documents[0].address;
+          console.log(region_2depth_name.split(" ")[1]);
+        });
+    }
+
+    function error(err) {
+      console.warn("ERROR(" + err.code + "): " + err.message);
+    }
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  }, []);
 
   return (
     <div className="relative h-[100vh] overflow-y-auto">
