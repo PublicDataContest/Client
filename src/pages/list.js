@@ -1,5 +1,5 @@
-import BottomTabNav from "@component/components/bottomTabNav";
-import ListCard from "@component/components/listCard";
+import BottomTabNav from "@components/bottomTabNav";
+import ListCard from "@components/listCard";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
