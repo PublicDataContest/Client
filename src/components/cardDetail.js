@@ -31,6 +31,43 @@ export function CardDetail({ item }) {
         </div>
         <div className="h-[44px] rounded-[8px] bg-[#EFF1F4] flex items-center py-[11px] px-[12px]">
           <div className="flex gap-[8px]">
+            <div className="flex gap-[4px] items-center">
+              <Image
+                alt=""
+                src={require("@images/star_review-orange.svg")}
+                width={22}
+                height={21}
+                priority
+              />
+              <Image
+                alt=""
+                src={require("@images/star_review-orange.svg")}
+                width={22}
+                height={21}
+                priority
+              />
+              <Image
+                alt=""
+                src={require("@images/star_review-orange.svg")}
+                width={22}
+                height={21}
+                priority
+              />
+              <Image
+                alt=""
+                src={require("@images/star_review-orange.svg")}
+                width={22}
+                height={21}
+                priority
+              />
+              <Image
+                alt=""
+                src={require("@images/star_review-gray.svg")}
+                width={22}
+                height={21}
+                priority
+              />
+            </div>
             <span className="text-[#FF823C]">{item.starCnt}</span>
             <div className="bg-[#D5D8DC] w-[1px] h-[18px]" />
             <span className="text-[#3B3F4A]">후기 {item.reviewCnt}</span>
