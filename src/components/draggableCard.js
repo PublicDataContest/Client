@@ -8,9 +8,9 @@ const LEVELS = {
 };
 
 const LEVEL_HEIGHTS = {
-  [LEVELS.SMALL]: 66,
-  [LEVELS.MEDIUM]: 200,
-  [LEVELS.LARGE]: 510,
+  [LEVELS.SMALL]: 10,
+  [LEVELS.MEDIUM]: 30,
+  [LEVELS.LARGE]: 76.5,
 };
 
 export default function DraggableCard() {
@@ -67,7 +67,7 @@ export default function DraggableCard() {
   return (
     <div
       className="flex flex-col pt-[6px] pb-[14px] rounded-t-[20px] bg-white shadow-t-gray transition-[height] duration-75"
-      style={{ height: `${LEVEL_HEIGHTS[level]}px` }}
+      style={{ height: `${LEVEL_HEIGHTS[level]}vh` }}
       onTouchStart={handleTouchStart}
       onMouseDown={handleMouseDown}
     >
