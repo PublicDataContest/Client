@@ -8,6 +8,7 @@ import Image from "next/image";
 import ReviewWrite from "@components/reviewWrite";
 import axiosInstance from "@api/axiosInstance";
 import useUserInfo from "@hooks/useUserInfo";
+import MenuList from "@components/menuList";
 
 export default function Home() {
   const { userInfo } = useUserInfo();
@@ -25,6 +26,9 @@ export default function Home() {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [content, setContent] = useState([]);
   const [detailContent, setDetailContent] = useState(null);
+  const [menu, setMenu] = useState([]);
+  const [showMenu, setShowMenu] = useState(false);
+  const [isFull, setIsFull] = useState(false);
 
   const getDetailContent = async () => {
     try {
@@ -41,9 +45,25 @@ export default function Home() {
     }
   };
 
+  const getMenu = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/menu/${userInfo.userId ?? localStorage.getItem("userId")}/${
+          content[selectedMarker].restaurantId
+        }`
+      );
+      console.log(res);
+      const { data } = res.data;
+      setMenu(data);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     if (!selectedMarker) return;
     getDetailContent();
+    getMenu();
   }, [selectedMarker]);
 
   return (
@@ -75,7 +95,14 @@ export default function Home() {
         <>
           {detailContent && (
             <div className="absolute bottom-0 left-0 w-full z-20">
-              <DraggableCardDetail item={detailContent} />
+              <DraggableCardDetail
+                item={detailContent}
+                menu={menu}
+                showMenu={showMenu}
+                setShowMenu={setShowMenu}
+                isFull={isFull}
+                setIsFull={setIsFull}
+              />
             </div>
           )}
 
@@ -112,6 +139,12 @@ export default function Home() {
       {writeReview && (
         <div className="absolute top-0 left-0 w-full z-30">
           <ReviewWrite setWriteReview={setWriteReview} />
+        </div>
+      )}
+
+      {isFull && showMenu && (
+        <div className="absolute top-0 left-0 w-full z-30">
+          <MenuList menu={menu} setShowMenu={setShowMenu} />
         </div>
       )}
     </div>

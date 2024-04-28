@@ -1,7 +1,8 @@
 import Image from "next/image";
 
-export function CardDetail({ item }) {
+export function CardDetail({ item, menu, isFull, showMenu, setShowMenu }) {
   const starCnt = Math.round(item?.rating);
+  const MAX_MENU_DISPLAY_CNT = 5;
 
   return (
     <div className="overflow-y-auto relative">
@@ -69,14 +70,64 @@ export function CardDetail({ item }) {
 
       <div className="w-full h-[6px] bg-[#EFF1F4]" />
 
-      <div className="py-[20px] px-[16px] flex flex-col gap-[34px] bg-white">
-        <div className="flex flex-col gap-[10px]">
+      <div className="flex flex-col gap-[10px] pt-[20px] px-[16px]">
+        <span className="font-[Pretendard-Bold] text-[#212121]">
+          메뉴 <span className="text-brand">{menu.length}</span>
+        </span>
+        <div className="px-[2px]">
+          {!isFull && showMenu
+            ? menu.map((v, i) => (
+                <div
+                  key={i}
+                  className={`${
+                    i < menu.length - 1 && "border-b border-b-[#EFF1F4]"
+                  } py-[12px] flex flex-col gap-[2px] text-[#3B3F4A] text-[1.4rem]`}
+                >
+                  <span>{v.menu}</span>
+                  <span className="font-b">{v.price}</span>
+                </div>
+              ))
+            : menu.slice(0, MAX_MENU_DISPLAY_CNT).map((v, i) => (
+                <div
+                  key={i}
+                  className={`${
+                    i < MAX_MENU_DISPLAY_CNT - 1 &&
+                    "border-b border-b-[#EFF1F4]"
+                  } py-[12px] flex flex-col gap-[2px] text-[#3B3F4A] text-[1.4rem]`}
+                >
+                  <span>{v.menu}</span>
+                  <span className="font-b">{v.price}</span>
+                </div>
+              ))}
+        </div>
+      </div>
+      {menu.length > MAX_MENU_DISPLAY_CNT && !showMenu && (
+        <button
+          className="w-full flex flex-col items-center pt-[6px] h-[48px] border-t border-t-[#EFF1F4]"
+          onClick={() => setShowMenu(true)}
+        >
+          <span className="text-[1.4rem] font-sb text-[#5A5E6A]">
+            메뉴 더보기
+          </span>
+          <Image
+            alt=""
+            src={require("@images/chevron_bottom-gray.svg")}
+            width={24}
+            height={24}
+          />
+        </button>
+      )}
+      <div className="w-full h-[6px] bg-[#EFF1F4]" />
+
+      <div className="py-[20px] flex flex-col gap-[34px] bg-white">
+        <div className="flex flex-col gap-[10px] px-[16px]">
           <span className="font-[Pretendard-Bold] text-[#212121]">
             계절별 방문자 비율
           </span>
           <div className="h-[170px] rounded-[8px] bg-[#EFF1F4]"></div>
         </div>
-        <div className="flex flex-col gap-[10px]">
+
+        <div className="flex flex-col gap-[10px] px-[16px]">
           <span className="font-[Pretendard-Bold] text-[#212121]">
             시간대별 방문자수
           </span>

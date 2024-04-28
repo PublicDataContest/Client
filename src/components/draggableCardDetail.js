@@ -4,11 +4,17 @@ import Image from "next/image";
 
 const LEVEL_HEIGHTS = [65, 100];
 
-export function DraggableCardDetail({ item }) {
+export function DraggableCardDetail({
+  item,
+  menu,
+  showMenu,
+  setShowMenu,
+  isFull,
+  setIsFull,
+}) {
   const [level, setLevel] = useState(0);
   const startY = useRef(0);
   const deltaY = useRef(0);
-  const [isFull, setIsFull] = useState(false);
   const [stickyHeader, setStickyHeader] = useState(false);
 
   useEffect(() => {
@@ -92,7 +98,13 @@ export function DraggableCardDetail({ item }) {
             onClick={() => setLevel((prev) => prev - 1)}
           />
         ))}
-      <CardDetail item={item} />
+      <CardDetail
+        item={item}
+        menu={menu}
+        isFull={isFull}
+        showMenu={showMenu}
+        setShowMenu={setShowMenu}
+      />
     </div>
   );
 }
