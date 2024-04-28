@@ -10,16 +10,19 @@ export function CardDetail({
   setShowMenu,
   season,
   time,
+  price,
 }) {
   const starCnt = Math.round(item?.rating);
   const MAX_MENU_DISPLAY_CNT = 5;
 
+  // 계절별
   const optionsSeason = {
     colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
     labels: ["봄", "여름", "가을", "겨울"],
   };
   const seriesSeason = Object.values(season);
 
+  // 시간대별
   const seriesTimeArr = Object.values(time);
   // const seriesTimeArr = [45, 12, 3, 60, 58, 34, 41, 12, 3, 64, 42, 34, 22, 54];
   const seriesTime = [
@@ -57,6 +60,13 @@ export function CardDetail({
       },
     },
   };
+
+  // 가격별
+  const optionsPrice = {
+    colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
+    labels: ["10,000원 이하", "15,000원", "20,000원", "20,000원 이상"],
+  };
+  const seriesPrice = Object.values(price);
 
   return (
     <div className="overflow-y-auto relative">
@@ -189,6 +199,15 @@ export function CardDetail({
           </span>
           <div className="h-[190px] rounded-[8px] bg-[#EFF1F4]">
             <Chart type="bar" options={optionsTime} series={seriesTime} />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[10px] px-[16px]">
+          <span className="font-[Pretendard-Bold] text-[#212121]">
+            가격별 통계 그래프
+          </span>
+          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[10px]">
+            <Chart type="donut" options={optionsPrice} series={seriesPrice} />
           </div>
         </div>
       </div>

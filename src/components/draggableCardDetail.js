@@ -13,6 +13,7 @@ export function DraggableCardDetail({
   setIsFull,
   season,
   time,
+  price,
 }) {
   const [level, setLevel] = useState(0);
   const startY = useRef(0);
@@ -108,6 +109,7 @@ export function DraggableCardDetail({
         setShowMenu={setShowMenu}
         season={season}
         time={time}
+        price={price}
       />
     </div>
   );

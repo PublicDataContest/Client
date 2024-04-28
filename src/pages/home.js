@@ -31,6 +31,7 @@ export default function Home() {
   const [isFull, setIsFull] = useState(false);
   const [season, setSeason] = useState(null);
   const [time, setTime] = useState(null);
+  const [price, setPrice] = useState(null);
 
   const getDetailContent = async () => {
     try {
@@ -88,12 +89,26 @@ export default function Home() {
     }
   };
 
+  const getPrice = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/statistics/price/${content[selectedMarker].restaurantId}`
+      );
+      console.log("price", res);
+      const { data } = res.data;
+      setPrice(data);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     if (!selectedMarker) return;
     getDetailContent();
     getMenu();
     getSeason();
     getTime();
+    getPrice();
   }, [selectedMarker]);
 
   return (
@@ -134,6 +149,7 @@ export default function Home() {
                 setIsFull={setIsFull}
                 season={season}
                 time={time}
+                price={price}
               />
             </div>
           )}
