@@ -1,13 +1,25 @@
 import Header from "@components/header";
 import Image from "next/image";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const login = () => {};
+  const login = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/api/login", {
+        userName,
+        password,
+      });
+      console.log(res);
+    } catch (e) {
+      alert(e.response.data.message);
+    }
+  };
 
   return (
     <div>
