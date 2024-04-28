@@ -2,7 +2,18 @@ import Image from "next/image";
 
 export default function Card({ item }) {
   return (
-    <div className="shrink-0 pt-[12px] pb-[8px] px-[12px] w-[232px] h-[124px] rounded-[10px] bg-[#EFF1F4] flex flex-col justify-between relative before:content-starGrayIcon before:absolute before:top-[8px] before:right-[8px]">
+    <div className="shrink-0 pt-[12px] pb-[8px] px-[12px] w-[232px] h-[124px] rounded-[10px] bg-[#EFF1F4] flex flex-col justify-between relative">
+      <Image
+        alt=""
+        src={
+          item.wishListRestaurant
+            ? require("@images/star-orange.svg")
+            : require("@images/star-gray.svg")
+        }
+        width={20}
+        height={20}
+        className="absolute top-[8px] right-[8px]"
+      />
       <div className="flex flex-col">
         <div className="flex gap-[4px] items-center">
           <span className="max-w-[180px] line-clamp-2 font-[Pretendard-SemiBold] text-[1.4rem] text-[#3B3F4A]">
@@ -30,10 +41,17 @@ export default function Card({ item }) {
           </span>
         </div>
       </div>
-      <div className="h-[39px] bg-[#D5D8DC] rounded-[5px] flex items-center py-[11px] px-[10px]">
-        <span className="font-[Pretendard-SemiBold] text-[1.2rem] text-[#5A5E6A]">
-          후기가 없습니다. 작성해보세요!
-        </span>
+      <div className="flex gap-[6px] items-center overflow-hidden">
+        {item.hashTags.split(" #").map((v) => (
+          <div
+            key={v}
+            className="px-[8px] shrink-0 min-w-[61px] h-[26px] bg-[#464343] rounded-[5px] flex items-center justify-center"
+          >
+            <span className="font-m text-[1.4rem] text-white">
+              #{v.replace("#", "").trim()}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
