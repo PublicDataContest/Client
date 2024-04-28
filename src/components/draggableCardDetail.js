@@ -14,6 +14,7 @@ export function DraggableCardDetail({
   season,
   time,
   price,
+  people,
 }) {
   const [level, setLevel] = useState(0);
   const startY = useRef(0);
@@ -110,6 +111,7 @@ export function DraggableCardDetail({
         season={season}
         time={time}
         price={price}
+        people={people}
       />
     </div>
   );

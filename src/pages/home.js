@@ -32,6 +32,7 @@ export default function Home() {
   const [season, setSeason] = useState(null);
   const [time, setTime] = useState(null);
   const [price, setPrice] = useState(null);
+  const [people, setPeople] = useState(null);
 
   const getDetailContent = async () => {
     try {
@@ -102,6 +103,19 @@ export default function Home() {
     }
   };
 
+  const getPeople = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/statistics/people/${content[selectedMarker].restaurantId}`
+      );
+      console.log("people", res);
+      const { data } = res.data;
+      setPeople(data);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     if (!selectedMarker) return;
     getDetailContent();
@@ -109,6 +123,7 @@ export default function Home() {
     getSeason();
     getTime();
     getPrice();
+    getPeople();
   }, [selectedMarker]);
 
   return (
@@ -150,6 +165,7 @@ export default function Home() {
                 season={season}
                 time={time}
                 price={price}
+                people={people}
               />
             </div>
           )}

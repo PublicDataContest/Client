@@ -11,6 +11,7 @@ export function CardDetail({
   season,
   time,
   price,
+  people,
 }) {
   const starCnt = Math.round(item?.rating);
   const MAX_MENU_DISPLAY_CNT = 5;
@@ -67,6 +68,13 @@ export function CardDetail({
     labels: ["10,000원 이하", "15,000원", "20,000원", "20,000원 이상"],
   };
   const seriesPrice = Object.values(price);
+
+  // 인원별
+  const optionsPeople = {
+    colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
+    labels: ["5명 이하", "10명 이하", "20명 이하", "20명 이상"],
+  };
+  const seriesPeople = Object.values(people);
 
   return (
     <div className="overflow-y-auto relative">
@@ -208,6 +216,15 @@ export function CardDetail({
           </span>
           <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[10px]">
             <Chart type="donut" options={optionsPrice} series={seriesPrice} />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[10px] px-[16px]">
+          <span className="font-[Pretendard-Bold] text-[#212121]">
+            인원별 통계 그래프
+          </span>
+          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[17px]">
+            <Chart type="donut" options={optionsPeople} series={seriesPeople} />
           </div>
         </div>
       </div>
