@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const login = () => {};
 
@@ -24,12 +25,26 @@ export default function Login() {
           </div>
           <div className="flex flex-col gap-[10px]">
             <span className="font-b text-[1.5rem]">비밀번호</span>
-            <input
-              type="password"
-              className="py-[14px] px-[10px] rounded-[5px] bg-[#EFF1F4] text-[1.4rem] placeholder:text-[#9DA0A8]"
-              placeholder="비밀번호를 입력해 주세요"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="flex justify-between gap-[10px] items-center py-[14px] px-[10px] rounded-[5px] bg-[#EFF1F4] text-[1.4rem]">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="w-full placeholder:text-[#9DA0A8] bg-[#EFF1F4]"
+                placeholder="비밀번호를 입력해 주세요"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Image
+                alt=""
+                src={
+                  showPassword
+                    ? require("@images/eye.svg")
+                    : require("@images/eye-hide.svg")
+                }
+                width={24}
+                height={24}
+                className="cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+              />
+            </div>
           </div>
         </div>
         <button
