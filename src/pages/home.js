@@ -3,7 +3,7 @@ import DraggableCard from "@components/draggableCard";
 import KakaoMap from "@components/kakaoMap";
 import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import ReviewWrite from "@components/reviewWrite";
 
@@ -20,98 +20,7 @@ export default function Home() {
     { idx: 7, label: "친환경" },
   ];
   const [selectedMarker, setSelectedMarker] = useState(null);
-  // 마커가 표시될 위치입니다
-  const positions = [
-    {
-      x: 33.450705,
-      y: 126.570677,
-      imgUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY0hN_nLSpS_aVeocPQehBsoYqLEOk1P48YGkziQj6Fg&s",
-      title: "냉면맛집",
-      category: "한식",
-      distance: "80m",
-      starCnt: 0,
-      reviewCnt: 0,
-      address: "서울 은평구 백련산로2길 19",
-      isOpen: true,
-      openTime: "매일 00:00 - 24:00",
-    },
-    {
-      x: 33.450936,
-      y: 126.569477,
-      imgUrl:
-        "https://i.namu.wiki/i/8s7OaNPsZ8KC1e8RQ6QZEwgfFUoIVVOIm0jA72-UO6Imw0OgI1aEK_DulMeXWbg4tstts3IQFMJS0jmYKD9rzQ.webp",
-      title: "라면맛집",
-      category: "일식",
-      distance: "90m",
-      starCnt: 3,
-      reviewCnt: 0,
-      address: "서울 은평구 백련산로2길 19",
-      isOpen: true,
-      openTime: "매일 00:00 - 24:00",
-    },
-    {
-      x: 33.450879,
-      y: 126.56994,
-      imgUrl:
-        "https://i.namu.wiki/i/xT2u3IXASDp4OB4qkTn14yrtyb6qYcIpEJBvrCJ6EfWAA4NMlGKbxxZa42Yjt_j6eLdTmNzd_Z7dXpnU5RpSJg11JPwGXy0FYeM7e4O1N4KLCuHj8GrJF6l-xOfDvoEPGu9l2IG-UTw60Axb7O9jpA.webp",
-      title: "빵맛집",
-      category: "베이커리",
-      distance: "110m",
-      starCnt: 3,
-      reviewCnt: 0,
-      address: "서울 은평구 백련산로2길 19",
-      isOpen: true,
-      openTime: "매일 00:00 - 24:00",
-    },
-    {
-      x: 33.451393,
-      y: 126.570738,
-      imgUrl:
-        "https://i.namu.wiki/i/lP9fTPdfSfPobmhPua5FtkdR7-ufWmAn8DDayYdVRiEiZmal22ywpqV_BpNmI4Ti1qdqG4uYhheSH7WMAYFd3gKMohm9S437fjSFEy06SjMu5plpReMbrgD5M7jrndVtU2dAzpGZRNplfvtV4-nHOg.webp",
-      title: "샐러드맛집",
-      category: "한식",
-      distance: "400m",
-      starCnt: 3,
-      reviewCnt: 0,
-      address: "서울 은평구 백련산로2길 19",
-      isOpen: false,
-      openTime: "매일 00:00 - 24:00",
-    },
-  ];
-
-  useEffect(() => {
-    var options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-    function success(pos) {
-      const { latitude, longitude } = pos.coords;
-      console.log("위도 : " + latitude);
-      console.log("경도: " + longitude);
-
-      fetch(
-        `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}`,
-        {
-          headers: {
-            authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          // console.log(res);
-          const { region_2depth_name } = res.documents[0].address;
-          console.log(region_2depth_name.split(" ")[1]);
-        });
-    }
-
-    function error(err) {
-      console.warn("ERROR(" + err.code + "): " + err.message);
-    }
-    navigator.geolocation.getCurrentPosition(success, error, options);
-  }, []);
+  const [content, setContent] = useState([]);
 
   return (
     <div className="relative h-[100vh] overflow-y-auto">
@@ -134,13 +43,14 @@ export default function Home() {
       <KakaoMap
         selectedMarker={selectedMarker}
         setSelectedMarker={setSelectedMarker}
-        positions={positions}
+        content={content}
+        setContent={setContent}
       />
 
       {selectedMarker !== null ? (
         <>
           <div className="absolute bottom-0 left-0 w-full z-20">
-            <DraggableCardDetail item={positions[selectedMarker]} />
+            <DraggableCardDetail item={content[selectedMarker]} />
           </div>
 
           <div className="absolute bottom-0 left-0 w-full z-20">
@@ -165,7 +75,7 @@ export default function Home() {
         </>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
-          <DraggableCard />
+          <DraggableCard content={content} />
         </div>
       )}
 
