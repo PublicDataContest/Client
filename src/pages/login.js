@@ -2,11 +2,15 @@ import Header from "@components/header";
 import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
+import useUserInfo from "@hooks/useUserInfo";
 
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const { setUserInfo } = useUserInfo();
 
   const login = async (e) => {
     e.preventDefault();
@@ -15,7 +19,14 @@ export default function Login() {
         userName,
         password,
       });
-      console.log(res);
+      const { accessToken, refreshToken, userId } = res.data;
+      setUserInfo({
+        userId,
+        userName,
+      });
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      router.push("/home");
     } catch (e) {
       alert(e.response.data.message);
     }
