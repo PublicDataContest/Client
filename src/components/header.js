@@ -10,6 +10,7 @@ export default function Header({ label }) {
         src={require("@images/close-gray.svg")}
         width={24}
         height={24}
+        priority
         className=" justify-self-end"
       />
     </div>
