@@ -26,6 +26,7 @@ export default function Login() {
       });
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("userId", userId);
       router.push("/home");
     } catch (e) {
       alert(e.response.data.message);
