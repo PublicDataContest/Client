@@ -3,11 +3,14 @@ import DraggableCard from "@components/draggableCard";
 import KakaoMap from "@components/kakaoMap";
 import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import ReviewWrite from "@components/reviewWrite";
+import axiosInstance from "@api/axiosInstance";
+import useUserInfo from "@hooks/useUserInfo";
 
 export default function Home() {
+  const { userInfo } = useUserInfo();
   const [writeReview, setWriteReview] = useState(false);
   const [selectedTag, setSelectedTag] = useState(1);
   const TAG_MENU = [
@@ -21,6 +24,27 @@ export default function Home() {
   ];
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [content, setContent] = useState([]);
+  const [detailContent, setDetailContent] = useState(null);
+
+  const getDetailContent = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/card/${userInfo.userId ?? localStorage.getItem("userId")}/${
+          content[selectedMarker].restaurantId
+        }`
+      );
+      console.log(res);
+      const { data } = res.data;
+      setDetailContent(data);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedMarker) return;
+    getDetailContent();
+  }, [selectedMarker]);
 
   return (
     <div className="relative h-[100vh] overflow-y-auto">
@@ -50,7 +74,7 @@ export default function Home() {
       {selectedMarker !== null ? (
         <>
           <div className="absolute bottom-0 left-0 w-full z-20">
-            <DraggableCardDetail item={content[selectedMarker]} />
+            <DraggableCardDetail item={detailContent} />
           </div>
 
           <div className="absolute bottom-0 left-0 w-full z-20">

@@ -12,6 +12,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "i.namu.wiki",
       },
+      {
+        protocol: "https",
+        hostname: "places.googleapis.com",
+      },
     ],
   },
   async rewrites() {
