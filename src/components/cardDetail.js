@@ -1,6 +1,8 @@
 import Image from "next/image";
 
 export function CardDetail({ item }) {
+  const starCnt = Math.round(item?.rating);
+
   return (
     <div className="overflow-y-auto relative">
       <Image
@@ -39,41 +41,24 @@ export function CardDetail({ item }) {
         <div className="h-[44px] rounded-[8px] bg-[#EFF1F4] flex items-center py-[11px] px-[12px]">
           <div className="flex gap-[8px]">
             <div className="flex gap-[4px] items-center">
-              <Image
-                alt=""
-                src={require("@images/star_review-orange.svg")}
-                width={22}
-                height={21}
-                priority
-              />
-              <Image
-                alt=""
-                src={require("@images/star_review-orange.svg")}
-                width={22}
-                height={21}
-                priority
-              />
-              <Image
-                alt=""
-                src={require("@images/star_review-orange.svg")}
-                width={22}
-                height={21}
-                priority
-              />
-              <Image
-                alt=""
-                src={require("@images/star_review-orange.svg")}
-                width={22}
-                height={21}
-                priority
-              />
-              <Image
-                alt=""
-                src={require("@images/star_review-gray.svg")}
-                width={22}
-                height={21}
-                priority
-              />
+              {Array(starCnt).map((_, i) => (
+                <Image
+                  key={i}
+                  alt=""
+                  src={require("@images/star_review-orange.svg")}
+                  width={22}
+                  height={21}
+                />
+              ))}
+              {Array(5 - starCnt).map((_, i) => (
+                <Image
+                  key={5 - i}
+                  alt=""
+                  src={require("@images/star_review-gray.svg")}
+                  width={22}
+                  height={21}
+                />
+              ))}
             </div>
             <span className="text-[#FF823C]">{item?.rating}</span>
             <div className="bg-[#D5D8DC] w-[1px] h-[18px]" />
