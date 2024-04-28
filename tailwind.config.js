@@ -19,14 +19,20 @@ module.exports = {
         searchIcon: 'url("/images/search-gray.svg")',
         barGrayIcon: 'url("/images/bar-gray.svg")',
       },
-      backgroundColor: {
-        brand: "#FF823C",
-      },
       fontFamily: {
         r: "Pretendard-Regular",
         m: "Pretendard-Medium",
         sb: "Pretendard-SemiBold",
         b: "Pretendard-Bold",
+      },
+      backgroundColor: {
+        brand: "#FF823C",
+      },
+      textColor: {
+        brand: "#FF823C",
+      },
+      borderColor: {
+        brand: "#FF823C",
       },
     },
   },
