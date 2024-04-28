@@ -1,8 +1,28 @@
 import Image from "next/image";
+import dynamic from "next/dynamic";
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export function CardDetail({ item, menu, isFull, showMenu, setShowMenu }) {
+export function CardDetail({
+  item,
+  menu,
+  isFull,
+  showMenu,
+  setShowMenu,
+  season,
+}) {
   const starCnt = Math.round(item?.rating);
   const MAX_MENU_DISPLAY_CNT = 5;
+
+  const options = {
+    chart: {
+      type: "donut",
+      width: 130,
+      height: 130,
+    },
+    colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
+    labels: ["봄", "여름", "가을", "겨울"],
+  };
+  const series = Object.values(season);
 
   return (
     <div className="overflow-y-auto relative">
@@ -124,7 +144,9 @@ export function CardDetail({ item, menu, isFull, showMenu, setShowMenu }) {
           <span className="font-[Pretendard-Bold] text-[#212121]">
             계절별 방문자 비율
           </span>
-          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4]"></div>
+          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[30px]">
+            <Chart type="donut" options={options} series={series} />
+          </div>
         </div>
 
         <div className="flex flex-col gap-[10px] px-[16px]">

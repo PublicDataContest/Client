@@ -29,6 +29,7 @@ export default function Home() {
   const [menu, setMenu] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
   const [isFull, setIsFull] = useState(false);
+  const [season, setSeason] = useState(null);
 
   const getDetailContent = async () => {
     try {
@@ -37,7 +38,7 @@ export default function Home() {
           content[selectedMarker].restaurantId
         }`
       );
-      console.log(res);
+      console.log("detailContent", res);
       const { data } = res.data;
       setDetailContent(data);
     } catch (e) {
@@ -52,9 +53,22 @@ export default function Home() {
           content[selectedMarker].restaurantId
         }`
       );
-      console.log(res);
+      console.log("menu", res);
       const { data } = res.data;
       setMenu(data);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
+  const getSeason = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/statistics/season/${content[selectedMarker].restaurantId}`
+      );
+      console.log("season", res);
+      const { data } = res.data;
+      setSeason(data);
     } catch (e) {
       console.log(e.response.data.message);
     }
@@ -64,6 +78,7 @@ export default function Home() {
     if (!selectedMarker) return;
     getDetailContent();
     getMenu();
+    getSeason();
   }, [selectedMarker]);
 
   return (
@@ -102,6 +117,7 @@ export default function Home() {
                 setShowMenu={setShowMenu}
                 isFull={isFull}
                 setIsFull={setIsFull}
+                season={season}
               />
             </div>
           )}
