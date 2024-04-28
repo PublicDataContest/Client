@@ -30,6 +30,7 @@ export default function Home() {
   const [showMenu, setShowMenu] = useState(false);
   const [isFull, setIsFull] = useState(false);
   const [season, setSeason] = useState(null);
+  const [time, setTime] = useState(null);
 
   const getDetailContent = async () => {
     try {
@@ -74,11 +75,25 @@ export default function Home() {
     }
   };
 
+  const getTime = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/statistics/time/${content[selectedMarker].restaurantId}`
+      );
+      console.log("time", res);
+      const { data } = res.data;
+      setTime(data);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     if (!selectedMarker) return;
     getDetailContent();
     getMenu();
     getSeason();
+    getTime();
   }, [selectedMarker]);
 
   return (
@@ -118,6 +133,7 @@ export default function Home() {
                 isFull={isFull}
                 setIsFull={setIsFull}
                 season={season}
+                time={time}
               />
             </div>
           )}

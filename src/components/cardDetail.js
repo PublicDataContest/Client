@@ -9,15 +9,54 @@ export function CardDetail({
   showMenu,
   setShowMenu,
   season,
+  time,
 }) {
   const starCnt = Math.round(item?.rating);
   const MAX_MENU_DISPLAY_CNT = 5;
 
-  const options = {
+  const optionsSeason = {
     colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
     labels: ["봄", "여름", "가을", "겨울"],
   };
-  const series = Object.values(season);
+  const seriesSeason = Object.values(season);
+
+  const seriesTimeArr = Object.values(time);
+  // const seriesTimeArr = [45, 12, 3, 60, 58, 34, 41, 12, 3, 64, 42, 34, 22, 54];
+  const seriesTime = [
+    {
+      name: "방문자수",
+      data: seriesTimeArr,
+    },
+  ];
+  const categories = Array.from({ length: 14 }).map((_, i) => [
+    `${8 + i} - ${8 + i + 1}`,
+  ]);
+  const optionsTime = {
+    colors: [
+      function ({ value, seriesIndex, w }) {
+        if (value / Math.max(...seriesTimeArr) > 0.8) {
+          return "#FF823C";
+        } else {
+          return "#BEC1C7";
+        }
+      },
+    ],
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        borderRadiusApplication: "end",
+      },
+    },
+    xaxis: {
+      categories,
+      labels: {
+        style: {
+          colors: ["#5A5E6A"],
+          fontSize: "12px",
+        },
+      },
+    },
+  };
 
   return (
     <div className="overflow-y-auto relative">
@@ -140,7 +179,7 @@ export function CardDetail({
             계절별 방문자 비율
           </span>
           <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[30px]">
-            <Chart type="donut" options={options} series={series} />
+            <Chart type="donut" options={optionsSeason} series={seriesSeason} />
           </div>
         </div>
 
@@ -148,7 +187,9 @@ export function CardDetail({
           <span className="font-[Pretendard-Bold] text-[#212121]">
             시간대별 방문자수
           </span>
-          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4]"></div>
+          <div className="h-[190px] rounded-[8px] bg-[#EFF1F4]">
+            <Chart type="bar" options={optionsTime} series={seriesTime} />
+          </div>
         </div>
       </div>
     </div>
