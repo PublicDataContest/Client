@@ -73,9 +73,11 @@ export default function Home() {
 
       {selectedMarker !== null ? (
         <>
-          <div className="absolute bottom-0 left-0 w-full z-20">
-            <DraggableCardDetail item={detailContent} />
-          </div>
+          {detailContent && (
+            <div className="absolute bottom-0 left-0 w-full z-20">
+              <DraggableCardDetail item={detailContent} />
+            </div>
+          )}
 
           <div className="absolute bottom-0 left-0 w-full z-20">
             <div className="bg-white pt-[8px] pb-[18px] px-[16px]">
