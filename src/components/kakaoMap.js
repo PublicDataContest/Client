@@ -133,10 +133,10 @@ export default function KakaoMap({
 
           // 커스텀 오버레이를 생성합니다
           const customOverlay = new kakao.maps.CustomOverlay({
-            position: new kakao.maps.LatLng(pos.x, pos.y),
+            position: new kakao.maps.LatLng(pos.y, pos.x),
             content: `<div style="width: 38px; height: 48px; position: relative; bottom: 22px;">
                   <img alt="" src="/images/marker-selected.svg" />
-                  <img style="position: absolute; top: 4px; left: 4px; border-radius: 50%; width: 30px; height: 30px;" alt="marker" src="${pos.imgUrl}" />
+                  <img style="position: absolute; top: 4px; left: 4px; border-radius: 50%; width: 30px; height: 30px;" alt="marker" src="${pos.photoUrl}" />
                 </div>`,
             clickable: true, // 컨텐츠 영역을 클릭했을 경우 지도 이벤트를 막아준다.
           });
