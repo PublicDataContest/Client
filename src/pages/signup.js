@@ -2,12 +2,14 @@ import Header from "@components/header";
 import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function Signup() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const checkIdDuplicate = () => {
     console.log(userName);
@@ -16,11 +18,15 @@ export default function Signup() {
   const signup = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/login", {
+      const res = await axios.post("/api/register", {
         userName,
         password,
       });
-      console.log(res);
+      const { status, message } = res.data;
+      if (status === 200) {
+        alert(message);
+        router.push("/login");
+      }
     } catch (e) {
       alert(e.response.data.message);
     }
