@@ -14,11 +14,6 @@ export function CardDetail({
   const MAX_MENU_DISPLAY_CNT = 5;
 
   const options = {
-    chart: {
-      type: "donut",
-      width: 130,
-      height: 130,
-    },
     colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
     labels: ["봄", "여름", "가을", "겨울"],
   };
