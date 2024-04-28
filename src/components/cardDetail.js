@@ -77,7 +77,7 @@ export function CardDetail({ item }) {
             </div>
             <span className="text-[#FF823C]">{item?.rating}</span>
             <div className="bg-[#D5D8DC] w-[1px] h-[18px]" />
-            <span className="text-[#3B3F4A]">후기 {item?.reviewsNum}</span>
+            <span className="text-[#3B3F4A]">리뷰 {item?.reviewsNum}</span>
           </div>
         </div>
       </div>
