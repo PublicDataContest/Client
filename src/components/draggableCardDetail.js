@@ -15,6 +15,9 @@ export function DraggableCardDetail({
   time,
   price,
   people,
+  review,
+  showReview,
+  setShowReview,
 }) {
   const [level, setLevel] = useState(0);
   const startY = useRef(0);
@@ -112,6 +115,9 @@ export function DraggableCardDetail({
         time={time}
         price={price}
         people={people}
+        review={review}
+        showReview={showReview}
+        setShowReview={setShowReview}
       />
     </div>
   );

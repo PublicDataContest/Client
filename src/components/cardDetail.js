@@ -12,19 +12,23 @@ export function CardDetail({
   time,
   price,
   people,
+  review,
+  showReview,
+  setShowReview,
 }) {
   const starCnt = Math.round(item?.rating);
   const MAX_MENU_DISPLAY_CNT = 5;
+  const MAX_REVIEW_DISPLAY_CNT = 3;
 
   // 계절별
   const optionsSeason = {
     colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
     labels: ["봄", "여름", "가을", "겨울"],
   };
-  const seriesSeason = Object.values(season);
+  const seriesSeason = Object.values(season ?? []);
 
   // 시간대별
-  const seriesTimeArr = Object.values(time);
+  const seriesTimeArr = Object.values(time ?? []);
   // const seriesTimeArr = [45, 12, 3, 60, 58, 34, 41, 12, 3, 64, 42, 34, 22, 54];
   const seriesTime = [
     {
@@ -67,14 +71,14 @@ export function CardDetail({
     colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
     labels: ["10,000원 이하", "15,000원", "20,000원", "20,000원 이상"],
   };
-  const seriesPrice = Object.values(price);
+  const seriesPrice = Object.values(price ?? []);
 
   // 인원별
   const optionsPeople = {
     colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
     labels: ["5명 이하", "10명 이하", "20명 이하", "20명 이상"],
   };
-  const seriesPeople = Object.values(people);
+  const seriesPeople = Object.values(people ?? []);
 
   return (
     <div className="overflow-y-auto relative">
@@ -189,6 +193,7 @@ export function CardDetail({
           />
         </button>
       )}
+
       <div className="w-full h-[6px] bg-[#EFF1F4]" />
 
       <div className="py-[20px] flex flex-col gap-[34px] bg-white">
@@ -228,6 +233,133 @@ export function CardDetail({
           </div>
         </div>
       </div>
+
+      <div className="w-full h-[6px] bg-[#EFF1F4]" />
+
+      <div className="flex flex-col py-[20px] px-[16px]">
+        <span className="mb-[20px] font-[Pretendard-Bold] text-[#212121]">
+          리뷰 <span className="text-brand">{review.length}</span>
+        </span>
+        <div className="flex flex-col gap-[24px]">
+          {!isFull && showReview
+            ? review.map((v) => (
+                <div
+                  key={v.id}
+                  className="flex flex-col gap-[8px] text-[1.4rem]"
+                >
+                  <span className="font-m text-[#9DA0A8]">
+                    {v.relativeTimeDescription}
+                  </span>
+                  <span className="font-b text-[#3B3F4A]">{v.authorName}</span>
+                  <div className="flex gap-[6px] items-center mb-[2px]">
+                    <div className="flex gap-[4px] items-center">
+                      {Array.from({ length: Math.round(v.rating) }).map(
+                        (_, i) => (
+                          <Image
+                            key={`${i}-review`}
+                            alt=""
+                            src={require("@images/star_review-orange.svg")}
+                            width={22}
+                            height={21}
+                          />
+                        )
+                      )}
+                      {Array.from({ length: 5 - Math.round(v.rating) }).map(
+                        (_, i) => (
+                          <Image
+                            key={`${5 - i}-review`}
+                            alt=""
+                            src={require("@images/star_review-gray.svg")}
+                            width={22}
+                            height={21}
+                          />
+                        )
+                      )}
+                    </div>
+                    <span className="text-[#FF823C] font-b">{v.rating}</span>
+                  </div>
+                  {v.photoUrl && (
+                    <Image
+                      alt=""
+                      src={v.photoUrl}
+                      width={343}
+                      height={155}
+                      priority
+                      className="h-[155px] mb-[8px] rounded-[8px] object-cover"
+                    />
+                  )}
+                  <p className="text-[#3B3F4A]">{v.text}</p>
+                </div>
+              ))
+            : review.slice(0, MAX_REVIEW_DISPLAY_CNT).map((v) => (
+                <div
+                  key={v.id}
+                  className="flex flex-col gap-[8px] text-[1.4rem]"
+                >
+                  <span className="font-m text-[#9DA0A8]">
+                    {v.relativeTimeDescription}
+                  </span>
+                  <span className="font-b text-[#3B3F4A]">{v.authorName}</span>
+                  <div className="flex gap-[6px] items-center mb-[2px]">
+                    <div className="flex gap-[4px] items-center">
+                      {Array.from({ length: Math.round(v.rating) }).map(
+                        (_, i) => (
+                          <Image
+                            key={`${i}-review`}
+                            alt=""
+                            src={require("@images/star_review-orange.svg")}
+                            width={22}
+                            height={21}
+                          />
+                        )
+                      )}
+                      {Array.from({ length: 5 - Math.round(v.rating) }).map(
+                        (_, i) => (
+                          <Image
+                            key={`${5 - i}-review`}
+                            alt=""
+                            src={require("@images/star_review-gray.svg")}
+                            width={22}
+                            height={21}
+                          />
+                        )
+                      )}
+                    </div>
+                    <span className="text-[#FF823C] font-b">{v.rating}</span>
+                  </div>
+                  {v.photoUrl && (
+                    <Image
+                      alt=""
+                      src={v.photoUrl}
+                      width={343}
+                      height={155}
+                      priority
+                      className="h-[155px] mb-[8px] rounded-[8px] object-cover"
+                    />
+                  )}
+                  <p className="text-[#3B3F4A]">{v.text}</p>
+                </div>
+              ))}
+        </div>
+      </div>
+      {review.length > MAX_REVIEW_DISPLAY_CNT && !showReview && (
+        <button
+          className="w-full flex flex-col items-center pt-[6px] h-[48px] border-t border-t-[#EFF1F4]"
+          onClick={() => setShowReview(true)}
+        >
+          <span className="text-[1.4rem] font-sb text-[#5A5E6A]">
+            리뷰 더보기
+          </span>
+          <Image
+            alt=""
+            src={require("@images/chevron_bottom-gray.svg")}
+            width={24}
+            height={24}
+          />
+        </button>
+      )}
+
+      <div className="w-full h-[6px] bg-[#EFF1F4]" />
     </div>
   );
 }

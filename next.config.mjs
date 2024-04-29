@@ -16,6 +16,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "places.googleapis.com",
       },
+      {
+        protocol: "http",
+        hostname: "t1.daumcdn.net",
+      },
     ],
   },
   async rewrites() {

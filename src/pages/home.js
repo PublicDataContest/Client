@@ -9,6 +9,7 @@ import ReviewWrite from "@components/reviewWrite";
 import axiosInstance from "@api/axiosInstance";
 import useUserInfo from "@hooks/useUserInfo";
 import MenuList from "@components/menuList";
+import ReviewList from "@components/reviewList";
 
 export default function Home() {
   const { userInfo } = useUserInfo();
@@ -33,6 +34,8 @@ export default function Home() {
   const [time, setTime] = useState(null);
   const [price, setPrice] = useState(null);
   const [people, setPeople] = useState(null);
+  const [review, setReview] = useState([]);
+  const [showReview, setShowReview] = useState(false);
 
   const getDetailContent = async () => {
     try {
@@ -116,6 +119,21 @@ export default function Home() {
     }
   };
 
+  const getReview = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/review/combine/${
+          userInfo.userId ?? localStorage.getItem("userId")
+        }/${content[selectedMarker].restaurantId}`
+      );
+      console.log("review", res);
+      const { kakaoReviews, normalReviews } = res.data;
+      setReview([...kakaoReviews, ...normalReviews]);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     if (!selectedMarker) return;
     getDetailContent();
@@ -124,6 +142,7 @@ export default function Home() {
     getTime();
     getPrice();
     getPeople();
+    getReview();
   }, [selectedMarker]);
 
   return (
@@ -166,6 +185,9 @@ export default function Home() {
                 time={time}
                 price={price}
                 people={people}
+                review={review}
+                showReview={showReview}
+                setShowReview={setShowReview}
               />
             </div>
           )}
@@ -209,6 +231,12 @@ export default function Home() {
       {isFull && showMenu && (
         <div className="absolute top-0 left-0 w-full z-30">
           <MenuList menu={menu} setShowMenu={setShowMenu} />
+        </div>
+      )}
+
+      {isFull && showReview && (
+        <div className="absolute top-0 left-0 w-full z-30">
+          <ReviewList review={review} setShowReview={setShowReview} />
         </div>
       )}
     </div>
