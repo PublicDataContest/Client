@@ -1,6 +1,9 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function Header({ label }) {
+  const router = useRouter();
+
   return (
     <div className=" grid grid-cols-3 py-[12px] px-[13px]">
       <div></div>
@@ -11,7 +14,8 @@ export default function Header({ label }) {
         width={24}
         height={24}
         priority
-        className=" justify-self-end"
+        className="cursor-pointer justify-self-end"
+        onClick={() => router.back()}
       />
     </div>
   );
