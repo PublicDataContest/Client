@@ -1,15 +1,17 @@
+import axiosInstance from "@api/axiosInstance";
 import BottomTabNav from "@components/bottomTabNav";
 import ListCard from "@components/listCard";
+import useUserInfo from "@hooks/useUserInfo";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function List() {
+  const { userInfo } = useUserInfo();
   const [sortOpen, setSortOpen] = useState(false);
   const SORT_MENU = [
-    { idx: 0, label: "매출수" },
-    { idx: 1, label: "좋아요수" },
-    { idx: 2, label: "최근방문수" },
-    { idx: 3, label: "방문횟수" },
+    { idx: 0, label: "매출수", path: "execAmounts" },
+    { idx: 1, label: "평점 순", path: "ratings" },
+    { idx: 3, label: "방문횟수", path: "total-visit" },
   ];
   const [selectedSort, setSelectedSort] = useState(0);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -31,6 +33,7 @@ export default function List() {
     FILTER_MENU.map(() => [])
   );
   const [isFilterApply, setIsFilterApply] = useState(false);
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     const modalSort = document.querySelector("#modalSort");
@@ -73,6 +76,25 @@ export default function List() {
     }
   }, [filterOpen]);
 
+  const getSortData = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/${SORT_MENU[selectedSort].path}/${
+          userInfo.userId ?? localStorage.getItem("userId")
+        }`
+      );
+      console.log("sortData", res);
+      const { content } = res.data.data;
+      setList(content);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    getSortData();
+  }, [selectedSort]);
+
   return (
     <div className="flex flex-col gap-[14px] pt-[28px] pb-[80px] px-[16px] bg-[#EFF1F4] h-[100vh] overflow-y-auto">
       <div className="flex justify-between items-center">
@@ -111,11 +133,9 @@ export default function List() {
       </div>
 
       <div className="flex flex-col gap-[12px]">
-        <ListCard />
-        <ListCard />
-        <ListCard />
-        <ListCard />
-        <ListCard />
+        {list.map((v) => (
+          <ListCard key={v.restaurantId} item={v} />
+        ))}
       </div>
 
       <div
