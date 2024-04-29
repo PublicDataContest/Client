@@ -21,6 +21,7 @@ export default function ReviewWrite({ setWriteReview }) {
           width={24}
           height={24}
           onClick={() => setWriteReview(false)}
+          className="cursor-pointer"
         />
       </div>
 
@@ -58,6 +59,7 @@ export default function ReviewWrite({ setWriteReview }) {
                 height={34}
                 priority
                 onClick={() => handleSelectStar(i)}
+                className="cursor-pointer"
               />
             ))}
           </div>
@@ -79,7 +81,7 @@ export default function ReviewWrite({ setWriteReview }) {
           </span>
           <div className="w-[144px] h-[80px] rounded-[8px] bg-[#EFF1F4]"></div>
           <span className="self-end text-[#9DA0A8] text-[1.3rem]">
-            0 / <sapn className="text-[#5A5E6A]">1</sapn>
+            0 / <span className="text-[#5A5E6A]">1</span>
           </span>
         </div>
       </div>
