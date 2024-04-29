@@ -3,7 +3,7 @@ import BottomTabNav from "@components/bottomTabNav";
 import ListCard from "@components/listCard";
 import useUserInfo from "@hooks/useUserInfo";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function List() {
   const { userInfo } = useUserInfo();
@@ -11,7 +11,7 @@ export default function List() {
   const SORT_MENU = [
     { idx: 0, label: "매출수", path: "execAmounts" },
     { idx: 1, label: "평점 순", path: "ratings" },
-    { idx: 3, label: "방문횟수", path: "total-visit" },
+    { idx: 2, label: "방문횟수", path: "total-visit" },
   ];
   const [selectedSort, setSelectedSort] = useState(0);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -34,6 +34,7 @@ export default function List() {
   );
   const [isFilterApply, setIsFilterApply] = useState(false);
   const [list, setList] = useState([]);
+  const sortIdx = useRef(0);
 
   useEffect(() => {
     const modalSort = document.querySelector("#modalSort");
@@ -67,15 +68,6 @@ export default function List() {
     setSelectedFilter(newArr);
   };
 
-  useEffect(() => {
-    if (filterOpen) return;
-    const isOn = selectedFilter.some((arr) => arr.length);
-    setIsFilterApply(isOn);
-    if (isOn) {
-      console.log(selectedFilter);
-    }
-  }, [filterOpen]);
-
   const getSortData = async () => {
     try {
       const res = await axiosInstance.get(
@@ -83,7 +75,7 @@ export default function List() {
           userInfo.userId ?? localStorage.getItem("userId")
         }`
       );
-      console.log("sortData", res);
+      console.log("sort", SORT_MENU[selectedSort].path, res);
       const { content } = res.data.data;
       setList(content);
     } catch (e) {
@@ -93,7 +85,25 @@ export default function List() {
 
   useEffect(() => {
     getSortData();
-  }, [selectedSort]);
+  }, []);
+
+  useEffect(() => {
+    if (filterOpen) return;
+    const isOn = selectedFilter.some((arr) => arr.length);
+    setIsFilterApply(isOn);
+    if (isOn) {
+      console.log(selectedFilter);
+    }
+  }, [filterOpen]);
+
+  useEffect(() => {
+    if (sortOpen) return;
+    const isOn = selectedSort !== sortIdx.current;
+    if (isOn) {
+      getSortData();
+      sortIdx.current = selectedSort;
+    }
+  }, [sortOpen]);
 
   return (
     <div className="flex flex-col gap-[14px] pt-[28px] pb-[80px] px-[16px] bg-[#EFF1F4] h-[100vh] overflow-y-auto">
