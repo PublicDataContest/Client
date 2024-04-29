@@ -94,7 +94,10 @@ export default function List() {
     if (state.includes(idx)) {
       const newState = state.filter((v) => v !== idx);
       setState(newState);
-      selectedSection.current = null;
+
+      if (!newState.length) {
+        selectedSection.current = null;
+      }
     } else {
       setState((prev) => [...prev, idx]);
       selectedSection.current = sIdx;
@@ -132,6 +135,28 @@ export default function List() {
     }
   };
 
+  const getSeasonData = () => {
+    console.log("selectedFilterSeason", selectedFilterSeason);
+    let seasonList = [];
+    selectedFilterSeason.forEach(async (idx) => {
+      try {
+        const seasonItem = FILTER_MENU_SEASON[idx];
+        const res = await axiosInstance.get(
+          `/api/api/${
+            userInfo.userId ?? localStorage.getItem("userId")
+          }?season=${seasonItem.data}`
+        );
+        console.log("season", seasonItem.label, res);
+        const { content } = res.data.data;
+        seasonList = [...seasonList, ...content];
+      } catch (e) {
+        console.log(e.response.data.message);
+      }
+    });
+    console.log("seasonList", seasonList);
+    setList(seasonList);
+  };
+
   useEffect(() => {
     getSortData();
   }, []);
@@ -143,26 +168,35 @@ export default function List() {
       isOn =
         selectedFilterPrice !== null &&
         selectedFilterPrice !== filterPriceIdx.current;
-      filterPriceIdx.current = selectedFilterPrice;
     } else if (selectedSection.current === 1) {
       isOn =
-        !selectedFilterSeason.length &&
-        selectedFilterSeason !== filterSeasonIdx.current;
-      filterSeasonIdx.current = selectedFilterSeason;
+        selectedFilterSeason.length &&
+        JSON.stringify(selectedFilterSeason) !==
+          JSON.stringify(filterSeasonIdx.current);
     } else if (selectedSection.current === 2) {
       isOn =
-        !selectedFilterTime.length &&
-        selectedFilterTime !== filterTimeIdx.current;
-      filterTimeIdx.current = selectedFilterTime;
+        selectedFilterTime.length &&
+        JSON.stringify(selectedFilterTime) !==
+          JSON.stringify(filterTimeIdx.current);
     } else if (selectedSection.current === 3) {
       isOn =
         selectedFilterPeople !== null &&
         selectedFilterPeople !== filterPeopleIdx.current;
-      filterPeopleIdx.current = selectedFilterPeople;
     }
     setIsFilterApply(isOn);
+
     if (isOn) {
-      getPriceData();
+      if (selectedSection.current === 0) {
+        getPriceData();
+        filterPriceIdx.current = selectedFilterPrice;
+      } else if (selectedSection.current === 1) {
+        getSeasonData();
+        filterSeasonIdx.current = selectedFilterSeason;
+      } else if (selectedSection.current === 2) {
+        filterTimeIdx.current = selectedFilterTime;
+      } else if (selectedSection.current === 3) {
+        filterPeopleIdx.current = selectedFilterPeople;
+      }
       isSortData.current = false;
     } else if (selectedSection.current === null && !isSortData.current) {
       getSortData();
