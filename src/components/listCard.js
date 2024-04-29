@@ -50,10 +50,17 @@ export default function ListCard({ item }) {
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-[6px]">
-          <div className="h-[26px] px-[14px] rounded-[5px] bg-[#7F828C] flex justify-center items-center">
-            <span className="font-m text-[1.4rem] text-white">#음식점</span>
-          </div>
+        <div className="flex items-center gap-[6px] overflow-x-auto scrollbar-hide">
+          {item?.hashTags.split(" #").map((v) => (
+            <div
+              key={v}
+              className="px-[8px] shrink-0 h-[26px] bg-[#7F828C] rounded-[5px] flex items-center justify-center"
+            >
+              <span className="font-m text-[1.4rem] text-white">
+                #{v.replace("#", "").trim()}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

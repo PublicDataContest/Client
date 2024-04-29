@@ -75,7 +75,7 @@ export default function DraggableCard({ content }) {
       <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
         내주변 공무원이 자주가는 맛집
       </span>
-      <div className="pl-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide">
+      <div className="px-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide">
         {content.map((item, i) => (
           <Card key={i} item={item} />
         ))}

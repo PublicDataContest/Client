@@ -41,11 +41,11 @@ export default function Card({ item }) {
           </span>
         </div>
       </div>
-      <div className="flex gap-[6px] items-center overflow-hidden">
+      <div className="flex gap-[6px] items-center overflow-x-auto scrollbar-hide">
         {item.hashTags.split(" #").map((v) => (
           <div
             key={v}
-            className="px-[8px] shrink-0 min-w-[61px] h-[26px] bg-[#464343] rounded-[5px] flex items-center justify-center"
+            className="px-[8px] shrink-0 h-[26px] bg-[#464343] rounded-[5px] flex items-center justify-center"
           >
             <span className="font-m text-[1.4rem] text-white">
               #{v.replace("#", "").trim()}
