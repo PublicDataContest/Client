@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from "react";
 
 export default function List() {
   const { userInfo } = useUserInfo();
+  const [list, setList] = useState([]);
+
   const [sortOpen, setSortOpen] = useState(false);
   const SORT_MENU = [
     { idx: 0, label: "매출수", path: "execAmounts" },
@@ -14,55 +16,43 @@ export default function List() {
     { idx: 2, label: "방문횟수", path: "total-visit" },
   ];
   const [selectedSort, setSelectedSort] = useState(0);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const FILTER_MENU = [
-    {
-      idx: 0,
-      label: "가격별",
-      option: [
-        { label: "만원 이하", data: "10000" },
-        { label: "15,000원", data: "15000" },
-        { label: "20,000원", data: "20000" },
-        { label: "20,000원 이상", data: "25000" },
-      ],
-    },
-    {
-      idx: 1,
-      label: "계절별",
-      option: [
-        { label: "봄", data: "spring" },
-        { label: "여름", data: "summer" },
-        { label: "가을", data: "fall" },
-        { label: "겨울", data: "winter" },
-      ],
-    },
-    {
-      idx: 2,
-      label: "시간대별",
-      option: [
-        { label: "아침", data: "spring" },
-        { label: "점심", data: "spring" },
-        { label: "저녁", data: "spring" },
-      ],
-    },
-    {
-      idx: 3,
-      label: "인원별",
-      option: [
-        { label: "5명 이하", data: "spring" },
-        { label: "10명 이하", data: "spring" },
-        { label: "20명 이하", data: "spring" },
-        { label: "20명 이상", data: "spring" },
-      ],
-    },
-  ];
-  const [selectedFilter, setSelectedFilter] = useState(
-    FILTER_MENU.map(() => [])
-  );
-  const [isFilterApply, setIsFilterApply] = useState(false);
-  const [list, setList] = useState([]);
   const sortIdx = useRef(0);
-  const filterIdx = useRef(FILTER_MENU.map(() => []));
+
+  const [filterOpen, setFilterOpen] = useState(false);
+  const FILTER_MENU_PRICE = [
+    { idx: 0, label: "만원 이하", data: "10000" },
+    { idx: 1, label: "15,000원", data: "15000" },
+    { idx: 2, label: "20,000원", data: "20000" },
+    { idx: 3, label: "20,000원 이상", data: "25000" },
+  ];
+  const FILTER_MENU_SEASON = [
+    { idx: 0, label: "봄", data: "spring" },
+    { idx: 1, label: "여름", data: "summer" },
+    { idx: 2, label: "가을", data: "fall" },
+    { idx: 3, label: "겨울", data: "winter" },
+  ];
+  const FILTER_MENU_TIME = [
+    { idx: 0, label: "아침", data: "spring" },
+    { idx: 1, label: "점심", data: "spring" },
+    { idx: 2, label: "저녁", data: "spring" },
+  ];
+  const FILTER_MENU_PEOPLE = [
+    { idx: 0, label: "5명 이하", data: "spring" },
+    { idx: 1, label: "10명 이하", data: "spring" },
+    { idx: 2, label: "20명 이하", data: "spring" },
+    { idx: 3, label: "20명 이상", data: "spring" },
+  ];
+  const [isFilterApply, setIsFilterApply] = useState(false);
+  const [selectedFilterPrice, setSelectedFilterPrice] = useState(null);
+  const [selectedFilterSeason, setSelectedFilterSeason] = useState([]);
+  const [selectedFilterTime, setSelectedFilterTime] = useState([]);
+  const [selectedFilterPeople, setSelectedFilterPeople] = useState(null);
+  const filterPriceIdx = useRef(null);
+  const filterSeasonIdx = useRef([]);
+  const filterTimeIdx = useRef([]);
+  const filterPeopleIdx = useRef(null);
+  const selectedSection = useRef(null);
+  const isSortData = useRef(true);
 
   useEffect(() => {
     const modalSort = document.querySelector("#modalSort");
@@ -80,20 +70,35 @@ export default function List() {
     });
   }, []);
 
-  const handleSelectFilter = (labelIdx, optionIdx) => {
-    const newArr = JSON.parse(JSON.stringify(selectedFilter));
-    if (newArr[labelIdx].includes(optionIdx)) {
-      newArr[labelIdx] = newArr[labelIdx].filter((v) => v !== optionIdx);
-      setSelectedFilter(newArr);
-      return;
-    }
-    if (labelIdx === 0 || labelIdx === 3) {
-      // 중복 필터링 불가
-      newArr[labelIdx] = [optionIdx];
+  const initSelected = (sIdx) => {
+    // 다른 섹션은 선택 불가
+    setSelectedFilterPrice(sIdx === 0 ? selectedFilterPrice : null);
+    setSelectedFilterSeason(sIdx === 1 ? selectedFilterSeason : []);
+    setSelectedFilterTime(sIdx === 2 ? selectedFilterTime : []);
+    setSelectedFilterPeople(sIdx === 3 ? selectedFilterPeople : null);
+  };
+
+  const handleSelectOne = (state, setState, idx, sIdx) => {
+    initSelected(sIdx);
+    if (state === idx) {
+      setState(null);
+      selectedSection.current = null;
     } else {
-      newArr[labelIdx].push(optionIdx);
+      setState(idx);
+      selectedSection.current = sIdx;
     }
-    setSelectedFilter(newArr);
+  };
+
+  const handleSelectMany = (state, setState, idx, sIdx) => {
+    initSelected(sIdx);
+    if (state.includes(idx)) {
+      const newState = state.filter((v) => v !== idx);
+      setState(newState);
+      selectedSection.current = null;
+    } else {
+      setState((prev) => [...prev, idx]);
+      selectedSection.current = sIdx;
+    }
   };
 
   const getSortData = async () => {
@@ -113,7 +118,7 @@ export default function List() {
 
   const getPriceData = async () => {
     try {
-      const priceItem = FILTER_MENU[0].option[selectedFilter[0][0]];
+      const priceItem = FILTER_MENU_PRICE[selectedFilterPrice];
       const res = await axiosInstance.get(
         `/api/api/${priceItem.data}/${
           userInfo.userId ?? localStorage.getItem("userId")
@@ -133,17 +138,35 @@ export default function List() {
 
   useEffect(() => {
     if (filterOpen) return;
-    // console.log(selectedFilter);
-    const filterApply = selectedFilter.some((arr) => arr.length);
-    const isOn =
-      filterApply && selectedFilter[0][0] !== filterIdx.current[0][0];
-    setIsFilterApply(filterApply);
+    let isOn;
+    if (selectedSection.current === 0) {
+      isOn =
+        selectedFilterPrice !== null &&
+        selectedFilterPrice !== filterPriceIdx.current;
+      filterPriceIdx.current = selectedFilterPrice;
+    } else if (selectedSection.current === 1) {
+      isOn =
+        !selectedFilterSeason.length &&
+        selectedFilterSeason !== filterSeasonIdx.current;
+      filterSeasonIdx.current = selectedFilterSeason;
+    } else if (selectedSection.current === 2) {
+      isOn =
+        !selectedFilterTime.length &&
+        selectedFilterTime !== filterTimeIdx.current;
+      filterTimeIdx.current = selectedFilterTime;
+    } else if (selectedSection.current === 3) {
+      isOn =
+        selectedFilterPeople !== null &&
+        selectedFilterPeople !== filterPeopleIdx.current;
+      filterPeopleIdx.current = selectedFilterPeople;
+    }
+    setIsFilterApply(isOn);
     if (isOn) {
       getPriceData();
-    } else {
+      isSortData.current = false;
+    } else if (selectedSection.current === null && !isSortData.current) {
       getSortData();
     }
-    filterIdx.current[0][0] = selectedFilter[0][0];
   }, [filterOpen]);
 
   useEffect(() => {
@@ -152,6 +175,7 @@ export default function List() {
     if (isOn) {
       getSortData();
       sortIdx.current = selectedSort;
+      isSortData.current = true;
     }
   }, [sortOpen]);
 
@@ -246,30 +270,113 @@ export default function List() {
               aria-labelledby="dropdownDefaultButton"
               className="flex flex-col gap-[24px] text-[1.4rem] px-[16px]"
             >
-              {FILTER_MENU.map((v) => (
-                <li
-                  key={v.idx}
-                  className="flex flex-col gap-[8px] text-[1.4rem]"
-                >
-                  <span className="font-[Pretendard-Bold]">{v.label}</span>
-                  <div className="flex gap-x-[8px] gap-y-[10px] flex-wrap">
-                    {v.option.map((op, i) => (
-                      <button
-                        key={i}
-                        className={`shrink-0 min-w-[57px] h-[30px] px-[16px] rounded-full ${
-                          selectedFilter[v.idx].includes(i)
-                            ? "text-white font-[Pretendard-Medium] bg-[#FF823C]"
-                            : "bg-[#E4E6EA] text-[#9DA0A8]"
-                        }`}
-                        type="button"
-                        onClick={() => handleSelectFilter(v.idx, i)}
-                      >
-                        {op.label}
-                      </button>
-                    ))}
-                  </div>
-                </li>
-              ))}
+              <li className="flex flex-col gap-[8px] text-[1.4rem]">
+                <span className="font-[Pretendard-Bold]">가격별</span>
+                <div className="flex gap-x-[8px] gap-y-[10px] flex-wrap">
+                  {FILTER_MENU_PRICE.map((v) => (
+                    <button
+                      key={v.idx}
+                      className={`shrink-0 min-w-[57px] h-[30px] px-[16px] rounded-full ${
+                        selectedFilterPrice === v.idx
+                          ? "text-white font-[Pretendard-Medium] bg-[#FF823C]"
+                          : "bg-[#E4E6EA] text-[#9DA0A8]"
+                      }`}
+                      type="button"
+                      onClick={() =>
+                        handleSelectOne(
+                          selectedFilterPrice,
+                          setSelectedFilterPrice,
+                          v.idx,
+                          0
+                        )
+                      }
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+              </li>
+
+              <li className="flex flex-col gap-[8px] text-[1.4rem]">
+                <span className="font-[Pretendard-Bold]">계절별</span>
+                <div className="flex gap-x-[8px] gap-y-[10px] flex-wrap">
+                  {FILTER_MENU_SEASON.map((v) => (
+                    <button
+                      key={v.idx}
+                      className={`shrink-0 min-w-[57px] h-[30px] px-[16px] rounded-full ${
+                        selectedFilterSeason.includes(v.idx)
+                          ? "text-white font-[Pretendard-Medium] bg-[#FF823C]"
+                          : "bg-[#E4E6EA] text-[#9DA0A8]"
+                      }`}
+                      type="button"
+                      onClick={() =>
+                        handleSelectMany(
+                          selectedFilterSeason,
+                          setSelectedFilterSeason,
+                          v.idx,
+                          1
+                        )
+                      }
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+              </li>
+
+              <li className="flex flex-col gap-[8px] text-[1.4rem]">
+                <span className="font-[Pretendard-Bold]">시간대별</span>
+                <div className="flex gap-x-[8px] gap-y-[10px] flex-wrap">
+                  {FILTER_MENU_TIME.map((v) => (
+                    <button
+                      key={v.idx}
+                      className={`shrink-0 min-w-[57px] h-[30px] px-[16px] rounded-full ${
+                        selectedFilterTime.includes(v.idx)
+                          ? "text-white font-[Pretendard-Medium] bg-[#FF823C]"
+                          : "bg-[#E4E6EA] text-[#9DA0A8]"
+                      }`}
+                      type="button"
+                      onClick={() =>
+                        handleSelectMany(
+                          selectedFilterTime,
+                          setSelectedFilterTime,
+                          v.idx,
+                          2
+                        )
+                      }
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+              </li>
+
+              <li className="flex flex-col gap-[8px] text-[1.4rem]">
+                <span className="font-[Pretendard-Bold]">인원별</span>
+                <div className="flex gap-x-[8px] gap-y-[10px] flex-wrap">
+                  {FILTER_MENU_PEOPLE.map((v) => (
+                    <button
+                      key={v.idx}
+                      className={`shrink-0 min-w-[57px] h-[30px] px-[16px] rounded-full ${
+                        selectedFilterPeople === v.idx
+                          ? "text-white font-[Pretendard-Medium] bg-[#FF823C]"
+                          : "bg-[#E4E6EA] text-[#9DA0A8]"
+                      }`}
+                      type="button"
+                      onClick={() =>
+                        handleSelectOne(
+                          selectedFilterPeople,
+                          setSelectedFilterPeople,
+                          v.idx,
+                          3
+                        )
+                      }
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+              </li>
             </ul>
           </div>
         </div>
