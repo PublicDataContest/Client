@@ -19,14 +19,41 @@ export default function List() {
     {
       idx: 0,
       label: "가격별",
-      option: ["만원 이하", "15000원", "20000원", "20000이상"],
+      option: [
+        { label: "만원 이하", data: "10000" },
+        { label: "15,000원", data: "15000" },
+        { label: "20,000원", data: "20000" },
+        { label: "20,000원 이상", data: "25000" },
+      ],
     },
-    { idx: 1, label: "계절별", option: ["봄", "여름", "가을", "겨울"] },
-    { idx: 2, label: "시간대별", option: ["아침", "점심", "저녁"] },
+    {
+      idx: 1,
+      label: "계절별",
+      option: [
+        { label: "봄", data: "spring" },
+        { label: "여름", data: "summer" },
+        { label: "가을", data: "fall" },
+        { label: "겨울", data: "winter" },
+      ],
+    },
+    {
+      idx: 2,
+      label: "시간대별",
+      option: [
+        { label: "아침", data: "spring" },
+        { label: "점심", data: "spring" },
+        { label: "저녁", data: "spring" },
+      ],
+    },
     {
       idx: 3,
       label: "인원별",
-      option: ["5명이하", "10명이하", "20명이하", "20명이상"],
+      option: [
+        { label: "5명 이하", data: "spring" },
+        { label: "10명 이하", data: "spring" },
+        { label: "20명 이하", data: "spring" },
+        { label: "20명 이상", data: "spring" },
+      ],
     },
   ];
   const [selectedFilter, setSelectedFilter] = useState(
@@ -35,6 +62,7 @@ export default function List() {
   const [isFilterApply, setIsFilterApply] = useState(false);
   const [list, setList] = useState([]);
   const sortIdx = useRef(0);
+  const filterIdx = useRef(FILTER_MENU.map(() => []));
 
   useEffect(() => {
     const modalSort = document.querySelector("#modalSort");
@@ -83,17 +111,39 @@ export default function List() {
     }
   };
 
+  const getPriceData = async () => {
+    try {
+      const priceItem = FILTER_MENU[0].option[selectedFilter[0][0]];
+      const res = await axiosInstance.get(
+        `/api/api/${priceItem.data}/${
+          userInfo.userId ?? localStorage.getItem("userId")
+        }`
+      );
+      console.log("price", priceItem.label, res);
+      const { content } = res.data.data;
+      setList(content);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     getSortData();
   }, []);
 
   useEffect(() => {
     if (filterOpen) return;
-    const isOn = selectedFilter.some((arr) => arr.length);
-    setIsFilterApply(isOn);
+    // console.log(selectedFilter);
+    const filterApply = selectedFilter.some((arr) => arr.length);
+    const isOn =
+      filterApply && selectedFilter[0][0] !== filterIdx.current[0][0];
+    setIsFilterApply(filterApply);
     if (isOn) {
-      console.log(selectedFilter);
+      getPriceData();
+    } else {
+      getSortData();
     }
+    filterIdx.current[0][0] = selectedFilter[0][0];
   }, [filterOpen]);
 
   useEffect(() => {
@@ -214,7 +264,7 @@ export default function List() {
                         type="button"
                         onClick={() => handleSelectFilter(v.idx, i)}
                       >
-                        {op}
+                        {op.label}
                       </button>
                     ))}
                   </div>
