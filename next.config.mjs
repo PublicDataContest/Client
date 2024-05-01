@@ -20,6 +20,10 @@ const nextConfig = {
         protocol: "http",
         hostname: "t1.daumcdn.net",
       },
+      {
+        protocol: "https",
+        hostname: "football-management-msa.s3.ap-northeast-2.amazonaws.com",
+      },
     ],
   },
   async rewrites() {

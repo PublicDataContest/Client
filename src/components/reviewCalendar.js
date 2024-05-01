@@ -15,6 +15,11 @@ export default function ReviewCalendar({ date, setDate, setShowDate }) {
     );
   };
 
+  const handleSave = () => {
+    setDate(selectedDate);
+    setShowDate(false);
+  };
+
   return (
     <div className="h-[100vh] overflow-y-auto pb-[18px] bg-white">
       <div className="h-[48px] flex justify-between items-center px-[12px] py-[10px]">
@@ -30,7 +35,7 @@ export default function ReviewCalendar({ date, setDate, setShowDate }) {
         </div>
         <button
           className="font-sb text-[1.4rem] text-brand py-[10px] px-[12px]"
-          onClick={() => setDate(selectedDate)}
+          onClick={handleSave}
         >
           저장
         </button>
