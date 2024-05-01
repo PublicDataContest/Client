@@ -52,7 +52,7 @@ export default function KakaoMap({
       } = res.data.data;
       setContent(content);
     } catch (e) {
-      console.log(e.response.data.message);
+      // console.log(e.response.data.message);
     }
   };
 
