@@ -37,10 +37,10 @@ export default function List() {
     { idx: 2, label: "저녁", data: "dinner" },
   ];
   const FILTER_MENU_PEOPLE = [
-    { idx: 0, label: "5명 이하", data: "spring" },
-    { idx: 1, label: "10명 이하", data: "spring" },
-    { idx: 2, label: "20명 이하", data: "spring" },
-    { idx: 3, label: "20명 이상", data: "spring" },
+    { idx: 0, label: "5명 이하", data: "5" },
+    { idx: 1, label: "10명 이하", data: "10" },
+    { idx: 2, label: "20명 이하", data: "20" },
+    { idx: 3, label: "20명 이상", data: "25" },
   ];
   const [isFilterApply, setIsFilterApply] = useState(false);
   const [selectedFilterPrice, setSelectedFilterPrice] = useState(null);
@@ -219,6 +219,22 @@ export default function List() {
     }
   };
 
+  const getPeopleData = async () => {
+    try {
+      const peopleItem = FILTER_MENU_PEOPLE[selectedFilterPeople];
+      const res = await axiosInstance.get(
+        `/api/api/people/${userInfo.userId ?? localStorage.getItem("userId")}/${
+          peopleItem.data
+        }`
+      );
+      console.log("people", peopleItem.label, res);
+      const { content } = res.data.data;
+      setList(content);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     getSortData();
   }, []);
@@ -258,6 +274,7 @@ export default function List() {
         getTimeData();
         filterTimeIdx.current = selectedFilterTime;
       } else if (selectedSection.current === 3) {
+        getPeopleData();
         filterPeopleIdx.current = selectedFilterPeople;
       }
       isSortData.current = false;
