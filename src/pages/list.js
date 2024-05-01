@@ -32,9 +32,9 @@ export default function List() {
     { idx: 3, label: "겨울", data: "winter" },
   ];
   const FILTER_MENU_TIME = [
-    { idx: 0, label: "아침", data: "spring" },
-    { idx: 1, label: "점심", data: "spring" },
-    { idx: 2, label: "저녁", data: "spring" },
+    { idx: 0, label: "아침", data: "morning" },
+    { idx: 1, label: "점심", data: "lunch" },
+    { idx: 2, label: "저녁", data: "dinner" },
   ];
   const FILTER_MENU_PEOPLE = [
     { idx: 0, label: "5명 이하", data: "spring" },
@@ -157,6 +157,48 @@ export default function List() {
     setList(seasonList);
   };
 
+  const getTimeData = async () => {
+    console.log("selectedFilterTime", selectedFilterTime);
+    // 새로운 배열을 생성하여 각 프로미스의 완료를 기다릴 수 있도록 함
+    const timePromises = [];
+    selectedFilterTime.forEach(async (idx) => {
+      try {
+        const timeItem = FILTER_MENU_TIME[idx];
+        const promise = axiosInstance
+          .get(
+            `/api/api/time/${
+              userInfo.userId ?? localStorage.getItem("userId")
+            }?time=${timeItem.data}`
+          )
+          .then((res) => {
+            console.log("time", timeItem.label, res);
+            return res.data.data.content;
+          })
+          .catch((error) => {
+            console.log(error.response.data.message);
+            return [];
+          });
+        timePromises.push(promise);
+      } catch (e) {
+        console.error("Error fetching time data:", e);
+      }
+    });
+
+    try {
+      // 모든 프로미스가 완료되길 기다림
+      const timeList = await Promise.all(timePromises);
+      const flattenedTimeList = timeList.flat();
+      const uniqueTimeList = flattenedTimeList.filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.restaurantId === item.restaurantId)
+      );
+      console.log("timeList", uniqueTimeList);
+      setList(uniqueTimeList);
+    } catch (error) {
+      console.error("Error fetching time data:", error);
+    }
+  };
+
   useEffect(() => {
     getSortData();
   }, []);
@@ -193,6 +235,7 @@ export default function List() {
         getSeasonData();
         filterSeasonIdx.current = selectedFilterSeason;
       } else if (selectedSection.current === 2) {
+        getTimeData();
         filterTimeIdx.current = selectedFilterTime;
       } else if (selectedSection.current === 3) {
         filterPeopleIdx.current = selectedFilterPeople;
