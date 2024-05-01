@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { useState } from "react";
+import ReviewCalendar from "./reviewCalendar";
 
 export default function ReviewWrite({ setWriteReview }) {
   const [selectedStar, setSelectedStar] = useState(
     Array.from({ length: 5 }, () => false)
   );
+  const [date, setDate] = useState(new Date());
+  const [showDate, setShowDate] = useState(false);
 
   const handleSelectStar = (starIdx) => {
     const newArr = JSON.parse(JSON.stringify(selectedStar));
@@ -13,7 +16,11 @@ export default function ReviewWrite({ setWriteReview }) {
   };
 
   return (
-    <div className="h-[100vh] overflow-y-auto px-[16px] pb-[18px] bg-[#EFF1F4]">
+    <div
+      className={`relative h-[100vh] ${
+        showDate ? "overflow-hidden" : "overflow-y-auto"
+      } px-[16px] pb-[18px] bg-[#EFF1F4]`}
+    >
       <div className="py-[10px]">
         <Image
           alt="뒤로가기"
@@ -32,15 +39,20 @@ export default function ReviewWrite({ setWriteReview }) {
 
         <div className="bg-white h-[44px] rounded-[10px] px-[16px] flex justify-between items-center text-[1.4rem] font-[Pretendard-Medium]">
           <span className="text-[#3B3F4A]">방문 날짜</span>
-          <div className="flex gap-[4px] items-center">
+          <button
+            className="flex gap-[4px] items-center"
+            onClick={() => setShowDate(true)}
+          >
             <Image
               alt="방문 날짜"
               src={require("@images/calendar-gray.svg")}
               width={20}
               height={20}
             />
-            <span className="text-[#9DA0A8]">0000.00.00</span>
-          </div>
+            <span className="text-[#9DA0A8]">
+              {date.getFullYear()}.{date.getMonth() + 1}.{date.getDate()}
+            </span>
+          </button>
         </div>
 
         <div className="bg-white h-[100px] rounded-[10px] px-[16px] flex flex-col gap-[8px] justify-center items-center text-[1.4rem] font-[Pretendard-Medium]">
@@ -89,6 +101,16 @@ export default function ReviewWrite({ setWriteReview }) {
       <button className="w-full mt-[29px] h-[43px] bg-[#9DA0A8] rounded-[10px]">
         <span className="text-white font-[Pretendard-SemiBold]">등록하기</span>
       </button>
+
+      {showDate && (
+        <div className="absolute top-0 left-0 z-30 w-full">
+          <ReviewCalendar
+            date={date}
+            setDate={setDate}
+            setShowDate={setShowDate}
+          />
+        </div>
+      )}
     </div>
   );
 }
