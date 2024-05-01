@@ -135,26 +135,46 @@ export default function List() {
     }
   };
 
-  const getSeasonData = () => {
+  const getSeasonData = async () => {
     console.log("selectedFilterSeason", selectedFilterSeason);
-    let seasonList = [];
+    // 새로운 배열을 생성하여 각 프로미스의 완료를 기다릴 수 있도록 함
+    const seasonPromises = [];
     selectedFilterSeason.forEach(async (idx) => {
       try {
         const seasonItem = FILTER_MENU_SEASON[idx];
-        const res = await axiosInstance.get(
-          `/api/api/${
-            userInfo.userId ?? localStorage.getItem("userId")
-          }?season=${seasonItem.data}`
-        );
-        console.log("season", seasonItem.label, res);
-        const { content } = res.data.data;
-        seasonList = [...seasonList, ...content];
+        const promise = axiosInstance
+          .get(
+            `/api/api/${
+              userInfo.userId ?? localStorage.getItem("userId")
+            }?season=${seasonItem.data}`
+          )
+          .then((res) => {
+            console.log("season", seasonItem.label, res);
+            return res.data.data.content;
+          })
+          .catch((error) => {
+            console.log(error.response.data.message);
+            return [];
+          });
+        seasonPromises.push(promise);
       } catch (e) {
-        console.log(e.response.data.message);
+        console.error("Error fetching season data:", e);
       }
     });
-    console.log("seasonList", seasonList);
-    setList(seasonList);
+
+    try {
+      // 모든 프로미스가 완료되길 기다림
+      const seasonList = await Promise.all(seasonPromises);
+      const flattenedSeasonList = seasonList.flat();
+      const uniqueSeasonList = flattenedSeasonList.filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.restaurantId === item.restaurantId)
+      );
+      console.log("seasonList", uniqueSeasonList);
+      setList(uniqueSeasonList);
+    } catch (error) {
+      console.error("Error fetching season data:", error);
+    }
   };
 
   const getTimeData = async () => {
