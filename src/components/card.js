@@ -1,18 +1,22 @@
+import useWishList from "@hooks/useWishList";
 import Image from "next/image";
 
 export default function Card({ item }) {
+  const { wish, handleWish } = useWishList(item);
+
   return (
     <div className="shrink-0 pt-[12px] pb-[8px] px-[12px] w-[232px] h-[124px] rounded-[10px] bg-[#EFF1F4] flex flex-col justify-between relative">
       <Image
         alt=""
         src={
-          item.wishListRestaurant
+          wish
             ? require("@images/star-orange.svg")
             : require("@images/star-gray.svg")
         }
         width={20}
         height={20}
-        className="absolute top-[8px] right-[8px]"
+        className="absolute top-[8px] right-[8px] cursor-pointer"
+        onClick={handleWish}
       />
       <div className="flex flex-col">
         <div className="flex gap-[4px] items-center">

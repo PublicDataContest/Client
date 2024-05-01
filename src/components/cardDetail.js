@@ -1,5 +1,6 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import useWishList from "@hooks/useWishList";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export function CardDetail({
@@ -19,6 +20,8 @@ export function CardDetail({
   const starCnt = Math.round(item?.rating);
   const MAX_MENU_DISPLAY_CNT = 5;
   const MAX_REVIEW_DISPLAY_CNT = 3;
+
+  const { wish, handleWish } = useWishList(item);
 
   // 계절별
   const optionsSeason = {
@@ -95,13 +98,14 @@ export function CardDetail({
         <Image
           alt=""
           src={
-            item?.wishListRestaurant
-              ? require("@images/star-fill-orange.svg")
+            wish
+              ? require("@images/star-round-orange.svg")
               : require("@images/star-round-gray.svg")
           }
           width={32}
           height={32}
-          className="absolute top-[16px] right-[16px]"
+          className="absolute top-[16px] right-[16px] cursor-pointer"
+          onClick={handleWish}
         />
         <div className="flex items-center gap-[4px]">
           <span className="max-w-[286px] line-clamp-2 font-[Pretendard-SemiBold] text-[1.8rem] text-[#212121]">
