@@ -2,7 +2,7 @@ import axiosInstance from "@api/axiosInstance";
 import BottomTabNav from "@components/bottomTabNav";
 import ListCard from "@components/listCard";
 import useUserInfo from "@hooks/useUserInfo";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function My() {
   const { userInfo } = useUserInfo();
@@ -12,6 +12,54 @@ export default function My() {
     { idx: 0, label: "찜한 가게", path: "wish-restaurant" },
     { idx: 1, label: "리뷰 쓴 가게", path: "reviews" },
   ];
+
+  const containerRef = useRef(null);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+
+  const handleMouseDown = (e) => {
+    touchStartX.current = e.clientX;
+  };
+  const handleMouseMove = (e) => {
+    touchEndX.current = e.clientX;
+  };
+  const handleMouseUp = () => {
+    if (touchStartX.current - touchEndX.current > 30) {
+      // swipe left
+      if (tabIdx < TAB_MENU.length - 1) {
+        setTabIdx(tabIdx + 1);
+      }
+    }
+
+    if (touchStartX.current - touchEndX.current < -30) {
+      // swipe right
+      if (tabIdx > 0) {
+        setTabIdx(tabIdx - 1);
+      }
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = () => {
+    if (touchStartX.current - touchEndX.current > 30) {
+      // swipe left
+      if (tabIdx < TAB_MENU.length - 1) {
+        setTabIdx(tabIdx + 1);
+      }
+    }
+
+    if (touchStartX.current - touchEndX.current < -30) {
+      // swipe right
+      if (tabIdx > 0) {
+        setTabIdx(tabIdx - 1);
+      }
+    }
+  };
 
   const getList = async () => {
     try {
@@ -32,7 +80,16 @@ export default function My() {
   }, [tabIdx]);
 
   return (
-    <div className="relative h-[100vh] overflow-y-auto bg-[#EFF1F4]">
+    <div
+      className="relative h-[100vh] overflow-y-auto bg-[#EFF1F4]"
+      ref={containerRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <div className="flex pt-[24px] px-[16px]">
         {TAB_MENU.map((v) => (
           <button
