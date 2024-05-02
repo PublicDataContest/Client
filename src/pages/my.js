@@ -6,44 +6,30 @@ import { useEffect, useState } from "react";
 
 export default function My() {
   const { userInfo } = useUserInfo();
-  const [wishList, setWishList] = useState([]);
-  const [reviewList, setReviewList] = useState([]);
+  const [list, setList] = useState([]);
   const [tabIdx, setTabIdx] = useState(0);
   const TAB_MENU = [
-    { idx: 0, label: "찜한 가게" },
-    { idx: 1, label: "리뷰 쓴 가게" },
+    { idx: 0, label: "찜한 가게", path: "wish-restaurant" },
+    { idx: 1, label: "리뷰 쓴 가게", path: "reviews" },
   ];
 
-  const getWishList = async () => {
+  const getList = async () => {
     try {
       const res = await axiosInstance.get(
-        `/api/api/${
-          userInfo.userId ?? localStorage.getItem("userId")
-        }/wish-restaurant`
+        `/api/api/${userInfo.userId ?? localStorage.getItem("userId")}/${
+          TAB_MENU[tabIdx].path
+        }`
       );
-      console.log("wish-restaurant", res);
-      setWishList(res.data.data.content);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getReviewList = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/${userInfo.userId ?? localStorage.getItem("userId")}/reviews`
-      );
-      console.log("reviews", res);
-      setReviewList(res.data.data.content);
+      console.log("wish-restaurant or reviews", res);
+      setList(res.data.data.content);
     } catch (e) {
       console.log(e.response.data.message);
     }
   };
 
   useEffect(() => {
-    getWishList();
-    getReviewList();
-  }, []);
+    getList();
+  }, [tabIdx]);
 
   return (
     <div className="relative h-[100vh] overflow-y-auto bg-[#EFF1F4]">
@@ -71,9 +57,9 @@ export default function My() {
 
       <div className="pt-[22px] px-[16px] flex flex-col gap-[12px]">
         <span className="font-b">2024.02.21</span>
-        {tabIdx === 0
-          ? wishList.map((v, i) => <ListCard key={i} item={v} />)
-          : reviewList.map((v, i) => <ListCard key={i} item={v} />)}
+        {list.map((v, i) => (
+          <ListCard key={i} item={v} />
+        ))}
       </div>
 
       <div className="absolute bottom-0 left-0 w-full z-10">

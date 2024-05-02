@@ -1,18 +1,22 @@
+import useWishList from "@hooks/useWishList";
 import Image from "next/image";
 
 export default function ListCard({ item }) {
+  const { wish, handleWish } = useWishList(item);
+
   return (
     <div className="flex gap-[10px] w-[343px] h-[118px] bg-white rounded-[10px] p-[8px] relative">
       <Image
         alt=""
         src={
-          item.wishListRestaurant
+          wish
             ? require("@images/star-orange.svg")
             : require("@images/star-gray.svg")
         }
         width={20}
         height={20}
         className="absolute top-[10px] right-[10px] cursor-pointer"
+        onClick={handleWish}
       />
       <Image
         alt="냉면"
