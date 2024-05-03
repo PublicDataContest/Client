@@ -232,6 +232,7 @@ export default function Home() {
           <ReviewWrite
             setWriteReview={setWriteReview}
             item={content[selectedMarker]}
+            getReview={getReview}
           />
         </div>
       )}

@@ -5,7 +5,7 @@ import axiosInstance from "@api/axiosInstance";
 import useUserInfo from "@hooks/useUserInfo";
 import getDateString from "@utils/getDateString";
 
-export default function ReviewWrite({ setWriteReview, item }) {
+export default function ReviewWrite({ setWriteReview, item, getReview }) {
   const { userInfo } = useUserInfo();
   const [selectedStar, setSelectedStar] = useState(
     Array.from({ length: 5 }, () => false)
@@ -102,6 +102,7 @@ export default function ReviewWrite({ setWriteReview, item }) {
       );
       alert("리뷰가 등록되었습니다.");
       setWriteReview(false);
+      getReview(); // 리뷰 업데이트 반영
     } catch (error) {
       console.log(error.response.data.message);
     }
