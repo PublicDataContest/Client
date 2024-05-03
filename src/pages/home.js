@@ -3,7 +3,7 @@ import DraggableCard from "@components/draggableCard";
 import KakaoMap from "@components/kakaoMap";
 import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import ReviewWrite from "@components/reviewWrite";
 import axiosInstance from "@api/axiosInstance";
@@ -38,8 +38,9 @@ export default function Home() {
   const [people, setPeople] = useState(null);
   const [review, setReview] = useState([]);
   const [showReview, setShowReview] = useState(false);
+  const modalRef = useRef(null);
   const { isModalOpen, modalText, callbackFn, openModal, closeModal } =
-    useModal();
+    useModal(modalRef);
 
   const getDetailContent = async () => {
     try {
@@ -254,7 +255,13 @@ export default function Home() {
       )}
 
       {isModalOpen && (
-        <div className="absolute top-0 left-0 w-full z-30 bg-black/30 h-full flex justify-center items-center">
+        <div
+          className="absolute top-0 left-0 w-full z-30 bg-black/30 h-full flex justify-center items-center"
+          ref={modalRef}
+          onClick={(e) => {
+            if (e.target === modalRef.current) closeModal();
+          }}
+        >
           <LayerPopup
             text={modalText}
             btnTextL={"취소"}
