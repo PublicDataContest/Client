@@ -27,57 +27,22 @@ export default function Home() {
           className="shadow-gray"
         />
         <p className="font-b text-[2.2rem] text-[#F9FAFC]">
-          간편 로그인으로 공식탐방을
+          공슐랭가이드를
           <br />
           즐겨보세요!
         </p>
       </div>
-      <div className="flex flex-col gap-[12px] items-center">
-        {/* <Link className="w-full" href="/home"> */}
-        <button className="bg-[#FEE500] flex items-center gap-[34px] px-[46px] shadow-gray-sm w-full text-[1.4rem] font-m h-[42px] rounded-[5px]">
-          <Image
-            alt=""
-            src={require("@images/kakao.svg")}
-            width={24}
-            height={24}
-          />
-          <span className="text-[#3B3F4A]">카카오톡으로 로그인</span>
-        </button>
-        {/* </Link> */}
-
-        {/* <Link className="w-full" href="/home"> */}
-        <button className="bg-[#03C75A] flex items-center gap-[34px] px-[46px] shadow-gray-sm w-full text-[1.4rem] font-m h-[42px] rounded-[5px]">
-          <Image
-            alt=""
-            src={require("@images/naver.svg")}
-            width={24}
-            height={24}
-          />
-          <span className="text-white">네이버로 로그인</span>
-        </button>
-        {/* </Link> */}
-
-        {/* <Link className="w-full" href="/home"> */}
-        <button className="bg-[#F9FAFC] flex items-center gap-[34px] px-[46px] shadow-gray-sm w-full text-[1.4rem] font-m h-[42px] rounded-[5px]">
-          <Image
-            alt=""
-            src={require("@images/google.svg")}
-            width={24}
-            height={24}
-          />
-          <span className="text-[#555]">구글로 로그인</span>
-        </button>
-        {/* </Link> */}
-
-        <div className="flex gap-[10px] items-center font-m text-[1.3rem] text-[#F9FAFC]">
-          <Link href={"/login"}>
-            <span>로그인</span>
-          </Link>
-          <div className="w-[1px] h-[11px] bg-[#F9FAFC]" />
-          <Link href={"/signup"}>
-            <span>회원가입</span>
-          </Link>
-        </div>
+      <div className="flex flex-col gap-[18px] items-center">
+        <Link className="w-full" href="/login">
+          <button className="bg-white shadow-gray-sm w-full text-[1.4rem] font-m h-[42px] rounded-[5px]">
+            <span className="text-[#3B3F4A]">로그인</span>
+          </button>
+        </Link>
+        <Link className="w-full" href="/signup">
+          <button className="bg-[#464343] shadow-gray-sm w-full text-[1.4rem] font-m h-[42px] rounded-[5px]">
+            <span className="text-white">회원가입</span>
+          </button>
+        </Link>
       </div>
     </main>
   );
