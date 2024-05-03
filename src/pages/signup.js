@@ -33,7 +33,7 @@ export default function Signup() {
   };
 
   return (
-    <form className="h-[100vh] overflow-y-auto pb-[38px]" onSubmit={signup}>
+    <form className="overflow-y-auto pb-[38px]" onSubmit={signup}>
       <Header label={"회원가입"} />
       <div className="px-[16px]">
         <div className="flex flex-col gap-[33px] pt-[13px] pb-[66px]">

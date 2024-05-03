@@ -21,7 +21,7 @@ export default function ReviewCalendar({ date, setDate, setShowDate }) {
   };
 
   return (
-    <div className="h-[100vh] overflow-y-auto pb-[18px] bg-white">
+    <div className="overflow-y-auto pb-[18px] bg-white">
       <div className="h-[48px] flex justify-between items-center px-[12px] py-[10px]">
         <div className="p-[8px]">
           <Image

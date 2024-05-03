@@ -42,3 +42,12 @@ body {
 input:focus {
   outline: none;
 }
+
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div,
+main {
+  height: 100%;
+}

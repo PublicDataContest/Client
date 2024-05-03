@@ -151,7 +151,7 @@ export default function Home() {
   }, [selectedMarker]);
 
   return (
-    <div className="relative h-[100vh] overflow-y-auto">
+    <div className="relative overflow-y-auto">
       <div className="absolute top-0 left-0 w-[375px] pt-[44px] z-10">
         <div className="pl-[16px] relative before:content-locationIcon before:absolute before:top-[10px] before:left-[28px]">
           <input className="w-[343px] h-[44px] pl-[38px] pr-[12px] px-[12px] text-[1.4rem] text-[#3B3F4A] bg-white rounded-[10px] shadow-gray" />

@@ -294,7 +294,7 @@ export default function List() {
   }, [sortOpen]);
 
   return (
-    <div className="flex flex-col gap-[14px] pt-[28px] pb-[80px] px-[16px] bg-[#EFF1F4] h-[100vh] overflow-y-auto">
+    <div className="flex flex-col gap-[14px] pt-[28px] pb-[80px] px-[16px] bg-[#EFF1F4] overflow-y-auto">
       <div className="flex justify-between items-center">
         <button
           type="button"

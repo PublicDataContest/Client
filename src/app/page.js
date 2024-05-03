@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="bg-brand flex flex-col justify-around p-[42px] h-[100vh]">
+    <main className="bg-brand flex flex-col justify-around p-[42px]">
       <div className="flex flex-col gap-[12px]">
         <Image
           alt=""

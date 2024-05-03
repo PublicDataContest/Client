@@ -3,7 +3,7 @@ import ReviewItem from "@components/reviewItem";
 
 export default function ReviewList({ review, setShowReview, openModal }) {
   return (
-    <div className="h-[100vh] overflow-y-auto px-[16px] pb-[18px] bg-white">
+    <div className="overflow-y-auto px-[16px] pb-[18px] bg-white">
       <div className="py-[10px]">
         <Image
           alt="뒤로가기"

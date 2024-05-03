@@ -45,7 +45,7 @@ export default function Recommendation() {
   }, []);
 
   return (
-    <div className="relative h-[100vh] overflow-y-auto pb-[60px]">
+    <div className="relative overflow-y-auto pb-[60px]">
       <div className="flex flex-col gap-[8px] bg-[#EFF1F4] pt-[22px] pb-[36px] px-[16px]">
         <div className="h-[22px] flex justify-between">
           <span className="font-b">Top5 맛집</span>

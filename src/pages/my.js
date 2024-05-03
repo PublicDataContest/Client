@@ -81,7 +81,7 @@ export default function My() {
 
   return (
     <div
-      className="relative h-[100vh] overflow-y-auto bg-[#EFF1F4]"
+      className="relative overflow-y-auto bg-[#EFF1F4]"
       ref={containerRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}

@@ -110,7 +110,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
 
   return (
     <div
-      className={`relative h-[100vh] ${
+      className={`relative ${
         showDate ? "overflow-hidden" : "overflow-y-auto"
       } px-[16px] pb-[18px] bg-[#EFF1F4]`}
     >
