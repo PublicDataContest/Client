@@ -2,18 +2,17 @@ import axiosInstance from "@api/axiosInstance";
 import useUserInfo from "@hooks/useUserInfo";
 import Image from "next/image";
 
-export default function ReviewItem({ item, getReview }) {
+export default function ReviewItem({ item, openModal }) {
   const { userInfo } = useUserInfo();
 
-  const handleDeleteReview = async (reviewId) => {
+  const deleteReview = async () => {
     try {
       const res = await axiosInstance.delete(
         `/api/api/review/normal/${
           userInfo.userId ?? localStorage.getItem("userId")
-        }/reviews/${reviewId}`
+        }/reviews/${item.id}`
       );
       console.log("delete review", res);
-      getReview();
     } catch (e) {
       console.log(e.response.data.message);
     }
@@ -58,7 +57,12 @@ export default function ReviewItem({ item, getReview }) {
               width={24}
               height={24}
               className="mb-[6px] cursor-pointer"
-              onClick={() => handleDeleteReview(item.id)}
+              onClick={() =>
+                openModal(
+                  "리뷰를 삭제하시겠습니까?",
+                  () => () => deleteReview()
+                )
+              }
             />
           )}
       </div>

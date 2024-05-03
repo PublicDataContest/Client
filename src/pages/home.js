@@ -10,6 +10,8 @@ import axiosInstance from "@api/axiosInstance";
 import useUserInfo from "@hooks/useUserInfo";
 import MenuList from "@components/menuList";
 import ReviewList from "@components/reviewList";
+import { useModal } from "@hooks/useModal";
+import LayerPopup from "@components/layerPopup";
 
 export default function Home() {
   const { userInfo } = useUserInfo();
@@ -36,6 +38,8 @@ export default function Home() {
   const [people, setPeople] = useState(null);
   const [review, setReview] = useState([]);
   const [showReview, setShowReview] = useState(false);
+  const { isModalOpen, modalText, callbackFn, openModal, closeModal } =
+    useModal();
 
   const getDetailContent = async () => {
     try {
@@ -188,7 +192,7 @@ export default function Home() {
                 review={review}
                 showReview={showReview}
                 setShowReview={setShowReview}
-                getReview={getReview}
+                openModal={openModal}
               />
             </div>
           )}
@@ -243,7 +247,23 @@ export default function Home() {
           <ReviewList
             review={review}
             setShowReview={setShowReview}
-            getReview={getReview}
+            openModal={openModal}
+          />
+        </div>
+      )}
+
+      {isModalOpen && (
+        <div className="absolute top-0 left-0 w-full z-30 bg-black/30 h-full flex justify-center items-center">
+          <LayerPopup
+            text={modalText}
+            btnTextL={"취소"}
+            btnTextR={"삭제"}
+            callbackFnL={closeModal}
+            callbackFnR={() => {
+              callbackFn();
+              getReview();
+              closeModal();
+            }}
           />
         </div>
       )}

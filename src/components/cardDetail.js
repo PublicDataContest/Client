@@ -18,7 +18,7 @@ export function CardDetail({
   review,
   showReview,
   setShowReview,
-  getReview,
+  openModal,
 }) {
   const starCnt = Math.round(item?.rating);
   const MAX_MENU_DISPLAY_CNT = 5;
@@ -235,12 +235,12 @@ export function CardDetail({
         <div className="flex flex-col gap-[24px]">
           {!isFull && showReview
             ? review.map((v) => (
-                <ReviewItem key={v.id} item={v} getReview={getReview} />
+                <ReviewItem key={v.id} item={v} openModal={openModal} />
               ))
             : review
                 .slice(0, MAX_REVIEW_DISPLAY_CNT)
                 .map((v) => (
-                  <ReviewItem key={v.id} item={v} getReview={getReview} />
+                  <ReviewItem key={v.id} item={v} openModal={openModal} />
                 ))}
         </div>
       </div>
