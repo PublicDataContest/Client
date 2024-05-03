@@ -103,7 +103,7 @@ export function DraggableCardDetail({
             src={require("@images/close-white.svg")}
             width={24}
             height={24}
-            className="absolute top-[8px] right-[16px] z-20"
+            className="absolute top-[8px] right-[16px] z-20 cursor-pointer"
             onClick={() => setLevel((prev) => prev - 1)}
           />
         ))}
