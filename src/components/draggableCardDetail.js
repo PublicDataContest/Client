@@ -93,6 +93,7 @@ export function DraggableCardDetail({
               width={24}
               height={24}
               onClick={() => setLevel((prev) => prev - 1)}
+              className="cursor-pointer"
             />
           </div>
         ) : (
