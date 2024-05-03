@@ -1,8 +1,20 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import useUserInfo from "@hooks/useUserInfo";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
+  const { userInfo } = useUserInfo();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (userInfo.userId !== null || localStorage.getItem("userId") !== null) {
+      router.push("/home");
+    }
+  }, []);
+
   return (
     <main className="bg-brand flex flex-col justify-around p-[42px]">
       <div className="flex flex-col gap-[12px]">
