@@ -28,7 +28,7 @@ export default function ReviewWrite({ setWriteReview, item }) {
     const maxAddImageCnt = MAX_IMG_CNT - formImages.length; // 새로 추가할 이미지의 최대 업로드 개수
 
     // 1. 파일 업로드 개수 검증
-    if (imageArr.length > MAX_IMG_CNT) {
+    if (imageArr.length > maxAddImageCnt) {
       alert("최대 등록 가능한 이미지 개수를 초과했습니다.");
       return;
     }
@@ -82,11 +82,11 @@ export default function ReviewWrite({ setWriteReview, item }) {
     if (formImages.length > 0) {
       // 이미지 파일이 업로드된 경우
       Array.from(formImages).forEach((image) => {
-        formData.append("photoFile", image); // 이미지 파일 배열 담기
+        formData.append("photoUrl", image); // 이미지 파일 배열 담기
       });
     } else {
       // 업로드된 이미지 파일이 없는 경우
-      formData.append("photoFile", null);
+      formData.append("photoUrl", null);
     }
 
     formData.append("relativeTimeDescription", getDateString(date));
