@@ -122,7 +122,7 @@ export function CardDetail({
         <div className="h-[44px] rounded-[8px] bg-[#EFF1F4] flex items-center py-[11px] px-[12px]">
           <div className="flex gap-[8px]">
             <div className="flex gap-[4px] items-center">
-              {Array(starCnt).map((_, i) => (
+              {Array.from({ length: starCnt }).map((_, i) => (
                 <Image
                   key={i}
                   alt=""
@@ -131,7 +131,7 @@ export function CardDetail({
                   height={21}
                 />
               ))}
-              {Array(5 - starCnt).map((_, i) => (
+              {Array.from({ length: 5 - starCnt }).map((_, i) => (
                 <Image
                   key={5 - i}
                   alt=""
