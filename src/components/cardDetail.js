@@ -1,6 +1,8 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import useWishList from "@hooks/useWishList";
+import ReviewItem from "@components/reviewItem";
+import MenuItem from "@components/menuItem";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export function CardDetail({
@@ -157,28 +159,13 @@ export function CardDetail({
         <div className="px-[2px]">
           {!isFull && showMenu
             ? menu.map((v, i) => (
-                <div
-                  key={i}
-                  className={`${
-                    i < menu.length - 1 && "border-b border-b-[#EFF1F4]"
-                  } py-[12px] flex flex-col gap-[2px] text-[#3B3F4A] text-[1.4rem]`}
-                >
-                  <span>{v.menu}</span>
-                  <span className="font-b">{v.price}</span>
-                </div>
+                <MenuItem key={i} item={v} idx={i} menu={menu} />
               ))
-            : menu.slice(0, MAX_MENU_DISPLAY_CNT).map((v, i) => (
-                <div
-                  key={i}
-                  className={`${
-                    i < MAX_MENU_DISPLAY_CNT - 1 &&
-                    "border-b border-b-[#EFF1F4]"
-                  } py-[12px] flex flex-col gap-[2px] text-[#3B3F4A] text-[1.4rem]`}
-                >
-                  <span>{v.menu}</span>
-                  <span className="font-b">{v.price}</span>
-                </div>
-              ))}
+            : menu
+                .slice(0, MAX_MENU_DISPLAY_CNT)
+                .map((v, i) => (
+                  <MenuItem key={i} item={v} idx={i} menu={menu} />
+                ))}
         </div>
       </div>
       {menu.length > MAX_MENU_DISPLAY_CNT && !showMenu && (
@@ -246,104 +233,10 @@ export function CardDetail({
         </span>
         <div className="flex flex-col gap-[24px]">
           {!isFull && showReview
-            ? review.map((v) => (
-                <div
-                  key={v.id}
-                  className="flex flex-col gap-[8px] text-[1.4rem]"
-                >
-                  <span className="font-m text-[#9DA0A8]">
-                    {v.relativeTimeDescription}
-                  </span>
-                  <span className="font-b text-[#3B3F4A]">{v.authorName}</span>
-                  <div className="flex gap-[6px] items-center mb-[2px]">
-                    <div className="flex gap-[4px] items-center">
-                      {Array.from({ length: Math.round(v.rating) }).map(
-                        (_, i) => (
-                          <Image
-                            key={`${i}-review`}
-                            alt=""
-                            src={require("@images/star_review-orange.svg")}
-                            width={22}
-                            height={21}
-                          />
-                        )
-                      )}
-                      {Array.from({ length: 5 - Math.round(v.rating) }).map(
-                        (_, i) => (
-                          <Image
-                            key={`${5 - i}-review`}
-                            alt=""
-                            src={require("@images/star_review-gray.svg")}
-                            width={22}
-                            height={21}
-                          />
-                        )
-                      )}
-                    </div>
-                    <span className="text-[#FF823C] font-b">{v.rating}</span>
-                  </div>
-                  {v.photoUrl && (
-                    <Image
-                      alt=""
-                      src={v.photoUrl}
-                      width={343}
-                      height={155}
-                      priority
-                      className="h-[155px] mb-[8px] rounded-[8px] object-cover"
-                    />
-                  )}
-                  <p className="text-[#3B3F4A]">{v.text}</p>
-                </div>
-              ))
-            : review.slice(0, MAX_REVIEW_DISPLAY_CNT).map((v) => (
-                <div
-                  key={v.id}
-                  className="flex flex-col gap-[8px] text-[1.4rem]"
-                >
-                  <span className="font-m text-[#9DA0A8]">
-                    {v.relativeTimeDescription}
-                  </span>
-                  <span className="font-b text-[#3B3F4A]">{v.authorName}</span>
-                  <div className="flex gap-[6px] items-center mb-[2px]">
-                    <div className="flex gap-[4px] items-center">
-                      {Array.from({ length: Math.round(v.rating) }).map(
-                        (_, i) => (
-                          <Image
-                            key={`${i}-review`}
-                            alt=""
-                            src={require("@images/star_review-orange.svg")}
-                            width={22}
-                            height={21}
-                          />
-                        )
-                      )}
-                      {Array.from({ length: 5 - Math.round(v.rating) }).map(
-                        (_, i) => (
-                          <Image
-                            key={`${5 - i}-review`}
-                            alt=""
-                            src={require("@images/star_review-gray.svg")}
-                            width={22}
-                            height={21}
-                          />
-                        )
-                      )}
-                    </div>
-                    <span className="text-[#FF823C] font-b">{v.rating}</span>
-                  </div>
-                  {v.photoUrl && (
-                    <Image
-                      alt=""
-                      src={v.photoUrl}
-                      width={343}
-                      height={155}
-                      priority
-                      className="h-[155px] mb-[8px] rounded-[8px] object-cover"
-                    />
-                  )}
-                  <p className="text-[#3B3F4A]">{v.text}</p>
-                </div>
-              ))}
+            ? review.map((v) => <ReviewItem key={v.id} item={v} />)
+            : review
+                .slice(0, MAX_REVIEW_DISPLAY_CNT)
+                .map((v) => <ReviewItem key={v.id} item={v} />)}
         </div>
       </div>
       {review.length > MAX_REVIEW_DISPLAY_CNT && !showReview && (
