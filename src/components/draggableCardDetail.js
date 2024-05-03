@@ -18,6 +18,7 @@ export function DraggableCardDetail({
   review,
   showReview,
   setShowReview,
+  getReview,
 }) {
   const [level, setLevel] = useState(0);
   const startY = useRef(0);
@@ -119,6 +120,7 @@ export function DraggableCardDetail({
         review={review}
         showReview={showReview}
         setShowReview={setShowReview}
+        getReview={getReview}
       />
     </div>
   );

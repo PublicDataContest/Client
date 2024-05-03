@@ -1,34 +1,66 @@
+import axiosInstance from "@api/axiosInstance";
+import useUserInfo from "@hooks/useUserInfo";
 import Image from "next/image";
 
-export default function ReviewItem({ item }) {
+export default function ReviewItem({ item, getReview }) {
+  const { userInfo } = useUserInfo();
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      const res = await axiosInstance.delete(
+        `/api/api/review/normal/${
+          userInfo.userId ?? localStorage.getItem("userId")
+        }/reviews/${reviewId}`
+      );
+      console.log("delete review", res);
+      getReview();
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-[8px] text-[1.4rem]">
       <span className="font-m text-[#9DA0A8]">
         {item.relativeTimeDescription}
       </span>
       <span className="font-b text-[#3B3F4A]">{item.authorName}</span>
-      <div className="flex gap-[6px] items-center mb-[2px]">
-        <div className="flex gap-[4px] items-center">
-          {Array.from({ length: Math.round(item.rating) }).map((_, i) => (
-            <Image
-              key={`${i}-review`}
-              alt=""
-              src={require("@images/star_review-orange.svg")}
-              width={22}
-              height={21}
-            />
-          ))}
-          {Array.from({ length: 5 - Math.round(item.rating) }).map((_, i) => (
-            <Image
-              key={`${5 - i}-review`}
-              alt=""
-              src={require("@images/star_review-gray.svg")}
-              width={22}
-              height={21}
-            />
-          ))}
+      <div className="flex justify-between">
+        <div className="flex gap-[6px] items-center mb-[2px]">
+          <div className="flex gap-[4px] items-center">
+            {Array.from({ length: Math.round(item.rating) }).map((_, i) => (
+              <Image
+                key={`${i}-review`}
+                alt=""
+                src={require("@images/star_review-orange.svg")}
+                width={22}
+                height={21}
+              />
+            ))}
+            {Array.from({ length: 5 - Math.round(item.rating) }).map((_, i) => (
+              <Image
+                key={`${5 - i}-review`}
+                alt=""
+                src={require("@images/star_review-gray.svg")}
+                width={22}
+                height={21}
+              />
+            ))}
+          </div>
+          <span className="text-[#FF823C] font-b">{item.rating}</span>
         </div>
-        <span className="text-[#FF823C] font-b">{item.rating}</span>
+        {item.userId &&
+          item.userId ===
+            (userInfo.userId ?? +localStorage.getItem("userId")) && (
+            <Image
+              alt="삭제하기"
+              src={require("@images/trash-gray.svg")}
+              width={24}
+              height={24}
+              className="mb-[6px] cursor-pointer"
+              onClick={() => handleDeleteReview(item.id)}
+            />
+          )}
       </div>
       {item.photoUrl && (
         <Image

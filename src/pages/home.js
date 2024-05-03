@@ -188,6 +188,7 @@ export default function Home() {
                 review={review}
                 showReview={showReview}
                 setShowReview={setShowReview}
+                getReview={getReview}
               />
             </div>
           )}
@@ -239,7 +240,11 @@ export default function Home() {
 
       {isFull && showReview && (
         <div className="absolute top-0 left-0 w-full z-30">
-          <ReviewList review={review} setShowReview={setShowReview} />
+          <ReviewList
+            review={review}
+            setShowReview={setShowReview}
+            getReview={getReview}
+          />
         </div>
       )}
     </div>

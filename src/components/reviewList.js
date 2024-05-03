@@ -1,7 +1,7 @@
 import Image from "next/image";
 import ReviewItem from "@components/reviewItem";
 
-export default function ReviewList({ review, setShowReview }) {
+export default function ReviewList({ review, setShowReview, getReview }) {
   return (
     <div className="h-[100vh] overflow-y-auto px-[16px] pb-[18px] bg-white">
       <div className="py-[10px]">
@@ -21,7 +21,7 @@ export default function ReviewList({ review, setShowReview }) {
         </span>
         <div className="flex flex-col gap-[24px]">
           {review.map((v) => (
-            <ReviewItem key={v.id} item={v} />
+            <ReviewItem key={v.id} item={v} getReview={getReview} />
           ))}
         </div>
       </div>
