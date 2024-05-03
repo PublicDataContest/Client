@@ -1,6 +1,7 @@
 import { CardDetail } from "@components/cardDetail";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useVh } from "@hooks/useVh";
 
 const LEVEL_HEIGHTS = [65, 100];
 
@@ -24,6 +25,7 @@ export function DraggableCardDetail({
   const startY = useRef(0);
   const deltaY = useRef(0);
   const [stickyHeader, setStickyHeader] = useState(false);
+  const vh = useVh();
 
   useEffect(() => {
     setIsFull(level === LEVEL_HEIGHTS.length - 1);
@@ -81,7 +83,7 @@ export function DraggableCardDetail({
         isFull ||
         "rounded-t-[20px] before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-20"
       } overflow-hidden bg-white shadow-t-gray transition-[height] duration-75`}
-      style={{ height: `${LEVEL_HEIGHTS[level]}vh` }}
+      style={{ height: `calc(var(--vh, 1vh) * ${LEVEL_HEIGHTS[level]})` }}
       onTouchStart={handleTouchStart}
       onMouseDown={handleMouseDown}
     >
