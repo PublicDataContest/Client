@@ -116,7 +116,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
 
   return (
     <div
-      className={`relative ${
+      className={`relative h-full ${
         showDate ? "overflow-hidden" : "overflow-y-auto"
       } px-[16px] pb-[18px] bg-[#EFF1F4]`}
     >
@@ -156,7 +156,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
             </button>
           </div>
 
-          <div className="bg-white h-[100px] rounded-[10px] px-[16px] flex flex-col gap-[8px] justify-center items-center text-[1.4rem] font-[Pretendard-Medium]">
+          <div className="bg-white h-[85px] rounded-[10px] px-[16px] flex flex-col gap-[8px] justify-center items-center text-[1.4rem] font-[Pretendard-Medium]">
             <span className="text-[#3B3F4A]">방문한 가게는 어떠셨나요?</span>
             <div className="flex gap-[7px] items-center">
               {selectedStar.map((v, i) => (
@@ -180,7 +180,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
 
           <div className="flex flex-col gap-[4px]">
             <textarea
-              className="bg-white h-[223px] rounded-[10px] py-[12px] px-[14px] placeholder:text-[#9DA0A8]"
+              className="bg-white h-[160px] rounded-[10px] py-[12px] px-[14px] placeholder:text-[#9DA0A8]"
               placeholder={`방문한 가게에 대한 리뷰를 남겨 주세요.${"\n"}(최소 10자)`}
               onChange={(e) => setText(e.target.value)}
             ></textarea>
@@ -189,7 +189,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
             </span>
           </div>
 
-          <div className="mt-[4px] bg-white h-[157px] rounded-[10px] p-[16px] font-[Pretendard-Medium] flex flex-col justify-center items-center gap-[6px]">
+          <div className="relative bg-white h-[130px] rounded-[10px] py-[10px] px-[16px] font-[Pretendard-Medium] flex flex-col justify-center items-center gap-[6px]">
             <span className="text-[#3B3F4A] text-[1.4rem]">
               이미지를 첨부해 주세요(선택)
             </span>
@@ -238,7 +238,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
                 </>
               )}
             </div>
-            <span className="self-end text-[#9DA0A8] text-[1.3rem]">
+            <span className="absolute bottom-[10px] right-[16px] text-[#9DA0A8] text-[1.3rem]">
               {images.length} /{" "}
               <span className="text-[#5A5E6A]">{MAX_IMG_CNT}</span>
             </span>
@@ -256,7 +256,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
       </form>
 
       {showDate && (
-        <div className="absolute bottom-0 left-0 z-30 w-full">
+        <div className="absolute bottom-0 left-0 z-30 w-full h-full">
           <ReviewCalendar
             date={date}
             setDate={setDate}

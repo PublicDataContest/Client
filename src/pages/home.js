@@ -225,7 +225,7 @@ export default function Home() {
       </div>
 
       {writeReview && (
-        <div className="absolute top-0 left-0 w-full z-30">
+        <div className="absolute top-0 left-0 w-full h-full z-30">
           <ReviewWrite
             setWriteReview={setWriteReview}
             item={content[selectedMarker]}
