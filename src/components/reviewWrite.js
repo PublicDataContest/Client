@@ -180,7 +180,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
 
           <div className="flex flex-col gap-[4px]">
             <textarea
-              className="bg-white h-[160px] rounded-[10px] py-[12px] px-[14px] placeholder:text-[#9DA0A8]"
+              className="bg-white h-[190px] rounded-[10px] py-[12px] px-[14px] placeholder:text-[#9DA0A8]"
               placeholder={`방문한 가게에 대한 리뷰를 남겨 주세요.${"\n"}(최소 10자)`}
               onChange={(e) => setText(e.target.value)}
             ></textarea>
