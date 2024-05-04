@@ -58,9 +58,9 @@ export default function Recommendation() {
         ))}
       </div>
 
-      <div className="p-[16px] flex flex-col gap-[8px]">
+      <div className="py-[16px] pl-[16px] flex flex-col gap-[8px]">
         <span className="font-b">나를 위한 맞춤 맛집</span>
-        <div className="flex gap-[10px] overflow-x-auto scrollbar-hide">
+        <div className="flex gap-[10px] overflow-x-auto scrollbar-hide pr-[16px]">
           {recommList.map((v, i) => (
             <RecommCard key={`${v.restaurantId}-${i}`} item={v} />
           ))}
