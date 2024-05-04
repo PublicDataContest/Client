@@ -5,7 +5,7 @@ export default function ListCard({ item }) {
   const { wish, handleWish } = useWishList(item);
 
   return (
-    <div className="flex gap-[10px] w-full h-[118px] bg-white rounded-[10px] p-[8px] relative">
+    <div className="flex gap-[10px] w-full h-[118px] bg-white rounded-[10px] py-[8px] pl-[8px] relative">
       <Image
         alt=""
         src={
@@ -54,7 +54,7 @@ export default function ListCard({ item }) {
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-[6px] overflow-x-auto scrollbar-hide">
+        <div className="flex items-center gap-[6px] overflow-x-auto scrollbar-hide pr-[8px]">
           {item?.hashTags.split(" #").map((v) => (
             <div
               key={v}
