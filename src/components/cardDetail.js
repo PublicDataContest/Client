@@ -193,7 +193,7 @@ export function CardDetail({
           <span className="font-[Pretendard-Bold] text-[#212121]">
             계절별 방문자 비율
           </span>
-          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[30px]">
+          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[43px]">
             <Chart type="donut" options={optionsSeason} series={seriesSeason} />
           </div>
         </div>
@@ -202,7 +202,7 @@ export function CardDetail({
           <span className="font-[Pretendard-Bold] text-[#212121]">
             시간대별 방문자수
           </span>
-          <div className="h-[190px] rounded-[8px] bg-[#EFF1F4]">
+          <div className="h-[190px] rounded-[8px] bg-[#EFF1F4] px-[13px]">
             <Chart type="bar" options={optionsTime} series={seriesTime} />
           </div>
         </div>
@@ -211,7 +211,7 @@ export function CardDetail({
           <span className="font-[Pretendard-Bold] text-[#212121]">
             가격별 통계 그래프
           </span>
-          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[10px]">
+          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[15px]">
             <Chart type="donut" options={optionsPrice} series={seriesPrice} />
           </div>
         </div>
@@ -220,7 +220,7 @@ export function CardDetail({
           <span className="font-[Pretendard-Bold] text-[#212121]">
             인원별 통계 그래프
           </span>
-          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[17px]">
+          <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[27px]">
             <Chart type="donut" options={optionsPeople} series={seriesPeople} />
           </div>
         </div>
