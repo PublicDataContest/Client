@@ -17,7 +17,6 @@ export default function DraggableCard({ content }) {
   const [level, setLevel] = useState(LEVELS.MEDIUM);
   const startY = useRef(0);
   const deltaY = useRef(0);
-  const cardRef = useRef(null);
 
   const updateLevel = () => {
     if (deltaY.current > 0) {
@@ -59,7 +58,7 @@ export default function DraggableCard({ content }) {
     startY.current = e.touches[0].clientY;
   };
 
-  const handleTouchEnd = (e) => {
+  const handleTouchEnd = () => {
     updateLevel();
     document.removeEventListener("touchmove", handleTouchMove);
     document.removeEventListener("touchend", handleTouchEnd);
@@ -67,23 +66,11 @@ export default function DraggableCard({ content }) {
 
   // content 영역을 슬라이드할 때는 card의 드래그 이벤트 방지
   const handleMouseDownC = (e) => {
-    cardRef.current.style.pointerEvents = "none";
-    document.addEventListener("mouseup", handleMouseUpC);
-  };
-
-  const handleMouseUpC = () => {
-    cardRef.current.style.pointerEvents = "auto";
-    document.removeEventListener("mouseup", handleMouseUpC);
+    e.stopPropagation();
   };
 
   const handleTouchStartC = (e) => {
-    cardRef.current.style.pointerEvents = "none";
-    document.addEventListener("touchend", handleTouchEndC);
-  };
-
-  const handleTouchEndC = (e) => {
-    cardRef.current.style.pointerEvents = "auto";
-    document.removeEventListener("touchend", handleTouchEndC);
+    e.stopPropagation();
   };
 
   return (
@@ -93,7 +80,6 @@ export default function DraggableCard({ content }) {
       style={{ height: `${LEVEL_HEIGHTS[level]}vh` }}
       onTouchStart={handleTouchStart}
       onMouseDown={handleMouseDown}
-      ref={cardRef}
     >
       <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
         내주변 공무원이 자주가는 맛집
