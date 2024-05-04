@@ -1,20 +1,41 @@
 import { CardDetail } from "@components/cardDetail";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useVh } from "@hooks/useVh";
 
 const LEVEL_HEIGHTS = [65, 100];
 
-export function DraggableCardDetail({ item }) {
+export function DraggableCardDetail({
+  item,
+  menu,
+  showMenu,
+  setShowMenu,
+  isFull,
+  setIsFull,
+  season,
+  time,
+  price,
+  people,
+  review,
+  showReview,
+  setShowReview,
+  openModal,
+}) {
   const [level, setLevel] = useState(0);
   const startY = useRef(0);
   const deltaY = useRef(0);
-  const [isFull, setIsFull] = useState(false);
+  const [stickyHeader, setStickyHeader] = useState(false);
+  const vh = useVh();
 
   useEffect(() => {
     setIsFull(level === LEVEL_HEIGHTS.length - 1);
   }, [level]);
 
   const updateLevel = () => {
+    if (isFull) {
+      setStickyHeader(deltaY.current < 0);
+      return;
+    }
     if (deltaY.current > 0 && level > 0) {
       setLevel((prev) => prev - 1);
     } else if (deltaY.current < 0 && level < LEVEL_HEIGHTS.length - 1) {
@@ -23,7 +44,6 @@ export function DraggableCardDetail({ item }) {
   };
 
   const handleMouseDown = (e) => {
-    if (isFull) return;
     startY.current = e.clientY;
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
@@ -41,7 +61,6 @@ export function DraggableCardDetail({ item }) {
   };
 
   const handleTouchStart = (e) => {
-    if (isFull) return;
     startY.current = e.touches[0].clientY;
     document.addEventListener("touchmove", handleTouchMove);
     document.addEventListener("touchend", handleTouchEnd);
@@ -64,21 +83,47 @@ export function DraggableCardDetail({ item }) {
         isFull ||
         "rounded-t-[20px] before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-20"
       } overflow-hidden bg-white shadow-t-gray transition-[height] duration-75`}
-      style={{ height: `${LEVEL_HEIGHTS[level]}vh` }}
+      style={{ height: `calc(var(--vh, 1vh) * ${LEVEL_HEIGHTS[level]})` }}
       onTouchStart={handleTouchStart}
       onMouseDown={handleMouseDown}
     >
-      {isFull && (
-        <Image
-          alt="닫기"
-          src={require("@images/close-white.svg")}
-          width={24}
-          height={24}
-          className="absolute top-[16px] right-[16px] z-20"
-          onClick={() => setLevel((prev) => prev - 1)}
-        />
-      )}
-      <CardDetail item={item} />
+      {isFull &&
+        (stickyHeader ? (
+          <div className="absolute top-0 left-0 py-[8px] px-[16px] bg-white/80 z-20 w-full flex justify-end">
+            <Image
+              alt="닫기"
+              src={require("@images/close-gray.svg")}
+              width={24}
+              height={24}
+              onClick={() => setLevel((prev) => prev - 1)}
+              className="cursor-pointer"
+            />
+          </div>
+        ) : (
+          <Image
+            alt="닫기"
+            src={require("@images/close-white.svg")}
+            width={24}
+            height={24}
+            className="absolute top-[8px] right-[16px] z-20 cursor-pointer"
+            onClick={() => setLevel((prev) => prev - 1)}
+          />
+        ))}
+      <CardDetail
+        item={item}
+        menu={menu}
+        isFull={isFull}
+        showMenu={showMenu}
+        setShowMenu={setShowMenu}
+        season={season}
+        time={time}
+        price={price}
+        people={people}
+        review={review}
+        showReview={showReview}
+        setShowReview={setShowReview}
+        openModal={openModal}
+      />
     </div>
   );
 }

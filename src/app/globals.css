@@ -24,7 +24,7 @@
 
 html {
   font-size: 62.5%;
-  font-family: "Pretendard-Medium", sans-serif;
+  font-family: "Pretendard-Regular", sans-serif;
   display: flex;
   justify-content: center;
   background-color: rgb(245, 245, 245);
@@ -33,7 +33,9 @@ html {
 
 body {
   font-size: 1.6rem;
-  width: 375px;
+  width: 100%;
+  max-width: 400px;
+  min-width: 350px;
   background-color: white;
   position: relative;
   height: 100vh;
@@ -41,4 +43,13 @@ body {
 
 input:focus {
   outline: none;
+}
+
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div,
+main {
+  height: 100%;
 }

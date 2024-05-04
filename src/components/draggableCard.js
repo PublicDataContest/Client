@@ -13,7 +13,7 @@ const LEVEL_HEIGHTS = {
   // [LEVELS.LARGE]: 76.5,
 };
 
-export default function DraggableCard() {
+export default function DraggableCard({ content }) {
   const [level, setLevel] = useState(LEVELS.MEDIUM);
   const startY = useRef(0);
   const deltaY = useRef(0);
@@ -58,10 +58,19 @@ export default function DraggableCard() {
     startY.current = e.touches[0].clientY;
   };
 
-  const handleTouchEnd = (e) => {
+  const handleTouchEnd = () => {
     updateLevel();
     document.removeEventListener("touchmove", handleTouchMove);
     document.removeEventListener("touchend", handleTouchEnd);
+  };
+
+  // content 영역을 슬라이드할 때는 card의 드래그 이벤트 방지
+  const handleMouseDownC = (e) => {
+    e.stopPropagation();
+  };
+
+  const handleTouchStartC = (e) => {
+    e.stopPropagation();
   };
 
   return (
@@ -75,12 +84,14 @@ export default function DraggableCard() {
       <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
         내주변 공무원이 자주가는 맛집
       </span>
-      <div className="pl-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+      <div
+        className="px-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide"
+        onTouchStart={handleTouchStartC}
+        onMouseDown={handleMouseDownC}
+      >
+        {content.map((item, i) => (
+          <Card key={i} item={item} />
+        ))}
       </div>
     </div>
   );
