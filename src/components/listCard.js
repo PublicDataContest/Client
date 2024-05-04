@@ -5,7 +5,7 @@ export default function ListCard({ item }) {
   const { wish, handleWish } = useWishList(item);
 
   return (
-    <div className="flex gap-[10px] w-[343px] h-[118px] bg-white rounded-[10px] p-[8px] relative">
+    <div className="flex gap-[10px] w-full h-[118px] bg-white rounded-[10px] p-[8px] relative">
       <Image
         alt=""
         src={
