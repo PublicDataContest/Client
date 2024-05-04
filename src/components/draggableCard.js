@@ -19,11 +19,11 @@ export default function DraggableCard({ content }) {
   const deltaY = useRef(0);
 
   const updateLevel = () => {
-    if (deltaY.current > 5) {
+    if (deltaY.current > 10) {
       setLevel((prevLevel) =>
         prevLevel === LEVELS.SMALL ? LEVELS.SMALL : prevLevel - 1
       );
-    } else if (deltaY.current < -5) {
+    } else if (deltaY.current < -10) {
       setLevel((prevLevel) =>
         prevLevel === LEVELS.MEDIUM ? LEVELS.MEDIUM : prevLevel + 1
       );
