@@ -62,7 +62,7 @@ export default function Signup() {
             <div className="flex justify-between gap-[4px] items-center">
               <input
                 type="text"
-                className="w-[257px] py-[14px] px-[10px] rounded-[5px] bg-[#EFF1F4] text-[1.4rem] placeholder:text-[#9DA0A8]"
+                className="w-full py-[14px] px-[10px] rounded-[5px] bg-[#EFF1F4] text-[1.4rem] placeholder:text-[#9DA0A8]"
                 placeholder="아이디를 입력해 주세요"
                 onChange={(e) => {
                   setUserName(e.target.value);
@@ -71,7 +71,7 @@ export default function Signup() {
               />
               <button
                 type="button"
-                className="w-[83px] py-[13px] text-[1.4rem] text-brand rounded-[5px] border border-brand disabled:text-[#9DA0A8] disabled:border-[#BEC1C7]"
+                className="shrink-0 w-[83px] py-[13px] text-[1.4rem] text-brand rounded-[5px] border border-brand disabled:text-[#9DA0A8] disabled:border-[#BEC1C7]"
                 onClick={checkIdDuplicate}
                 disabled={!userName.trim() || isNotDuplicated}
               >
