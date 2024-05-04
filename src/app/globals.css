@@ -33,7 +33,9 @@ html {
 
 body {
   font-size: 1.6rem;
-  width: 375px;
+  width: 100%;
+  max-width: 400px;
+  min-width: 350px;
   background-color: white;
   position: relative;
   height: 100vh;
