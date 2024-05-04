@@ -17,13 +17,14 @@ export default function DraggableCard({ content }) {
   const [level, setLevel] = useState(LEVELS.MEDIUM);
   const startY = useRef(0);
   const deltaY = useRef(0);
+  const cardRef = useRef(null);
 
   const updateLevel = () => {
-    if (deltaY.current > 20) {
+    if (deltaY.current > 0) {
       setLevel((prevLevel) =>
         prevLevel === LEVELS.SMALL ? LEVELS.SMALL : prevLevel - 1
       );
-    } else if (deltaY.current < -20) {
+    } else if (deltaY.current < 0) {
       setLevel((prevLevel) =>
         prevLevel === LEVELS.MEDIUM ? LEVELS.MEDIUM : prevLevel + 1
       );
@@ -64,6 +65,27 @@ export default function DraggableCard({ content }) {
     document.removeEventListener("touchend", handleTouchEnd);
   };
 
+  // content 영역을 슬라이드할 때는 card의 드래그 이벤트 방지
+  const handleMouseDownC = (e) => {
+    cardRef.current.style.pointerEvents = "none";
+    document.addEventListener("mouseup", handleMouseUpC);
+  };
+
+  const handleMouseUpC = () => {
+    cardRef.current.style.pointerEvents = "auto";
+    document.removeEventListener("mouseup", handleMouseUpC);
+  };
+
+  const handleTouchStartC = (e) => {
+    cardRef.current.style.pointerEvents = "none";
+    document.addEventListener("touchend", handleTouchEndC);
+  };
+
+  const handleTouchEndC = (e) => {
+    cardRef.current.style.pointerEvents = "auto";
+    document.removeEventListener("touchend", handleTouchEndC);
+  };
+
   return (
     <div
       className="relative before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-10
@@ -71,11 +93,16 @@ export default function DraggableCard({ content }) {
       style={{ height: `${LEVEL_HEIGHTS[level]}vh` }}
       onTouchStart={handleTouchStart}
       onMouseDown={handleMouseDown}
+      ref={cardRef}
     >
       <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
         내주변 공무원이 자주가는 맛집
       </span>
-      <div className="px-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide">
+      <div
+        className="px-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide"
+        onTouchStart={handleTouchStartC}
+        onMouseDown={handleMouseDownC}
+      >
         {content.map((item, i) => (
           <Card key={i} item={item} />
         ))}
