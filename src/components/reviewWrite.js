@@ -19,7 +19,13 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
 
   const handleSelectStar = (starIdx) => {
     const newArr = JSON.parse(JSON.stringify(selectedStar));
-    newArr[starIdx] = !newArr[starIdx];
+    for (let i = 0; i < 5; i++) {
+      if (i <= starIdx) {
+        newArr[i] = true;
+      } else {
+        newArr[i] = false;
+      }
+    }
     setSelectedStar(newArr);
   };
 
