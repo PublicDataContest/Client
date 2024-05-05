@@ -1,5 +1,6 @@
 import axiosInstance from "@api/axiosInstance";
 import BottomTabNav from "@components/bottomTabNav";
+import { DraggableCardDetail } from "@components/draggableCardDetail";
 import ListCard from "@components/listCard";
 import useUserInfo from "@hooks/useUserInfo";
 import Image from "next/image";
@@ -53,6 +54,7 @@ export default function List() {
   const filterPeopleIdx = useRef(null);
   const selectedSection = useRef(null);
   const isSortData = useRef(true);
+  const [selectedRId, setSelectedRId] = useState(null);
 
   useEffect(() => {
     const modalSort = document.querySelector("#modalSort");
@@ -332,9 +334,25 @@ export default function List() {
 
       <div className="flex flex-col gap-[12px]">
         {list.map((v) => (
-          <ListCard key={v.restaurantId} item={v} />
+          <button
+            className="w-full"
+            key={v.restaurantId}
+            onClick={() => setSelectedRId(v.restaurantId)}
+          >
+            <ListCard item={v} />
+          </button>
         ))}
       </div>
+
+      {selectedRId !== null && (
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <DraggableCardDetail
+            restaurantId={selectedRId}
+            setSelectedRId={setSelectedRId}
+            isSelected
+          />
+        </div>
+      )}
 
       <div
         id="modalSort"

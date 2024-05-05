@@ -127,7 +127,7 @@ export default function ReviewWrite() {
           src={require("@images/chevron_left-gray.svg")}
           width={24}
           height={24}
-          onClick={() => setWriteReview(false)}
+          onClick={() => router.back()}
           className="cursor-pointer"
         />
       </div>

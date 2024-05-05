@@ -1,15 +1,16 @@
 import axiosInstance from "@api/axiosInstance";
 import BottomTabNav from "@components/bottomTabNav";
+import { DraggableCardDetail } from "@components/draggableCardDetail";
 import RecommCard from "@components/recommCard";
 import RecommList from "@components/recommList";
 import useUserInfo from "@hooks/useUserInfo";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Recommendation() {
   const { userInfo } = useUserInfo();
   const [rankList, setRankList] = useState([]);
   const [recommList, setRecommList] = useState([]);
+  const [selectedRId, setSelectedRId] = useState(null);
 
   const getTopRanking = async () => {
     try {
@@ -54,7 +55,13 @@ export default function Recommendation() {
           </span>
         </div>
         {rankList.map((v, i) => (
-          <RecommList key={v.restaurantId} item={v} i={i} />
+          <button
+            className="w-full"
+            key={v.restaurantId}
+            onClick={() => setSelectedRId(v.restaurantId)}
+          >
+            <RecommList item={v} i={i} />
+          </button>
         ))}
       </div>
 
@@ -62,10 +69,26 @@ export default function Recommendation() {
         <span className="font-b">나를 위한 맞춤 맛집</span>
         <div className="flex gap-[10px] overflow-x-auto scrollbar-hide pr-[16px]">
           {recommList.map((v, i) => (
-            <RecommCard key={`${v.restaurantId}-${i}`} item={v} />
+            <button
+              className="w-full"
+              key={`${v.restaurantId}-${i}`}
+              onClick={() => setSelectedRId(v.restaurantId)}
+            >
+              <RecommCard item={v} />
+            </button>
           ))}
         </div>
       </div>
+
+      {selectedRId !== null && (
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <DraggableCardDetail
+            restaurantId={selectedRId}
+            setSelectedRId={setSelectedRId}
+            isSelected
+          />
+        </div>
+      )}
 
       <div className="absolute bottom-0 left-0 w-full z-10">
         <BottomTabNav />

@@ -1,10 +1,12 @@
 import axiosInstance from "@api/axiosInstance";
 import BottomTabNav from "@components/bottomTabNav";
+import { DraggableCardDetail } from "@components/draggableCardDetail";
 import ListCard from "@components/listCard";
 import useUserInfo from "@hooks/useUserInfo";
 import { useEffect, useRef, useState } from "react";
 
 export default function My() {
+  const [selectedRId, setSelectedRId] = useState(null);
   const { userInfo } = useUserInfo();
   const [list, setList] = useState([]);
   const [tabIdx, setTabIdx] = useState(0);
@@ -115,9 +117,25 @@ export default function My() {
       <div className="pt-[22px] px-[16px] flex flex-col gap-[12px]">
         <span className="font-b">2024.02.21</span>
         {list.map((v, i) => (
-          <ListCard key={i} item={v} />
+          <button
+            className="w-full"
+            key={i}
+            onClick={() => setSelectedRId(v.restaurantId)}
+          >
+            <ListCard item={v} />
+          </button>
         ))}
       </div>
+
+      {selectedRId !== null && (
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <DraggableCardDetail
+            restaurantId={selectedRId}
+            setSelectedRId={setSelectedRId}
+            isSelected
+          />
+        </div>
+      )}
 
       <div className="absolute bottom-0 left-0 w-full z-10">
         <BottomTabNav />

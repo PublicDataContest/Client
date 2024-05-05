@@ -16,11 +16,15 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const LEVEL_HEIGHTS = [65, 100];
 
-export function DraggableCardDetail({ restaurantId }) {
+export function DraggableCardDetail({
+  restaurantId,
+  setSelectedRId,
+  isSelected,
+}) {
   const router = useRouter();
   const { userInfo } = useUserInfo();
   const [showMenu, setShowMenu] = useState(false);
-  const [isFull, setIsFull] = useState(false);
+  const [isFull, setIsFull] = useState(!!isSelected);
   const [showReview, setShowReview] = useState(false);
   const [item, setItem] = useState(null);
   const [menu, setMenu] = useState([]);
@@ -29,7 +33,7 @@ export function DraggableCardDetail({ restaurantId }) {
   const { isModalOpen, modalText, callbackFn, openModal, closeModal } =
     useModal(modalRef);
 
-  const MAX_MENU_DISPLAY_CNT = 3;
+  const MAX_MENU_DISPLAY_CNT = 5;
   const MAX_REVIEW_DISPLAY_CNT = 3;
 
   const { wish, handleWish } = useWishList(item);
@@ -207,7 +211,7 @@ export function DraggableCardDetail({ restaurantId }) {
   }, [restaurantId]);
 
   // draggable
-  const [level, setLevel] = useState(0);
+  const [level, setLevel] = useState(isSelected ? LEVEL_HEIGHTS.length - 1 : 0);
   const startY = useRef(0);
   const deltaY = useRef(0);
   const [stickyHeader, setStickyHeader] = useState(false);
@@ -281,7 +285,9 @@ export function DraggableCardDetail({ restaurantId }) {
               src={require("@images/close-gray.svg")}
               width={24}
               height={24}
-              onClick={() => setLevel((prev) => prev - 1)}
+              onClick={() =>
+                isSelected ? setSelectedRId(null) : setLevel((prev) => prev - 1)
+              }
               className="cursor-pointer"
             />
           </div>
@@ -292,7 +298,9 @@ export function DraggableCardDetail({ restaurantId }) {
             width={24}
             height={24}
             className="absolute top-[8px] right-[16px] z-20 cursor-pointer"
-            onClick={() => setLevel((prev) => prev - 1)}
+            onClick={() =>
+              isSelected ? setSelectedRId(null) : setLevel((prev) => prev - 1)
+            }
           />
         ))}
       <div className="overflow-y-auto relative">
