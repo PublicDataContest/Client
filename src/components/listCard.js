@@ -19,12 +19,12 @@ export default function ListCard({ item }) {
         onClick={handleWish}
       />
       <Image
-        alt="냉면"
+        alt=""
         src={item?.photoUrl}
         width={105}
         height={102}
         priority
-        className="rounded-[6px] object-cover"
+        className="rounded-[6px] object-cover shrink-0"
       />
       <div className="flex flex-col justify-between w-full">
         <div className="flex flex-col">
