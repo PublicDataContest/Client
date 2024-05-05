@@ -13,7 +13,7 @@ const LEVEL_HEIGHTS = {
   // [LEVELS.LARGE]: 76.5,
 };
 
-export default function DraggableCard({ content }) {
+export default function DraggableCard({ content, setSelectedRId }) {
   const [level, setLevel] = useState(LEVELS.MEDIUM);
   const startY = useRef(0);
   const deltaY = useRef(0);
@@ -90,7 +90,13 @@ export default function DraggableCard({ content }) {
         onMouseDown={handleMouseDownC}
       >
         {content.map((item, i) => (
-          <Card key={i} item={item} />
+          <div
+            className="cursor-pointer"
+            key={i}
+            onClick={() => setSelectedRId(item.restaurantId)}
+          >
+            <Card item={item} />
+          </div>
         ))}
       </div>
     </div>

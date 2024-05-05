@@ -14,6 +14,7 @@ export default function Home() {
   ];
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [content, setContent] = useState([]);
+  const [selectedRId, setSelectedRId] = useState(null);
 
   return (
     <div className="relative overflow-y-auto">
@@ -48,13 +49,23 @@ export default function Home() {
         </div>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
-          <DraggableCard content={content} />
+          <DraggableCard content={content} setSelectedRId={setSelectedRId} />
         </div>
       )}
 
       <div className="absolute bottom-0 left-0 w-full z-10">
         <BottomTabNav />
       </div>
+
+      {selectedRId !== null && (
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <DraggableCardDetail
+            restaurantId={selectedRId}
+            setSelectedRId={setSelectedRId}
+            isSelected
+          />
+        </div>
+      )}
     </div>
   );
 }
