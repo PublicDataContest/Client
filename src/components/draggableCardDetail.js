@@ -330,9 +330,17 @@ export function DraggableCardDetail({
             <span className="max-w-[286px] line-clamp-2 font-[Pretendard-SemiBold] text-[1.8rem] text-[#212121]">
               {item?.placeName}
             </span>
-            <span className="text-[#6A6A6A]">
+            {item?.priceModel && (
+              <Image
+                alt="착한가게"
+                src={require("@images/mark-orange.svg")}
+                width={17}
+                height={17}
+              />
+            )}
+            {/* <span className="text-[#6A6A6A]">
               {item?.categoryName?.replace(/"/g, "")}
-            </span>
+            </span> */}
           </div>
           <span className="text-[#7F828C]">{item?.addressName}</span>
           <span className="text-[#3B3F4A] whitespace-pre-wrap">

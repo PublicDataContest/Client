@@ -28,9 +28,19 @@ export default function RecommCard({ item }) {
           onClick={handleWish}
         />
       </div>
-      <span className="font-sb text-[#3B3F4A] line-clamp-2">
-        {item.placeName}
-      </span>
+      <div className="flex gap-[4px] items-center">
+        <span className="font-sb text-[#3B3F4A] line-clamp-2">
+          {item.placeName}
+        </span>
+        {item.priceModel && (
+          <Image
+            alt="착한가게"
+            src={require("@images/mark-orange.svg")}
+            width={17}
+            height={17}
+          />
+        )}
+      </div>
       <div className="flex gap-[4px] items-center">
         <Image
           alt="별점"

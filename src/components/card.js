@@ -23,6 +23,14 @@ export default function Card({ item }) {
           <span className="max-w-[180px] line-clamp-2 font-[Pretendard-SemiBold] text-[1.4rem] text-[#3B3F4A]">
             {item.placeName}
           </span>
+          {item.priceModel && (
+            <Image
+              alt="착한가게"
+              src={require("@images/mark-orange.svg")}
+              width={17}
+              height={17}
+            />
+          )}
           {/* <span className="font-[Pretendard-Medium] text-[1.2rem] text-[#7F828C]">
             {item.categoryName}
           </span> */}
