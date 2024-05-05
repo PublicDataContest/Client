@@ -69,13 +69,13 @@ export default function Recommendation() {
         <span className="font-b">나를 위한 맞춤 맛집</span>
         <div className="flex gap-[10px] overflow-x-auto scrollbar-hide pr-[16px]">
           {recommList.map((v, i) => (
-            <button
-              className="w-full"
+            <div
+              className="cursor-pointer"
               key={`${v.restaurantId}-${i}`}
               onClick={() => setSelectedRId(v.restaurantId)}
             >
               <RecommCard item={v} />
-            </button>
+            </div>
           ))}
         </div>
       </div>

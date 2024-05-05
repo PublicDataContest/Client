@@ -334,13 +334,13 @@ export default function List() {
 
       <div className="flex flex-col gap-[12px]">
         {list.map((v) => (
-          <button
-            className="w-full"
+          <div
+            className="cursor-pointer"
             key={v.restaurantId}
             onClick={() => setSelectedRId(v.restaurantId)}
           >
             <ListCard item={v} />
-          </button>
+          </div>
         ))}
       </div>
 

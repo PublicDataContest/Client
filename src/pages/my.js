@@ -117,13 +117,13 @@ export default function My() {
       <div className="pt-[22px] px-[16px] flex flex-col gap-[12px]">
         <span className="font-b">2024.02.21</span>
         {list.map((v, i) => (
-          <button
-            className="w-full"
+          <div
+            className="cursor-pointer"
             key={i}
             onClick={() => setSelectedRId(v.restaurantId)}
           >
             <ListCard item={v} />
-          </button>
+          </div>
         ))}
       </div>
 
