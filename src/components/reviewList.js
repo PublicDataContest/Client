@@ -25,9 +25,9 @@ export default function ReviewList({
           리뷰 <span className="text-brand">{review.length}</span>
         </span>
         <div className="flex flex-col gap-[24px]">
-          {review.map((v) => (
+          {review.map((v, i) => (
             <ReviewItem
-              key={v.id}
+              key={`${v.id}-${i}`}
               item={v}
               openModal={openModal}
               getReview={getReview}
