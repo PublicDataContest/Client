@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { useState } from "react";
-import ReviewCalendar from "./reviewCalendar";
+import ReviewCalendar from "../components/reviewCalendar";
 import axiosInstance from "@api/axiosInstance";
 import useUserInfo from "@hooks/useUserInfo";
 import getDateString from "@utils/getDateString";
+import { useRouter } from "next/router";
 
-export default function ReviewWrite({ setWriteReview, item, getReview }) {
+export default function ReviewWrite() {
+  const router = useRouter();
   const { userInfo } = useUserInfo();
   const [selectedStar, setSelectedStar] = useState(
     Array.from({ length: 5 }, () => false)
@@ -103,12 +105,11 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
       await axiosInstance.post(
         `/api/api/review/normal/${
           userInfo.userId ?? localStorage.getItem("userId")
-        }/${item.restaurantId}`,
+        }/${router.query.restaurantId}`,
         formData
       );
       alert("리뷰가 등록되었습니다.");
-      setWriteReview(false);
-      getReview(); // 리뷰 업데이트 반영
+      router.back();
     } catch (error) {
       console.log(error.response.data.message);
     }
@@ -134,7 +135,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
       <form onSubmit={onSubmit}>
         <div className="pt-[8px] flex flex-col gap-[12px]">
           <span className="text-[1.8rem] font-[Pretendard-SemiBold] pb-[4px]">
-            {item.placeName}
+            {router.query.placeName}
           </span>
 
           <div className="bg-white h-[44px] rounded-[10px] px-[16px] flex justify-between items-center text-[1.4rem] font-[Pretendard-Medium]">

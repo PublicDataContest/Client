@@ -2,7 +2,7 @@ import axiosInstance from "@api/axiosInstance";
 import useUserInfo from "@hooks/useUserInfo";
 import Image from "next/image";
 
-export default function ReviewItem({ item, openModal }) {
+export default function ReviewItem({ item, openModal, getReview }) {
   const { userInfo } = useUserInfo();
 
   const deleteReview = async () => {
@@ -58,10 +58,10 @@ export default function ReviewItem({ item, openModal }) {
               height={24}
               className="mb-[6px] cursor-pointer"
               onClick={() =>
-                openModal(
-                  "리뷰를 삭제하시겠습니까?",
-                  () => () => deleteReview()
-                )
+                openModal("리뷰를 삭제하시겠습니까?", () => () => {
+                  deleteReview();
+                  getReview();
+                })
               }
             />
           )}

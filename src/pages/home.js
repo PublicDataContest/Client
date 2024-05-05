@@ -3,19 +3,9 @@ import DraggableCard from "@components/draggableCard";
 import KakaoMap from "@components/kakaoMap";
 import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import ReviewWrite from "@components/reviewWrite";
-import axiosInstance from "@api/axiosInstance";
-import useUserInfo from "@hooks/useUserInfo";
-import MenuList from "@components/menuList";
-import ReviewList from "@components/reviewList";
-import { useModal } from "@hooks/useModal";
-import LayerPopup from "@components/layerPopup";
+import { useState } from "react";
 
 export default function Home() {
-  const { userInfo } = useUserInfo();
-  const [writeReview, setWriteReview] = useState(false);
   const [selectedTag, setSelectedTag] = useState(1);
   const TAG_MENU = [
     { idx: 1, label: "음식점" },
@@ -24,127 +14,6 @@ export default function Home() {
   ];
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [content, setContent] = useState([]);
-  const [detailContent, setDetailContent] = useState(null);
-  const [menu, setMenu] = useState([]);
-  const [showMenu, setShowMenu] = useState(false);
-  const [isFull, setIsFull] = useState(false);
-  const [season, setSeason] = useState(null);
-  const [time, setTime] = useState(null);
-  const [price, setPrice] = useState(null);
-  const [people, setPeople] = useState(null);
-  const [review, setReview] = useState([]);
-  const [showReview, setShowReview] = useState(false);
-  const modalRef = useRef(null);
-  const { isModalOpen, modalText, callbackFn, openModal, closeModal } =
-    useModal(modalRef);
-
-  const getDetailContent = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/card/${userInfo.userId ?? localStorage.getItem("userId")}/${
-          content[selectedMarker].restaurantId
-        }`
-      );
-      console.log("detailContent", res);
-      const { data } = res.data;
-      setDetailContent(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getMenu = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/menu/${userInfo.userId ?? localStorage.getItem("userId")}/${
-          content[selectedMarker].restaurantId
-        }`
-      );
-      console.log("menu", res);
-      const { data } = res.data;
-      setMenu(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getSeason = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/statistics/season/${content[selectedMarker].restaurantId}`
-      );
-      console.log("season", res);
-      const { data } = res.data;
-      setSeason(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getTime = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/statistics/time/${content[selectedMarker].restaurantId}`
-      );
-      console.log("time", res);
-      const { data } = res.data;
-      setTime(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getPrice = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/statistics/price/${content[selectedMarker].restaurantId}`
-      );
-      console.log("price", res);
-      const { data } = res.data;
-      setPrice(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getPeople = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/statistics/people/${content[selectedMarker].restaurantId}`
-      );
-      console.log("people", res);
-      const { data } = res.data;
-      setPeople(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getReview = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/review/combine/${
-          userInfo.userId ?? localStorage.getItem("userId")
-        }/${content[selectedMarker].restaurantId}`
-      );
-      console.log("review", res);
-      const { kakaoReviews, normalReviews } = res.data;
-      setReview([...kakaoReviews, ...normalReviews]);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  useEffect(() => {
-    if (!selectedMarker) return;
-    getDetailContent();
-    getMenu();
-    getSeason();
-    getTime();
-    getPrice();
-    getPeople();
-    getReview();
-  }, [selectedMarker]);
 
   return (
     <div className="relative overflow-y-auto">
@@ -172,48 +41,11 @@ export default function Home() {
       />
 
       {selectedMarker !== null ? (
-        <>
-          {detailContent && (
-            <div className="absolute bottom-0 left-0 w-full z-20">
-              <DraggableCardDetail
-                item={detailContent}
-                menu={menu}
-                showMenu={showMenu}
-                setShowMenu={setShowMenu}
-                isFull={isFull}
-                setIsFull={setIsFull}
-                season={season}
-                time={time}
-                price={price}
-                people={people}
-                review={review}
-                showReview={showReview}
-                setShowReview={setShowReview}
-                openModal={openModal}
-              />
-            </div>
-          )}
-
-          <div className="absolute bottom-0 left-0 w-full z-20">
-            <div className="bg-white pt-[8px] pb-[18px] px-[16px]">
-              <button
-                className="w-full bg-[#FF823C] h-[43px] rounded-[10px] flex gap-[8px] items-center justify-center"
-                onClick={() => setWriteReview(true)}
-              >
-                <Image
-                  alt=""
-                  src={require("@images/pencil-white.svg")}
-                  width={16}
-                  height={16}
-                  priority
-                />
-                <span className="text-white font-[Pretendard-SemiBold]">
-                  리뷰 쓰기
-                </span>
-              </button>
-            </div>
-          </div>
-        </>
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <DraggableCardDetail
+            restaurantId={content[selectedMarker].restaurantId}
+          />
+        </div>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
           <DraggableCard content={content} />
@@ -223,54 +55,6 @@ export default function Home() {
       <div className="absolute bottom-0 left-0 w-full z-10">
         <BottomTabNav />
       </div>
-
-      {writeReview && (
-        <div className="absolute top-0 left-0 w-full h-full z-30">
-          <ReviewWrite
-            setWriteReview={setWriteReview}
-            item={content[selectedMarker]}
-            getReview={getReview}
-          />
-        </div>
-      )}
-
-      {isFull && showMenu && (
-        <div className="absolute top-0 left-0 w-full z-30">
-          <MenuList menu={menu} setShowMenu={setShowMenu} />
-        </div>
-      )}
-
-      {isFull && showReview && (
-        <div className="absolute top-0 left-0 w-full z-30">
-          <ReviewList
-            review={review}
-            setShowReview={setShowReview}
-            openModal={openModal}
-          />
-        </div>
-      )}
-
-      {isModalOpen && (
-        <div
-          className="absolute top-0 left-0 w-full z-30 bg-black/30 h-full flex justify-center items-center"
-          ref={modalRef}
-          onClick={(e) => {
-            if (e.target === modalRef.current) closeModal();
-          }}
-        >
-          <LayerPopup
-            text={modalText}
-            btnTextL={"취소"}
-            btnTextR={"삭제"}
-            callbackFnL={closeModal}
-            callbackFnR={() => {
-              callbackFn();
-              getReview();
-              closeModal();
-            }}
-          />
-        </div>
-      )}
     </div>
   );
 }

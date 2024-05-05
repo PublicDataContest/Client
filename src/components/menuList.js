@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function MenuList({ menu, setShowMenu }) {
   return (
-    <div className="overflow-y-auto px-[16px] pb-[18px] bg-white">
+    <div className="overflow-y-auto px-[16px] pb-[18px] bg-white h-full">
       <div className="py-[10px]">
         <Image
           alt="뒤로가기"
