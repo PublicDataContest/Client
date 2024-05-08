@@ -3,155 +3,124 @@ import DraggableCard from "@components/draggableCard";
 import KakaoMap from "@components/kakaoMap";
 import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import ReviewWrite from "@components/reviewWrite";
-import axiosInstance from "@api/axiosInstance";
+import { useEffect, useState } from "react";
+import { getGu } from "@api/getGu";
 import useUserInfo from "@hooks/useUserInfo";
-import MenuList from "@components/menuList";
-import ReviewList from "@components/reviewList";
-import { useModal } from "@hooks/useModal";
-import LayerPopup from "@components/layerPopup";
+import axiosInstance from "@api/axiosInstance";
+import { getPos } from "@api/getPos";
+
+export const TAG_MENU = [
+  {
+    idx: 0,
+    label: "음식점",
+    path: "restaurants",
+    desc: "내주변 공무원이 자주가는 맛집",
+  },
+  {
+    idx: 1,
+    label: "카페",
+    path: "non-restaurants",
+    desc: "내주변 공무원이 자주가는 카페",
+  },
+  {
+    idx: 2,
+    label: "날씨추천",
+    path: "gpt",
+    desc: "실시간 날씨 기반 맛집 추천",
+  },
+];
 
 export default function Home() {
   const { userInfo } = useUserInfo();
-  const [writeReview, setWriteReview] = useState(false);
-  const [selectedTag, setSelectedTag] = useState(1);
-  const TAG_MENU = [
-    { idx: 1, label: "음식점" },
-    { idx: 2, label: "카페" },
-    { idx: 3, label: "날씨추천" },
-  ];
+  const [selectedTag, setSelectedTag] = useState(0);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [content, setContent] = useState([]);
-  const [detailContent, setDetailContent] = useState(null);
-  const [menu, setMenu] = useState([]);
-  const [showMenu, setShowMenu] = useState(false);
-  const [isFull, setIsFull] = useState(false);
-  const [season, setSeason] = useState(null);
-  const [time, setTime] = useState(null);
-  const [price, setPrice] = useState(null);
-  const [people, setPeople] = useState(null);
-  const [review, setReview] = useState([]);
-  const [showReview, setShowReview] = useState(false);
-  const modalRef = useRef(null);
-  const { isModalOpen, modalText, callbackFn, openModal, closeModal } =
-    useModal(modalRef);
+  const [selectedRId, setSelectedRId] = useState(null);
+  const [gu, setGu] = useState("");
+  const [x, setX] = useState(null);
+  const [y, setY] = useState(null);
+  const [keyword, setKeyword] = useState("");
+  const [weather, setWeather] = useState([]);
 
-  const getDetailContent = async () => {
+  const getContent = async (gu) => {
     try {
       const res = await axiosInstance.get(
-        `/api/api/card/${userInfo.userId ?? localStorage.getItem("userId")}/${
-          content[selectedMarker].restaurantId
-        }`
-      );
-      console.log("detailContent", res);
-      const { data } = res.data;
-      setDetailContent(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getMenu = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/menu/${userInfo.userId ?? localStorage.getItem("userId")}/${
-          content[selectedMarker].restaurantId
-        }`
-      );
-      console.log("menu", res);
-      const { data } = res.data;
-      setMenu(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getSeason = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/statistics/season/${content[selectedMarker].restaurantId}`
-      );
-      console.log("season", res);
-      const { data } = res.data;
-      setSeason(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getTime = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/statistics/time/${content[selectedMarker].restaurantId}`
-      );
-      console.log("time", res);
-      const { data } = res.data;
-      setTime(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getPrice = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/statistics/price/${content[selectedMarker].restaurantId}`
-      );
-      console.log("price", res);
-      const { data } = res.data;
-      setPrice(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getPeople = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/statistics/people/${content[selectedMarker].restaurantId}`
-      );
-      console.log("people", res);
-      const { data } = res.data;
-      setPeople(data);
-    } catch (e) {
-      console.log(e.response.data.message);
-    }
-  };
-
-  const getReview = async () => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/review/combine/${
+        `/api/api/map/${
           userInfo.userId ?? localStorage.getItem("userId")
-        }/${content[selectedMarker].restaurantId}`
+        }/${gu}/${TAG_MENU[selectedTag].path}`
       );
-      console.log("review", res);
-      const { kakaoReviews, normalReviews } = res.data;
-      setReview([...kakaoReviews, ...normalReviews]);
+      console.log(
+        `/api/map/{userId}/${gu}/${TAG_MENU[selectedTag].label}`,
+        res
+      );
+      setContent(res.data.data.content);
+    } catch (e) {
+      // console.log(e.response.data.message);
+    }
+  };
+
+  const setDefaultPos = () => {
+    setGu("중구");
+    setX(37.562338155889385);
+    setY(126.97420654822417);
+  };
+
+  const search = (e) => {
+    e.preventDefault();
+
+    if (keyword === "중구") {
+      setDefaultPos();
+    } else if (keyword === "중랑구") {
+      setX(37.562338155889385);
+      setY(126.97420654822417);
+    }
+    setGu(keyword);
+  };
+
+  const getWeather = async () => {
+    try {
+      const res = await axiosInstance.get(`/api/api/weather`);
+      console.log(`weather`, res);
+      setWeather(res.data);
     } catch (e) {
       console.log(e.response.data.message);
     }
   };
 
   useEffect(() => {
-    if (!selectedMarker) return;
-    getDetailContent();
-    getMenu();
-    getSeason();
-    getTime();
-    getPrice();
-    getPeople();
-    getReview();
-  }, [selectedMarker]);
+    const initPos = async () => {
+      const { x, y } = getPos();
+      if (!x && !y) {
+        setDefaultPos();
+        return;
+      }
+      const gu = await getGu(x, y);
+      setGu(gu);
+      setX(x);
+      setY(y);
+    };
+    initPos();
+    getWeather();
+  }, []);
+
+  useEffect(() => {
+    if (!gu) return;
+    getContent(gu);
+  }, [gu, selectedTag]);
 
   return (
     <div className="relative overflow-y-auto">
       <div className="absolute top-0 left-0 w-full pt-[44px] z-10">
-        <div className="px-[16px] relative before:content-locationIcon before:absolute before:top-[10px] before:left-[28px]">
-          <input className="w-full h-[44px] pl-[38px] pr-[12px] px-[12px] text-[1.4rem] text-[#3B3F4A] bg-white rounded-[10px] shadow-gray" />
-        </div>
+        <form
+          className="px-[16px] relative before:content-locationIcon before:absolute before:top-[10px] before:left-[28px]"
+          onSubmit={search}
+        >
+          <input
+            className="w-full h-[44px] pl-[38px] pr-[12px] px-[12px] text-[1.4rem] text-[#3B3F4A] bg-white rounded-[10px] shadow-gray"
+            placeholder="서울시의 구 이름을 검색해보세요! ex) 중구, 중랑구"
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </form>
         <div className="pl-[16px] py-[10px] flex gap-[8px] overflow-x-auto scrollbar-hide">
           {TAG_MENU.map((v) => (
             <TagButton
@@ -164,59 +133,32 @@ export default function Home() {
         </div>
       </div>
 
-      <KakaoMap
-        selectedMarker={selectedMarker}
-        setSelectedMarker={setSelectedMarker}
-        content={content}
-        setContent={setContent}
-      />
+      {gu && x !== null && y !== null && (
+        <KakaoMap
+          selectedMarker={selectedMarker}
+          setSelectedMarker={setSelectedMarker}
+          content={content}
+          setContent={setContent}
+          x={x}
+          y={y}
+        />
+      )}
 
       {selectedMarker !== null ? (
-        <>
-          {detailContent && (
-            <div className="absolute bottom-0 left-0 w-full z-20">
-              <DraggableCardDetail
-                item={detailContent}
-                menu={menu}
-                showMenu={showMenu}
-                setShowMenu={setShowMenu}
-                isFull={isFull}
-                setIsFull={setIsFull}
-                season={season}
-                time={time}
-                price={price}
-                people={people}
-                review={review}
-                showReview={showReview}
-                setShowReview={setShowReview}
-                openModal={openModal}
-              />
-            </div>
-          )}
-
-          <div className="absolute bottom-0 left-0 w-full z-20">
-            <div className="bg-white pt-[8px] pb-[18px] px-[16px]">
-              <button
-                className="w-full bg-[#FF823C] h-[43px] rounded-[10px] flex gap-[8px] items-center justify-center"
-                onClick={() => setWriteReview(true)}
-              >
-                <Image
-                  alt=""
-                  src={require("@images/pencil-white.svg")}
-                  width={16}
-                  height={16}
-                  priority
-                />
-                <span className="text-white font-[Pretendard-SemiBold]">
-                  리뷰 쓰기
-                </span>
-              </button>
-            </div>
-          </div>
-        </>
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <DraggableCardDetail
+            restaurantId={content[selectedMarker].restaurantId}
+          />
+        </div>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
-          <DraggableCard content={content} />
+          <DraggableCard
+            content={content}
+            setSelectedRId={setSelectedRId}
+            gu={gu}
+            weather={weather}
+            selectedTag={selectedTag}
+          />
         </div>
       )}
 
@@ -224,50 +166,12 @@ export default function Home() {
         <BottomTabNav />
       </div>
 
-      {writeReview && (
-        <div className="absolute top-0 left-0 w-full h-full z-30">
-          <ReviewWrite
-            setWriteReview={setWriteReview}
-            item={content[selectedMarker]}
-            getReview={getReview}
-          />
-        </div>
-      )}
-
-      {isFull && showMenu && (
-        <div className="absolute top-0 left-0 w-full z-30">
-          <MenuList menu={menu} setShowMenu={setShowMenu} />
-        </div>
-      )}
-
-      {isFull && showReview && (
-        <div className="absolute top-0 left-0 w-full z-30">
-          <ReviewList
-            review={review}
-            setShowReview={setShowReview}
-            openModal={openModal}
-          />
-        </div>
-      )}
-
-      {isModalOpen && (
-        <div
-          className="absolute top-0 left-0 w-full z-30 bg-black/30 h-full flex justify-center items-center"
-          ref={modalRef}
-          onClick={(e) => {
-            if (e.target === modalRef.current) closeModal();
-          }}
-        >
-          <LayerPopup
-            text={modalText}
-            btnTextL={"취소"}
-            btnTextR={"삭제"}
-            callbackFnL={closeModal}
-            callbackFnR={() => {
-              callbackFn();
-              getReview();
-              closeModal();
-            }}
+      {selectedRId !== null && (
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <DraggableCardDetail
+            restaurantId={selectedRId}
+            setSelectedRId={setSelectedRId}
+            isSelected
           />
         </div>
       )}

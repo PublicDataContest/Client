@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import useUserInfo from "@hooks/useUserInfo";
+import Toast from "@components/toast";
 
 export default function Login() {
   const [userName, setUserName] = useState("");
@@ -11,6 +12,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const { setUserInfo } = useUserInfo();
+  const [toast, setToast] = useState("");
 
   const login = async (e) => {
     e.preventDefault();
@@ -29,7 +31,8 @@ export default function Login() {
       localStorage.setItem("userId", userId);
       router.push("/home");
     } catch (e) {
-      alert(e.response.data.message);
+      setToast(e.response.data.message);
+      // alert(e.response.data.message);
     }
   };
 
@@ -78,6 +81,12 @@ export default function Login() {
           로그인 하기
         </button>
       </form>
+
+      {toast && (
+        <div className="absolute top-0 left-0 w-full p-[16px]">
+          <Toast setToast={setToast} text={toast} />
+        </div>
+      )}
     </div>
   );
 }

@@ -5,7 +5,7 @@ export default function ListCard({ item }) {
   const { wish, handleWish } = useWishList(item);
 
   return (
-    <div className="flex gap-[10px] w-[343px] h-[118px] bg-white rounded-[10px] p-[8px] relative">
+    <div className="flex gap-[10px] w-full h-[118px] bg-white rounded-[10px] py-[8px] pl-[8px] relative">
       <Image
         alt=""
         src={
@@ -19,12 +19,12 @@ export default function ListCard({ item }) {
         onClick={handleWish}
       />
       <Image
-        alt="냉면"
+        alt=""
         src={item?.photoUrl}
         width={105}
         height={102}
         priority
-        className="rounded-[6px] object-cover"
+        className="rounded-[6px] object-cover shrink-0"
       />
       <div className="flex flex-col justify-between w-full">
         <div className="flex flex-col">
@@ -32,6 +32,14 @@ export default function ListCard({ item }) {
             <span className="font-[Pretendard-SemiBold] text-[1.4rem] text-[#3B3F4A]">
               {item?.placeName}
             </span>
+            {item?.priceModel && (
+              <Image
+                alt="착한가게"
+                src={require("@images/mark-orange.svg")}
+                width={17}
+                height={17}
+              />
+            )}
             {/* <span className="font-[Pretendard-Medium] text-[1.2rem] text-[#7F828C]">
               한식
             </span> */}
@@ -54,7 +62,7 @@ export default function ListCard({ item }) {
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-[6px] overflow-x-auto scrollbar-hide">
+        <div className="flex items-center gap-[6px] overflow-x-auto scrollbar-hide pr-[8px]">
           {item?.hashTags.split(" #").map((v) => (
             <div
               key={v}

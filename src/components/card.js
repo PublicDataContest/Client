@@ -23,6 +23,14 @@ export default function Card({ item }) {
           <span className="max-w-[180px] line-clamp-2 font-[Pretendard-SemiBold] text-[1.4rem] text-[#3B3F4A]">
             {item.placeName}
           </span>
+          {item.priceModel && (
+            <Image
+              alt="착한가게"
+              src={require("@images/mark-orange.svg")}
+              width={17}
+              height={17}
+            />
+          )}
           {/* <span className="font-[Pretendard-Medium] text-[1.2rem] text-[#7F828C]">
             {item.categoryName}
           </span> */}
@@ -46,16 +54,17 @@ export default function Card({ item }) {
         </div>
       </div>
       <div className="flex gap-[6px] items-center overflow-x-auto scrollbar-hide">
-        {item.hashTags.split(" #").map((v) => (
-          <div
-            key={v}
-            className="px-[8px] shrink-0 h-[26px] bg-[#464343] rounded-[5px] flex items-center justify-center"
-          >
-            <span className="font-m text-[1.4rem] text-white">
-              #{v.replace("#", "").trim()}
-            </span>
-          </div>
-        ))}
+        {item.hashTags &&
+          item.hashTags.split(" #").map((v) => (
+            <div
+              key={v}
+              className="px-[8px] shrink-0 h-[26px] bg-[#464343] rounded-[5px] flex items-center justify-center"
+            >
+              <span className="font-m text-[1.4rem] text-white">
+                #{v.replace("#", "").trim()}
+              </span>
+            </div>
+          ))}
       </div>
     </div>
   );

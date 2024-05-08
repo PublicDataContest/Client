@@ -1,10 +1,12 @@
 import axiosInstance from "@api/axiosInstance";
 import BottomTabNav from "@components/bottomTabNav";
+import { DraggableCardDetail } from "@components/draggableCardDetail";
 import ListCard from "@components/listCard";
 import useUserInfo from "@hooks/useUserInfo";
 import { useEffect, useRef, useState } from "react";
 
 export default function My() {
+  const [selectedRId, setSelectedRId] = useState(null);
   const { userInfo } = useUserInfo();
   const [list, setList] = useState([]);
   const [tabIdx, setTabIdx] = useState(0);
@@ -113,11 +115,37 @@ export default function My() {
       </div>
 
       <div className="pt-[22px] px-[16px] flex flex-col gap-[12px]">
-        <span className="font-b">2024.02.21</span>
-        {list.map((v, i) => (
-          <ListCard key={i} item={v} />
-        ))}
+        {/* <span className="font-b">2024.02.21</span> */}
+        {list.length ? (
+          list.map((v, i) => (
+            <div
+              className="cursor-pointer"
+              key={i}
+              onClick={() => setSelectedRId(v.restaurantId)}
+            >
+              <ListCard item={v} />
+            </div>
+          ))
+        ) : (
+          <div className="pt-[200px] flex justify-center items-center">
+            <p className="leading-[3rem] text-[1.4rem] text-[#7F828C] text-center">
+              아직 나만의 맛집 데이터가 없어요.
+              <br />
+              마음에 드는 가게를 찾아볼까요?
+            </p>
+          </div>
+        )}
       </div>
+
+      {selectedRId !== null && (
+        <div className="absolute bottom-0 left-0 w-full z-20">
+          <DraggableCardDetail
+            restaurantId={selectedRId}
+            setSelectedRId={setSelectedRId}
+            isSelected
+          />
+        </div>
+      )}
 
       <div className="absolute bottom-0 left-0 w-full z-10">
         <BottomTabNav />

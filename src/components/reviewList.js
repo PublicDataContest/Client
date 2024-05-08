@@ -1,7 +1,12 @@
 import Image from "next/image";
 import ReviewItem from "@components/reviewItem";
 
-export default function ReviewList({ review, setShowReview, openModal }) {
+export default function ReviewList({
+  review,
+  setShowReview,
+  openModal,
+  getReview,
+}) {
   return (
     <div className="overflow-y-auto px-[16px] pb-[18px] bg-white">
       <div className="py-[10px]">
@@ -20,8 +25,13 @@ export default function ReviewList({ review, setShowReview, openModal }) {
           리뷰 <span className="text-brand">{review.length}</span>
         </span>
         <div className="flex flex-col gap-[24px]">
-          {review.map((v) => (
-            <ReviewItem key={v.id} item={v} openModal={openModal} />
+          {review.map((v, i) => (
+            <ReviewItem
+              key={`${v.id}-${i}`}
+              item={v}
+              openModal={openModal}
+              getReview={getReview}
+            />
           ))}
         </div>
       </div>

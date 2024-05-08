@@ -7,9 +7,19 @@ export default function RecommList({ item, i }) {
         <span className={`font-m ${i < 3 ? "text-brand" : "text-[#464343]"}`}>
           {i + 1}
         </span>
-        <span className="text-[1.4rem] font-m max-w-[162px] text-nowrap text-ellipsis overflow-hidden">
-          {item.placeName}
-        </span>
+        <div className="flex gap-[4px] items-center">
+          <span className="text-[1.4rem] font-m max-w-[162px] text-nowrap text-ellipsis overflow-hidden">
+            {item.placeName}
+          </span>
+          {item.priceModel && (
+            <Image
+              alt="착한가게"
+              src={require("@images/mark-orange.svg")}
+              width={17}
+              height={17}
+            />
+          )}
+        </div>
       </div>
       <div className="flex gap-[4px] items-center">
         <Image

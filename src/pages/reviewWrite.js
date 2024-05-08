@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { useState } from "react";
-import ReviewCalendar from "./reviewCalendar";
+import ReviewCalendar from "../components/reviewCalendar";
 import axiosInstance from "@api/axiosInstance";
 import useUserInfo from "@hooks/useUserInfo";
 import getDateString from "@utils/getDateString";
+import { useRouter } from "next/router";
 
-export default function ReviewWrite({ setWriteReview, item, getReview }) {
+export default function ReviewWrite() {
+  const router = useRouter();
   const { userInfo } = useUserInfo();
   const [selectedStar, setSelectedStar] = useState(
     Array.from({ length: 5 }, () => false)
@@ -88,11 +90,11 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
     if (formImages.length > 0) {
       // 이미지 파일이 업로드된 경우
       Array.from(formImages).forEach((image) => {
-        formData.append("photoFile", image); // 이미지 파일 배열 담기
+        formData.append("photoUrl", image); // 이미지 파일 배열 담기
       });
     } else {
       // 업로드된 이미지 파일이 없는 경우
-      formData.append("photoFile", null);
+      formData.append("photoUrl", null);
     }
 
     formData.append("relativeTimeDescription", getDateString(date));
@@ -103,12 +105,11 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
       await axiosInstance.post(
         `/api/api/review/normal/${
           userInfo.userId ?? localStorage.getItem("userId")
-        }/${item.restaurantId}`,
+        }/${router.query.restaurantId}`,
         formData
       );
       alert("리뷰가 등록되었습니다.");
-      setWriteReview(false);
-      getReview(); // 리뷰 업데이트 반영
+      router.back();
     } catch (error) {
       console.log(error.response.data.message);
     }
@@ -126,7 +127,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
           src={require("@images/chevron_left-gray.svg")}
           width={24}
           height={24}
-          onClick={() => setWriteReview(false)}
+          onClick={() => router.back()}
           className="cursor-pointer"
         />
       </div>
@@ -134,7 +135,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
       <form onSubmit={onSubmit}>
         <div className="pt-[8px] flex flex-col gap-[12px]">
           <span className="text-[1.8rem] font-[Pretendard-SemiBold] pb-[4px]">
-            {item.placeName}
+            {router.query.placeName}
           </span>
 
           <div className="bg-white h-[44px] rounded-[10px] px-[16px] flex justify-between items-center text-[1.4rem] font-[Pretendard-Medium]">
@@ -180,7 +181,7 @@ export default function ReviewWrite({ setWriteReview, item, getReview }) {
 
           <div className="flex flex-col gap-[4px]">
             <textarea
-              className="bg-white h-[160px] rounded-[10px] py-[12px] px-[14px] placeholder:text-[#9DA0A8]"
+              className="bg-white h-[190px] rounded-[10px] py-[12px] px-[14px] placeholder:text-[#9DA0A8]"
               placeholder={`방문한 가게에 대한 리뷰를 남겨 주세요.${"\n"}(최소 10자)`}
               onChange={(e) => setText(e.target.value)}
             ></textarea>
