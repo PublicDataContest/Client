@@ -21,7 +21,10 @@ axiosInstance.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      (error.response.status === 400 || error.response.status === 401) &&
+      !originalRequest._retry
+    ) {
       if (!localStorage.getItem("refreshToken")) {
         alert("로그인이 필요한 페이지입니다.");
         location.href = "/";
@@ -56,6 +59,7 @@ export async function refreshAccessToken() {
     localStorage.setItem("userId", userId);
   } catch (error) {
     if (error.response.status === 401) {
+      localStorage.removeItem("userId");
       alert("세션이 만료되어 로그인 페이지로 이동합니다.");
       location.href = "/";
       return;
