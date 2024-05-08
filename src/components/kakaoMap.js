@@ -1,34 +1,15 @@
-import axiosInstance from "@api/axiosInstance";
-import useUserInfo from "@hooks/useUserInfo";
 import { useEffect, useRef, useState } from "react";
 
 export default function KakaoMap({
   selectedMarker,
   setSelectedMarker,
   content,
-  setContent,
-  gu,
   x,
   y,
 }) {
   const selectedCustomOverlay = useRef(null);
   const mapRef = useRef(null);
-  const { userInfo } = useUserInfo();
   const [isLoadKakao, setIsLoadKakao] = useState(false);
-
-  const getContent = async (gu) => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/api/map/${
-          userInfo.userId ?? localStorage.getItem("userId")
-        }/${gu}`
-      );
-      console.log("/api/map/{userId}/{gu}", res);
-      setContent(res.data.data.content);
-    } catch (e) {
-      // console.log(e.response.data.message);
-    }
-  };
 
   const setMap = async () => {
     const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
@@ -39,8 +20,6 @@ export default function KakaoMap({
     };
     const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     mapRef.current = map;
-
-    await getContent(gu);
   };
 
   const setMarker = () => {
@@ -122,7 +101,7 @@ export default function KakaoMap({
   useEffect(() => {
     if (!isLoadKakao) return;
     setMap();
-  }, [isLoadKakao]);
+  }, [isLoadKakao, x, y]);
 
   useEffect(() => {
     if (!isLoadKakao) return;

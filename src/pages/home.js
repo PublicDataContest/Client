@@ -5,8 +5,11 @@ import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
 import { useEffect, useState } from "react";
 import { getGu } from "@api/getGu";
+import useUserInfo from "@hooks/useUserInfo";
+import axiosInstance from "@api/axiosInstance";
 
 export default function Home() {
+  const { userInfo } = useUserInfo();
   const [selectedTag, setSelectedTag] = useState(1);
   const TAG_MENU = [
     { idx: 1, label: "음식점" },
@@ -19,15 +22,44 @@ export default function Home() {
   const [gu, setGu] = useState("");
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
+  const [keyword, setKeyword] = useState("");
 
-  useEffect(() => {
-    const setDefaultPos = () => {
-      setGu("중구");
+  const getContent = async (gu) => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/api/map/${
+          userInfo.userId ?? localStorage.getItem("userId")
+        }/${gu}`
+      );
+      console.log(`/api/map/{userId}/${gu}`, res);
+      setContent(res.data.data.content);
+    } catch (e) {
+      // console.log(e.response.data.message);
+    }
+  };
+
+  const setDefaultPos = () => {
+    setGu("중구");
+    setX(37.562338155889385);
+    setY(126.97420654822417);
+    getContent("중구");
+  };
+
+  const search = (e) => {
+    e.preventDefault();
+
+    if (keyword === "중구") {
+      setDefaultPos();
+    } else if (keyword === "중랑구") {
       setX(37.562338155889385);
       setY(126.97420654822417);
-    };
+    }
+    setGu(keyword);
+    getContent(keyword);
+  };
 
-    const initGu = async () => {
+  useEffect(() => {
+    const initPos = async () => {
       if (navigator.geolocation) {
         const success = async (position) => {
           const x = position.coords.latitude; // 위도
@@ -38,6 +70,7 @@ export default function Home() {
           setGu(gu);
           setX(x);
           setY(y);
+          getContent(gu);
         };
         const error = () => {
           console.log("error in navigator.geolocation.getCurrentPosition");
@@ -48,15 +81,22 @@ export default function Home() {
         setDefaultPos();
       }
     };
-    initGu();
+    initPos();
   }, []);
 
   return (
     <div className="relative overflow-y-auto">
       <div className="absolute top-0 left-0 w-full pt-[44px] z-10">
-        <div className="px-[16px] relative before:content-locationIcon before:absolute before:top-[10px] before:left-[28px]">
-          <input className="w-full h-[44px] pl-[38px] pr-[12px] px-[12px] text-[1.4rem] text-[#3B3F4A] bg-white rounded-[10px] shadow-gray" />
-        </div>
+        <form
+          className="px-[16px] relative before:content-locationIcon before:absolute before:top-[10px] before:left-[28px]"
+          onSubmit={search}
+        >
+          <input
+            className="w-full h-[44px] pl-[38px] pr-[12px] px-[12px] text-[1.4rem] text-[#3B3F4A] bg-white rounded-[10px] shadow-gray"
+            placeholder="서울시의 구 이름을 검색해보세요! ex) 중구, 중랑구"
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </form>
         <div className="pl-[16px] py-[10px] flex gap-[8px] overflow-x-auto scrollbar-hide">
           {TAG_MENU.map((v) => (
             <TagButton
@@ -75,7 +115,6 @@ export default function Home() {
           setSelectedMarker={setSelectedMarker}
           content={content}
           setContent={setContent}
-          gu={gu}
           x={x}
           y={y}
         />
