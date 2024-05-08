@@ -271,7 +271,7 @@ export function DraggableCardDetail({
     <div
       className={`flex flex-col pb-[69px] relative ${
         isFull ||
-        "rounded-t-[20px] before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-20"
+        "rounded-t-[20px] overflow-hidden before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-20"
       } bg-white shadow-t-gray transition-[height] duration-75`}
       style={{ height: `calc(var(--vh, 1vh) * ${LEVEL_HEIGHTS[level]})` }}
       onTouchStart={handleTouchStart}
