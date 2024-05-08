@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { getGu } from "@api/getGu";
 import useUserInfo from "@hooks/useUserInfo";
 import axiosInstance from "@api/axiosInstance";
+import { getPos } from "@api/getPos";
 
 export const TAG_MENU = [
   {
@@ -62,7 +63,6 @@ export default function Home() {
     setGu("중구");
     setX(37.562338155889385);
     setY(126.97420654822417);
-    getContent("중구");
   };
 
   const search = (e) => {
@@ -89,25 +89,15 @@ export default function Home() {
 
   useEffect(() => {
     const initPos = async () => {
-      if (navigator.geolocation) {
-        const success = async (position) => {
-          const x = position.coords.latitude; // 위도
-          const y = position.coords.longitude; // 경도
-
-          const gu = await getGu(x, y);
-          console.log("gu", gu);
-          setGu(gu);
-          setX(x);
-          setY(y);
-        };
-        const error = () => {
-          console.log("error in navigator.geolocation.getCurrentPosition");
-          setDefaultPos();
-        };
-        navigator.geolocation.getCurrentPosition(success, error);
-      } else {
+      const { x, y } = getPos();
+      if (!x && !y) {
         setDefaultPos();
+        return;
       }
+      const gu = await getGu(x, y);
+      setGu(gu);
+      setX(x);
+      setY(y);
     };
     initPos();
     getWeather();
