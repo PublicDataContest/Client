@@ -7,27 +7,14 @@ export default function KakaoMap({
   setSelectedMarker,
   content,
   setContent,
+  gu,
+  x,
+  y,
 }) {
   const selectedCustomOverlay = useRef(null);
   const mapRef = useRef(null);
   const { userInfo } = useUserInfo();
   const [isLoadKakao, setIsLoadKakao] = useState(false);
-
-  const getGu = async (x, y) => {
-    const res = await fetch(
-      `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${y}&y=${x}`,
-      {
-        headers: {
-          authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
-        },
-      }
-    );
-    const json = await res.json();
-    const { region_2depth_name } = json.documents[0].address;
-    const gu = region_2depth_name.split(" ")[1];
-    console.log(gu);
-    return gu;
-  };
 
   const getContent = async (gu) => {
     try {
@@ -36,67 +23,24 @@ export default function KakaoMap({
           userInfo.userId ?? localStorage.getItem("userId")
         }/${gu}`
       );
-      console.log(res);
-      const {
-        content,
-        pageable,
-        last,
-        totalElements,
-        totalPage,
-        size,
-        number,
-        sort,
-        first,
-        numberOfElements,
-        empty,
-      } = res.data.data;
-      setContent(content);
+      console.log("/api/map/{userId}/{gu}", res);
+      setContent(res.data.data.content);
     } catch (e) {
       // console.log(e.response.data.message);
     }
   };
 
-  const setDefaultMap = async () => {
+  const setMap = async () => {
     const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+
     const options = {
-      center: new window.kakao.maps.LatLng(
-        37.562338155889385,
-        126.97420654822417
-      ), //지도의 중심좌표.
+      center: new window.kakao.maps.LatLng(x, y), //지도의 중심좌표.
       level: 3, //지도의 레벨(확대, 축소 정도)
     };
     const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     mapRef.current = map;
 
-    await getContent("중구");
-  };
-
-  const setMap = async () => {
-    const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-
-    if (navigator.geolocation) {
-      const success = async (position) => {
-        const x = position.coords.latitude; // 위도
-        const y = position.coords.longitude; // 경도
-
-        const options = {
-          center: new window.kakao.maps.LatLng(x, y), //지도의 중심좌표.
-          level: 3, //지도의 레벨(확대, 축소 정도)
-        };
-        const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-        mapRef.current = map;
-
-        // 구 위치 구하기
-        const gu = await getGu(x, y);
-        await getContent(gu);
-      };
-      const error = () => {
-        setDefaultMap();
-      };
-      navigator.geolocation.getCurrentPosition(success, error);
-    } else {
-      setDefaultMap();
-    }
+    await getContent(gu);
   };
 
   const setMarker = () => {

@@ -3,7 +3,8 @@ import DraggableCard from "@components/draggableCard";
 import KakaoMap from "@components/kakaoMap";
 import TagButton from "@components/tagButton";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getGu } from "@api/getGu";
 
 export default function Home() {
   const [selectedTag, setSelectedTag] = useState(1);
@@ -15,6 +16,40 @@ export default function Home() {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [content, setContent] = useState([]);
   const [selectedRId, setSelectedRId] = useState(null);
+  const [gu, setGu] = useState("");
+  const [x, setX] = useState(null);
+  const [y, setY] = useState(null);
+
+  useEffect(() => {
+    const setDefaultPos = () => {
+      setGu("중구");
+      setX(37.562338155889385);
+      setY(126.97420654822417);
+    };
+
+    const initGu = async () => {
+      if (navigator.geolocation) {
+        const success = async (position) => {
+          const x = position.coords.latitude; // 위도
+          const y = position.coords.longitude; // 경도
+
+          const gu = await getGu(x, y);
+          console.log("gu", gu);
+          setGu(gu);
+          setX(x);
+          setY(y);
+        };
+        const error = () => {
+          console.log("error in navigator.geolocation.getCurrentPosition");
+          setDefaultPos();
+        };
+        navigator.geolocation.getCurrentPosition(success, error);
+      } else {
+        setDefaultPos();
+      }
+    };
+    initGu();
+  }, []);
 
   return (
     <div className="relative overflow-y-auto">
@@ -34,12 +69,17 @@ export default function Home() {
         </div>
       </div>
 
-      <KakaoMap
-        selectedMarker={selectedMarker}
-        setSelectedMarker={setSelectedMarker}
-        content={content}
-        setContent={setContent}
-      />
+      {gu && x !== null && y !== null && (
+        <KakaoMap
+          selectedMarker={selectedMarker}
+          setSelectedMarker={setSelectedMarker}
+          content={content}
+          setContent={setContent}
+          gu={gu}
+          x={x}
+          y={y}
+        />
+      )}
 
       {selectedMarker !== null ? (
         <div className="absolute bottom-0 left-0 w-full z-20">
@@ -49,7 +89,11 @@ export default function Home() {
         </div>
       ) : (
         <div className="absolute bottom-[63px] left-0 w-full z-10">
-          <DraggableCard content={content} setSelectedRId={setSelectedRId} />
+          <DraggableCard
+            content={content}
+            setSelectedRId={setSelectedRId}
+            gu={gu}
+          />
         </div>
       )}
 

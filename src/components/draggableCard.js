@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Card from "@components/card";
 
 const LEVELS = {
@@ -13,7 +13,7 @@ const LEVEL_HEIGHTS = {
   // [LEVELS.LARGE]: 76.5,
 };
 
-export default function DraggableCard({ content, setSelectedRId }) {
+export default function DraggableCard({ content, setSelectedRId, gu }) {
   const [level, setLevel] = useState(LEVELS.MEDIUM);
   const startY = useRef(0);
   const deltaY = useRef(0);
@@ -73,6 +73,8 @@ export default function DraggableCard({ content, setSelectedRId }) {
     e.stopPropagation();
   };
 
+  useEffect(() => {}, []);
+
   return (
     <div
       className="relative before:content-barGrayIcon before:absolute before:top-[-8px] before:left-1/2 before:-translate-x-1/2 before:z-10
@@ -84,21 +86,31 @@ export default function DraggableCard({ content, setSelectedRId }) {
       <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
         내주변 공무원이 자주가는 맛집
       </span>
-      <div
-        className="px-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide"
-        onTouchStart={handleTouchStartC}
-        onMouseDown={handleMouseDownC}
-      >
-        {content.map((item, i) => (
-          <div
-            className="cursor-pointer"
-            key={i}
-            onClick={() => setSelectedRId(item.restaurantId)}
-          >
-            <Card item={item} />
-          </div>
-        ))}
-      </div>
+      {content.length ? (
+        <div
+          className="px-[16px] flex gap-[10px] overflow-x-auto scrollbar-hide"
+          onTouchStart={handleTouchStartC}
+          onMouseDown={handleMouseDownC}
+        >
+          {content.map((item, i) => (
+            <div
+              className="cursor-pointer"
+              key={i}
+              onClick={() => setSelectedRId(item.restaurantId)}
+            >
+              <Card item={item} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="h-full flex justify-center items-center">
+          <p className="text-[1.4rem] text-[#7F828C] text-center">
+            아직 {gu}에는 맛집 데이터가 모이지 않았어요.
+            <br />
+            상단 검색창을 통해 서울시의 구 이름을 검색해 주세요.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
