@@ -54,29 +54,45 @@ export default function Recommendation() {
             매주 화 업데이트
           </span>
         </div>
-        {rankList.map((v, i) => (
-          <button
-            className="w-full"
-            key={v.restaurantId}
-            onClick={() => setSelectedRId(v.restaurantId)}
-          >
-            <RecommList item={v} i={i} />
-          </button>
-        ))}
+        {rankList.length ? (
+          rankList.map((v, i) => (
+            <button
+              className="w-full"
+              key={v.restaurantId}
+              onClick={() => setSelectedRId(v.restaurantId)}
+            >
+              <RecommList item={v} i={i} />
+            </button>
+          ))
+        ) : (
+          <div className="flex justify-center items-center">
+            <p className="leading-[3rem] text-[1.4rem] text-[#7F828C] text-center">
+              아직 맛집 데이터가 없어요.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="py-[16px] pl-[16px] flex flex-col gap-[8px]">
         <span className="font-b">나를 위한 맞춤 맛집</span>
         <div className="flex gap-[10px] overflow-x-auto scrollbar-hide pr-[16px]">
-          {recommList.map((v, i) => (
-            <div
-              className="cursor-pointer"
-              key={`${v.restaurantId}-${i}`}
-              onClick={() => setSelectedRId(v.restaurantId)}
-            >
-              <RecommCard item={v} />
+          {recommList.length ? (
+            recommList.map((v, i) => (
+              <div
+                className="cursor-pointer"
+                key={`${v.restaurantId}-${i}`}
+                onClick={() => setSelectedRId(v.restaurantId)}
+              >
+                <RecommCard item={v} />
+              </div>
+            ))
+          ) : (
+            <div className="w-full pt-[200px] flex justify-center items-center">
+              <p className="leading-[3rem] text-[1.4rem] text-[#7F828C] text-center">
+                아직 맛집 데이터가 없어요.
+              </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 
