@@ -10,11 +10,11 @@ import axiosInstance from "@api/axiosInstance";
 
 export default function Home() {
   const { userInfo } = useUserInfo();
-  const [selectedTag, setSelectedTag] = useState(1);
+  const [selectedTag, setSelectedTag] = useState(0);
   const TAG_MENU = [
-    { idx: 1, label: "음식점" },
-    { idx: 2, label: "카페" },
-    { idx: 3, label: "날씨추천" },
+    { idx: 0, label: "음식점", path: "non-restaurants" },
+    { idx: 1, label: "카페", path: "restaurants" },
+    { idx: 2, label: "날씨추천", path: "gpt" },
   ];
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [content, setContent] = useState([]);
@@ -30,9 +30,12 @@ export default function Home() {
       const res = await axiosInstance.get(
         `/api/api/map/${
           userInfo.userId ?? localStorage.getItem("userId")
-        }/${gu}`
+        }/${gu}/${TAG_MENU[selectedTag].path}`
       );
-      console.log(`/api/map/{userId}/${gu}`, res);
+      console.log(
+        `/api/map/{userId}/${gu}/${TAG_MENU[selectedTag].label}`,
+        res
+      );
       setContent(res.data.data.content);
     } catch (e) {
       // console.log(e.response.data.message);
@@ -56,7 +59,6 @@ export default function Home() {
       setY(126.97420654822417);
     }
     setGu(keyword);
-    getContent(keyword);
   };
 
   const getWeather = async () => {
@@ -81,7 +83,6 @@ export default function Home() {
           setGu(gu);
           setX(x);
           setY(y);
-          getContent(gu);
         };
         const error = () => {
           console.log("error in navigator.geolocation.getCurrentPosition");
@@ -95,6 +96,11 @@ export default function Home() {
     initPos();
     getWeather();
   }, []);
+
+  useEffect(() => {
+    if (!gu) return;
+    getContent(gu);
+  }, [gu, selectedTag]);
 
   return (
     <div className="relative overflow-y-auto">

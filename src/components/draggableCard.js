@@ -11,7 +11,7 @@ const LEVELS = {
 
 const LEVEL_HEIGHTS = {
   [LEVELS.SMALL]: 10,
-  [LEVELS.MEDIUM]: 30,
+  [LEVELS.MEDIUM]: 36,
   // [LEVELS.LARGE]: 76.5,
 };
 
