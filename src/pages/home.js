@@ -23,6 +23,7 @@ export default function Home() {
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [weather, setWeather] = useState([]);
 
   const getContent = async (gu) => {
     try {
@@ -58,6 +59,16 @@ export default function Home() {
     getContent(keyword);
   };
 
+  const getWeather = async () => {
+    try {
+      const res = await axiosInstance.get(`/api/api/weather`);
+      console.log(`weather`, res);
+      setWeather(res.data);
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     const initPos = async () => {
       if (navigator.geolocation) {
@@ -82,6 +93,7 @@ export default function Home() {
       }
     };
     initPos();
+    getWeather();
   }, []);
 
   return (
@@ -132,6 +144,7 @@ export default function Home() {
             content={content}
             setSelectedRId={setSelectedRId}
             gu={gu}
+            weather={weather}
           />
         </div>
       )}

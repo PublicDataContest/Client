@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import Card from "@components/card";
+import Image from "next/image";
+import useCalendar, { DAY_LABEL_KO } from "@hooks/useCalendar";
 
 const LEVELS = {
   SMALL: 0,
@@ -13,10 +15,16 @@ const LEVEL_HEIGHTS = {
   // [LEVELS.LARGE]: 76.5,
 };
 
-export default function DraggableCard({ content, setSelectedRId, gu }) {
+export default function DraggableCard({
+  content,
+  setSelectedRId,
+  gu,
+  weather,
+}) {
   const [level, setLevel] = useState(LEVELS.MEDIUM);
   const startY = useRef(0);
   const deltaY = useRef(0);
+  const { currentDate } = useCalendar();
 
   const updateLevel = () => {
     if (deltaY.current > 0) {
@@ -83,6 +91,41 @@ export default function DraggableCard({ content, setSelectedRId, gu }) {
       onTouchStart={handleTouchStart}
       onMouseDown={handleMouseDown}
     >
+      <div className="px-[16px]">
+        <div className="pt-[10px] pb-[6px] flex justify-between items-center border-b border-b-[#E4E6EA]">
+          <div className="flex items-center gap-[4px] text-[#3B3F4A] font-sb">
+            <Image
+              alt=""
+              src={
+                weather[1]?.value === "1"
+                  ? require("@images/weather-1.svg")
+                  : weather[1]?.value === "3"
+                  ? require("@images/weather-3.svg")
+                  : require("@images/weather-4.svg")
+              }
+              width={28}
+              height={28}
+            />
+            <span className="pl-[2px]">{weather[0]?.value}°</span>
+            <span>/</span>
+            <span>
+              {weather[2]?.value === "강수없음"
+                ? "강수없음"
+                : `${weather[2]?.value}mm`}
+            </span>
+          </div>
+          <div className="flex items-center gap-[4px] text-[1.4rem] font-sb">
+            <span className="text-[#3B3F4A]">
+              {DAY_LABEL_KO[currentDate.getDay() - 1]}요일
+            </span>
+            <span className="text-[#7F828C]">
+              {currentDate.getMonth() + 1}월
+            </span>
+            <span className="text-[#7F828C]">{currentDate.getDate()}일</span>
+          </div>
+        </div>
+      </div>
+
       <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
         내주변 공무원이 자주가는 맛집
       </span>

@@ -1,6 +1,7 @@
 import { getDaysInMonth, subMonths } from "date-fns";
 import { useState } from "react";
 
+export const DAY_LABEL_KO = ["월", "화", "수", "목", "금", "토", "일"];
 const DAYS_IN_WEEK = 7;
 const DAY_LABEL = ["S", "M", "T", "W", "T", "F", "S"];
 const DEFAULT_TRASH_VALUE = 0;
