@@ -73,7 +73,7 @@ export default function ReviewItem({ item, openModal, getReview }) {
           width={343}
           height={155}
           priority
-          className="h-[155px] mb-[8px] rounded-[8px] object-cover"
+          className="w-full h-[155px] mb-[8px] rounded-[8px] object-cover"
         />
       )}
       <p className="text-[#3B3F4A]">{item.text}</p>
