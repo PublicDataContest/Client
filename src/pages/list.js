@@ -333,15 +333,23 @@ export default function List() {
       </div>
 
       <div className="flex flex-col gap-[12px]">
-        {list.map((v) => (
-          <div
-            className="cursor-pointer"
-            key={v.restaurantId}
-            onClick={() => setSelectedRId(v.restaurantId)}
-          >
-            <ListCard item={v} />
+        {list.length ? (
+          list.map((v) => (
+            <div
+              className="cursor-pointer"
+              key={v.restaurantId}
+              onClick={() => setSelectedRId(v.restaurantId)}
+            >
+              <ListCard item={v} />
+            </div>
+          ))
+        ) : (
+          <div className="pt-[200px] flex justify-center items-center">
+            <p className="leading-[3rem] text-[1.4rem] text-[#7F828C] text-center">
+              아직 맛집 리스트가 없어요.
+            </p>
           </div>
-        ))}
+        )}
       </div>
 
       {selectedRId !== null && (
