@@ -12,8 +12,8 @@ export default function Home() {
   const { userInfo } = useUserInfo();
   const [selectedTag, setSelectedTag] = useState(0);
   const TAG_MENU = [
-    { idx: 0, label: "음식점", path: "non-restaurants" },
-    { idx: 1, label: "카페", path: "restaurants" },
+    { idx: 0, label: "음식점", path: "restaurants" },
+    { idx: 1, label: "카페", path: "non-restaurants" },
     { idx: 2, label: "날씨추천", path: "gpt" },
   ];
   const [selectedMarker, setSelectedMarker] = useState(null);
