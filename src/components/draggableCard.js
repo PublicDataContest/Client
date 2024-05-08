@@ -104,7 +104,7 @@ export default function DraggableCard({ content, setSelectedRId, gu }) {
         </div>
       ) : (
         <div className="h-full flex justify-center items-center">
-          <p className="text-[1.4rem] text-[#7F828C] text-center">
+          <p className="leading-[3rem] text-[1.4rem] text-[#7F828C] text-center">
             아직 {gu && `${gu}에는`} 맛집 데이터가 모이지 않았어요.
             <br />
             상단 검색창을 통해 서울시의 구 이름을 검색해 주세요.

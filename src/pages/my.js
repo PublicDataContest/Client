@@ -116,15 +116,25 @@ export default function My() {
 
       <div className="pt-[22px] px-[16px] flex flex-col gap-[12px]">
         <span className="font-b">2024.02.21</span>
-        {list.map((v, i) => (
-          <div
-            className="cursor-pointer"
-            key={i}
-            onClick={() => setSelectedRId(v.restaurantId)}
-          >
-            <ListCard item={v} />
+        {list.length ? (
+          list.map((v, i) => (
+            <div
+              className="cursor-pointer"
+              key={i}
+              onClick={() => setSelectedRId(v.restaurantId)}
+            >
+              <ListCard item={v} />
+            </div>
+          ))
+        ) : (
+          <div className="pt-[200px] flex justify-center items-center">
+            <p className="leading-[3rem] text-[1.4rem] text-[#7F828C] text-center">
+              아직 나만의 맛집 데이터가 없어요.
+              <br />
+              마음에 드는 가게를 찾아볼까요?
+            </p>
           </div>
-        ))}
+        )}
       </div>
 
       {selectedRId !== null && (
