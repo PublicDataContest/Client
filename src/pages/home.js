@@ -8,14 +8,30 @@ import { getGu } from "@api/getGu";
 import useUserInfo from "@hooks/useUserInfo";
 import axiosInstance from "@api/axiosInstance";
 
+export const TAG_MENU = [
+  {
+    idx: 0,
+    label: "음식점",
+    path: "restaurants",
+    desc: "내주변 공무원이 자주가는 맛집",
+  },
+  {
+    idx: 1,
+    label: "카페",
+    path: "non-restaurants",
+    desc: "내주변 공무원이 자주가는 카페",
+  },
+  {
+    idx: 2,
+    label: "날씨추천",
+    path: "gpt",
+    desc: "실시간 날씨 기반 맛집 추천",
+  },
+];
+
 export default function Home() {
   const { userInfo } = useUserInfo();
   const [selectedTag, setSelectedTag] = useState(0);
-  const TAG_MENU = [
-    { idx: 0, label: "음식점", path: "restaurants" },
-    { idx: 1, label: "카페", path: "non-restaurants" },
-    { idx: 2, label: "날씨추천", path: "gpt" },
-  ];
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [content, setContent] = useState([]);
   const [selectedRId, setSelectedRId] = useState(null);
@@ -151,6 +167,7 @@ export default function Home() {
             setSelectedRId={setSelectedRId}
             gu={gu}
             weather={weather}
+            selectedTag={selectedTag}
           />
         </div>
       )}

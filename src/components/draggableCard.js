@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import Card from "@components/card";
 import Image from "next/image";
 import useCalendar, { DAY_LABEL_KO } from "@hooks/useCalendar";
+import { TAG_MENU } from "../pages/home";
 
 const LEVELS = {
   SMALL: 0,
@@ -20,6 +21,7 @@ export default function DraggableCard({
   setSelectedRId,
   gu,
   weather,
+  selectedTag,
 }) {
   const [level, setLevel] = useState(LEVELS.MEDIUM);
   const startY = useRef(0);
@@ -127,7 +129,7 @@ export default function DraggableCard({
       </div>
 
       <span className="pt-[22px] pb-[6px] px-[16px] font-[Pretendard-Bold]">
-        내주변 공무원이 자주가는 맛집
+        {TAG_MENU[selectedTag].desc}
       </span>
       {content.length ? (
         <div
