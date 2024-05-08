@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Toast from "@components/toast";
 
 export default function Signup() {
   const [userName, setUserName] = useState("");
@@ -11,17 +12,20 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [isNotDuplicated, setIsNotDuplicated] = useState(false);
   const router = useRouter();
+  const [toast, setToast] = useState("");
 
   const checkIdDuplicate = async () => {
     try {
       const res = await axios.get(`/api/check/username?username=${userName}`);
       const { status, message } = res.data;
-      alert(message);
+      setToast(message);
+      // alert(message);
       if (status === 200) {
         setIsNotDuplicated(true);
       }
     } catch (e) {
-      alert(e.response.data.message);
+      setToast(e.response.data.message);
+      // alert(e.response.data.message);
     }
   };
 
@@ -33,7 +37,8 @@ export default function Signup() {
     e.preventDefault();
 
     if (!isValidPassword()) {
-      alert("비밀번호가 일치하지 않습니다.");
+      setToast("비밀번호가 일치하지 않습니다.");
+      // alert("비밀번호가 일치하지 않습니다.");
       return;
     }
 
@@ -44,11 +49,12 @@ export default function Signup() {
       });
       const { status, message } = res.data;
       if (status === 200) {
-        alert(message);
+        // alert(message);
         router.push("/login");
       }
     } catch (e) {
-      alert(e.response.data.message);
+      setToast(e.response.data.message);
+      // alert(e.response.data.message);
     }
   };
 
@@ -140,6 +146,12 @@ export default function Signup() {
           다음
         </button>
       </div>
+
+      {toast && (
+        <div className="absolute top-0 left-0 w-full p-[16px]">
+          <Toast setToast={setToast} text={toast} />
+        </div>
+      )}
     </form>
   );
 }
