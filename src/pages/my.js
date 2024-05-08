@@ -115,7 +115,7 @@ export default function My() {
       </div>
 
       <div className="pt-[22px] px-[16px] flex flex-col gap-[12px]">
-        <span className="font-b">2024.02.21</span>
+        {/* <span className="font-b">2024.02.21</span> */}
         {list.length ? (
           list.map((v, i) => (
             <div
