@@ -63,7 +63,7 @@ export default function ListCard({ item }) {
           </div>
         </div>
         <div className="flex items-center gap-[6px] overflow-x-auto scrollbar-hide pr-[8px]">
-          {item?.hashTags.split(" #").map((v) => (
+          {item?.hashTags?.split(" #").map((v) => (
             <div
               key={v}
               className="px-[8px] shrink-0 h-[26px] bg-[#7F828C] rounded-[5px] flex items-center justify-center"
