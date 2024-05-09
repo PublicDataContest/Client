@@ -90,11 +90,11 @@ export default function ReviewWrite() {
     if (formImages.length > 0) {
       // 이미지 파일이 업로드된 경우
       Array.from(formImages).forEach((image) => {
-        formData.append("photoUrl", image); // 이미지 파일 배열 담기
+        formData.append("photoFile", image); // 이미지 파일 배열 담기
       });
     } else {
       // 업로드된 이미지 파일이 없는 경우
-      formData.append("photoUrl", null);
+      formData.append("photoFile", null);
     }
 
     formData.append("relativeTimeDescription", getDateString(date));
