@@ -2,6 +2,7 @@ import axiosInstance from "@api/axiosInstance";
 import BottomTabNav from "@components/bottomTabNav";
 import { DraggableCardDetail } from "@components/draggableCardDetail";
 import ListCard from "@components/listCard";
+import useIntersect from "@hooks/useIntersect";
 import useUserInfo from "@hooks/useUserInfo";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +10,9 @@ import { useEffect, useRef, useState } from "react";
 export default function List() {
   const { userInfo } = useUserInfo();
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isLastPage, setIsLastPage] = useState(false);
+  const page = useRef(0);
 
   const [sortOpen, setSortOpen] = useState(false);
   const SORT_MENU = [
@@ -108,37 +112,64 @@ export default function List() {
 
   const getSortData = async () => {
     try {
+      setLoading(true); // 데이터 요청 시작 시 로딩 상태 설정
       const res = await axiosInstance.get(
         `/api/api/${SORT_MENU[selectedSort].path}/${
           userInfo.userId ?? localStorage.getItem("userId")
-        }`
+        }?page=${page.current}`
       );
       console.log("sort", SORT_MENU[selectedSort].path, res);
       const { content } = res.data.data;
-      setList(content);
+      setList((prev) =>
+        [...prev, ...content].filter(
+          (item, index, self) =>
+            index ===
+            self.findIndex((t) => t.restaurantId === item.restaurantId)
+        )
+      );
+      if (content.length === 0) setIsLastPage(true);
+
+      setIsFilterApply(false);
+      setSelectedFilterPrice(null);
+      setSelectedFilterSeason([]);
+      setSelectedFilterTime([]);
+      setSelectedFilterPeople(null);
     } catch (e) {
       console.log(e.response.data.message);
+    } finally {
+      setLoading(false); // 데이터 요청 완료 시 로딩 상태 제거
     }
   };
 
   const getPriceData = async () => {
     try {
+      setLoading(true); // 데이터 요청 시작 시 로딩 상태 설정
       const priceItem = FILTER_MENU_PRICE[selectedFilterPrice];
       const res = await axiosInstance.get(
         `/api/api/${priceItem.data}/${
           userInfo.userId ?? localStorage.getItem("userId")
-        }`
+        }?page=${page.current}`
       );
       console.log("price", priceItem.label, res);
       const { content } = res.data.data;
-      setList(content);
+      setList((prev) =>
+        [...prev, ...content].filter(
+          (item, index, self) =>
+            index ===
+            self.findIndex((t) => t.restaurantId === item.restaurantId)
+        )
+      );
+      if (content.length === 0) setIsLastPage(true);
     } catch (e) {
       console.log(e.response.data.message);
+    } finally {
+      setLoading(false); // 데이터 요청 완료 시 로딩 상태 제거
     }
   };
 
   const getSeasonData = async () => {
     console.log("selectedFilterSeason", selectedFilterSeason);
+    setLoading(true); // 데이터 요청 시작 시 로딩 상태 설정
     // 새로운 배열을 생성하여 각 프로미스의 완료를 기다릴 수 있도록 함
     const seasonPromises = [];
     selectedFilterSeason.forEach(async (idx) => {
@@ -148,7 +179,7 @@ export default function List() {
           .get(
             `/api/api/${
               userInfo.userId ?? localStorage.getItem("userId")
-            }?season=${seasonItem.data}`
+            }?season=${seasonItem.data}&page=${page.current}`
           )
           .then((res) => {
             console.log("season", seasonItem.label, res);
@@ -168,19 +199,25 @@ export default function List() {
       // 모든 프로미스가 완료되길 기다림
       const seasonList = await Promise.all(seasonPromises);
       const flattenedSeasonList = seasonList.flat();
-      const uniqueSeasonList = flattenedSeasonList.filter(
-        (item, index, self) =>
-          index === self.findIndex((t) => t.restaurantId === item.restaurantId)
+      console.log("seasonList", flattenedSeasonList);
+      setList((prev) =>
+        [...prev, ...flattenedSeasonList].filter(
+          (item, index, self) =>
+            index ===
+            self.findIndex((t) => t.restaurantId === item.restaurantId)
+        )
       );
-      console.log("seasonList", uniqueSeasonList);
-      setList(uniqueSeasonList);
+      if (flattenedSeasonList.length === 0) setIsLastPage(true);
     } catch (error) {
       console.error("Error fetching season data:", error);
+    } finally {
+      setLoading(false); // 데이터 요청 완료 시 로딩 상태 제거
     }
   };
 
   const getTimeData = async () => {
     console.log("selectedFilterTime", selectedFilterTime);
+    setLoading(true); // 데이터 요청 시작 시 로딩 상태 설정
     // 새로운 배열을 생성하여 각 프로미스의 완료를 기다릴 수 있도록 함
     const timePromises = [];
     selectedFilterTime.forEach(async (idx) => {
@@ -190,7 +227,7 @@ export default function List() {
           .get(
             `/api/api/time/${
               userInfo.userId ?? localStorage.getItem("userId")
-            }?time=${timeItem.data}`
+            }?time=${timeItem.data}&page=${page.current}`
           )
           .then((res) => {
             console.log("time", timeItem.label, res);
@@ -210,31 +247,69 @@ export default function List() {
       // 모든 프로미스가 완료되길 기다림
       const timeList = await Promise.all(timePromises);
       const flattenedTimeList = timeList.flat();
-      const uniqueTimeList = flattenedTimeList.filter(
-        (item, index, self) =>
-          index === self.findIndex((t) => t.restaurantId === item.restaurantId)
+      console.log("timeList", flattenedTimeList);
+      setList((prev) =>
+        [...prev, ...flattenedTimeList].filter(
+          (item, index, self) =>
+            index ===
+            self.findIndex((t) => t.restaurantId === item.restaurantId)
+        )
       );
-      console.log("timeList", uniqueTimeList);
-      setList(uniqueTimeList);
+      if (flattenedTimeList.length === 0) setIsLastPage(true);
     } catch (error) {
       console.error("Error fetching time data:", error);
+    } finally {
+      setLoading(false); // 데이터 요청 완료 시 로딩 상태 제거
     }
   };
 
   const getPeopleData = async () => {
     try {
+      setLoading(true); // 데이터 요청 시작 시 로딩 상태 설정
       const peopleItem = FILTER_MENU_PEOPLE[selectedFilterPeople];
       const res = await axiosInstance.get(
         `/api/api/people/${userInfo.userId ?? localStorage.getItem("userId")}/${
           peopleItem.data
-        }`
+        }?page=${page.current}`
       );
       console.log("people", peopleItem.label, res);
       const { content } = res.data.data;
-      setList(content);
+      setList((prev) =>
+        [...prev, ...content].filter(
+          (item, index, self) =>
+            index ===
+            self.findIndex((t) => t.restaurantId === item.restaurantId)
+        )
+      );
+      if (content.length === 0) setIsLastPage(true);
     } catch (e) {
       console.log(e.response.data.message);
+    } finally {
+      setLoading(false); // 데이터 요청 완료 시 로딩 상태 제거
     }
+  };
+
+  const getFilterData = () => {
+    if (selectedSection.current === 0) {
+      getPriceData();
+      filterPriceIdx.current = selectedFilterPrice;
+    } else if (selectedSection.current === 1) {
+      getSeasonData();
+      filterSeasonIdx.current = selectedFilterSeason;
+    } else if (selectedSection.current === 2) {
+      getTimeData();
+      filterTimeIdx.current = selectedFilterTime;
+    } else if (selectedSection.current === 3) {
+      getPeopleData();
+      filterPeopleIdx.current = selectedFilterPeople;
+    }
+    isSortData.current = false;
+  };
+
+  const initPage = () => {
+    page.current = 0;
+    setIsLastPage(false);
+    setList([]);
   };
 
   useEffect(() => {
@@ -264,22 +339,10 @@ export default function List() {
         selectedFilterPeople !== filterPeopleIdx.current;
     }
     setIsFilterApply(isOn);
+    initPage();
 
     if (isOn) {
-      if (selectedSection.current === 0) {
-        getPriceData();
-        filterPriceIdx.current = selectedFilterPrice;
-      } else if (selectedSection.current === 1) {
-        getSeasonData();
-        filterSeasonIdx.current = selectedFilterSeason;
-      } else if (selectedSection.current === 2) {
-        getTimeData();
-        filterTimeIdx.current = selectedFilterTime;
-      } else if (selectedSection.current === 3) {
-        getPeopleData();
-        filterPeopleIdx.current = selectedFilterPeople;
-      }
-      isSortData.current = false;
+      getFilterData();
     } else if (selectedSection.current === null && !isSortData.current) {
       getSortData();
     }
@@ -289,11 +352,24 @@ export default function List() {
     if (sortOpen) return;
     const isOn = selectedSort !== sortIdx.current;
     if (isOn) {
+      initPage();
       getSortData();
       sortIdx.current = selectedSort;
       isSortData.current = true;
     }
   }, [sortOpen]);
+
+  // useIntersect훅에 타겟 감지 시 실행해야할 콜백함수 전달
+  const ref = useIntersect((entry, { threshold = 1 }) => {
+    // 불러올 데이터가 더 이상 없는지 체크
+    if (loading || isLastPage) return;
+    page.current++;
+    if (isFilterApply) {
+      getFilterData();
+    } else {
+      getSortData();
+    }
+  });
 
   return (
     <div className="flex flex-col gap-[14px] pt-[28px] pb-[80px] px-[16px] bg-[#EFF1F4] overflow-y-auto">
@@ -350,6 +426,11 @@ export default function List() {
             </p>
           </div>
         )}
+        <div className={`w-full flex justify-center`} ref={ref}>
+          {loading && (
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-brand"></div>
+          )}
+        </div>
       </div>
 
       {selectedRId !== null && (
