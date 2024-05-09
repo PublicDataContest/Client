@@ -92,9 +92,6 @@ export default function ReviewWrite() {
       Array.from(formImages).forEach((image) => {
         formData.append("photoFile", image); // 이미지 파일 배열 담기
       });
-    } else {
-      // 업로드된 이미지 파일이 없는 경우
-      formData.append("photoFile", null);
     }
 
     formData.append("relativeTimeDescription", getDateString(date));
