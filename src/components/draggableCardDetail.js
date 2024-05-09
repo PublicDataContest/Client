@@ -569,7 +569,7 @@ export function DraggableCardDetail({
       </div>
 
       {isFull && showReview && (
-        <div className="absolute top-0 left-0 w-full z-30">
+        <div className="absolute top-0 left-0 w-full h-full z-30">
           <ReviewList
             review={review}
             setShowReview={setShowReview}
