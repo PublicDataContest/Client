@@ -13,6 +13,7 @@ export default function ReviewItem({ item, openModal, getReview }) {
         }/reviews/${item.id}`
       );
       console.log("delete review", res);
+      getReview();
     } catch (e) {
       console.log(e.response.data.message);
     }
@@ -60,7 +61,6 @@ export default function ReviewItem({ item, openModal, getReview }) {
               onClick={() =>
                 openModal("리뷰를 삭제하시겠습니까?", () => () => {
                   deleteReview();
-                  getReview();
                 })
               }
             />
