@@ -39,20 +39,8 @@ export function DraggableCardDetail({
   const { wish, handleWish } = useWishList(item);
 
   // 계절별
-  const optionsSeason = {
-    colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
-    labels: ["봄", "여름", "가을", "겨울"],
-    legend: {
-      formatter: function (seriesName, opts) {
-        return `${seriesName} ${opts.w.globals.series[opts.seriesIndex]}%`;
-      },
-      fontFamily: "Pretendard-Regular",
-      fontSize: "14px",
-      labels: { colors: "#3B3F4A" },
-    },
-    stroke: { show: false },
-  };
   const [seriesSeason, setSeriesSeason] = useState([]);
+  const [optionsSeason, setOptionsSeason] = useState(null);
 
   // 시간대별
   const [seriesTimeArr, setSeriesTimeArr] = useState([]);
@@ -94,36 +82,12 @@ export function DraggableCardDetail({
   };
 
   // 가격별
-  const optionsPrice = {
-    colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
-    labels: ["10,000원 이하", "15,000원", "20,000원", "20,000원 이상"],
-    legend: {
-      formatter: function (seriesName, opts) {
-        return `${seriesName} ${opts.w.globals.series[opts.seriesIndex]}%`;
-      },
-      fontFamily: "Pretendard-Regular",
-      fontSize: "14px",
-      labels: { colors: "#3B3F4A" },
-    },
-    stroke: { show: false },
-  };
   const [seriesPrice, setSeriesPrice] = useState([]);
+  const [optionsPrice, setOptionsPrice] = useState(null);
 
   // 인원별
-  const optionsPeople = {
-    colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
-    labels: ["5명 이하", "10명 이하", "20명 이하", "20명 이상"],
-    legend: {
-      formatter: function (seriesName, opts) {
-        return `${seriesName} ${opts.w.globals.series[opts.seriesIndex]}%`;
-      },
-      fontFamily: "Pretendard-Regular",
-      fontSize: "14px",
-      labels: { colors: "#3B3F4A" },
-    },
-    stroke: { show: false },
-  };
   const [seriesPeople, setSeriesPeople] = useState([]);
+  const [optionsPeople, setOptionsPeople] = useState(null);
 
   const getDetailContent = async () => {
     try {
@@ -163,7 +127,26 @@ export function DraggableCardDetail({
       console.log("season", res);
       const { data } = res.data;
       // setSeason(data);
-      setSeriesSeason(Object.values(data));
+      const seriesSeason = Object.values(data);
+      setSeriesSeason(seriesSeason);
+      const optionsSeason = {
+        colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
+        labels: ["봄", "여름", "가을", "겨울"],
+        legend: {
+          formatter: function (seriesName, opts) {
+            return `${seriesName} ${Math.round(
+              (opts.w.globals.series[opts.seriesIndex] /
+                seriesSeason.reduce((p, c) => p + c, 0)) *
+                100
+            )}%`;
+          },
+          fontFamily: "Pretendard-Regular",
+          fontSize: "14px",
+          labels: { colors: "#3B3F4A" },
+        },
+        stroke: { show: false },
+      };
+      setOptionsSeason(optionsSeason);
     } catch (e) {
       console.log(e.response.data.message);
     }
@@ -191,7 +174,26 @@ export function DraggableCardDetail({
       console.log("price", res);
       const { data } = res.data;
       // setPrice(data);
-      setSeriesPrice(Object.values(data));
+      const seriesPrice = Object.values(data);
+      setSeriesPrice(seriesPrice);
+      const optionsPrice = {
+        colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
+        labels: ["10,000원 이하", "15,000원", "20,000원", "20,000원 이상"],
+        legend: {
+          formatter: function (seriesName, opts) {
+            return `${seriesName} ${Math.round(
+              (opts.w.globals.series[opts.seriesIndex] /
+                seriesPrice.reduce((p, c) => p + c, 0)) *
+                100
+            )}%`;
+          },
+          fontFamily: "Pretendard-Regular",
+          fontSize: "14px",
+          labels: { colors: "#3B3F4A" },
+        },
+        stroke: { show: false },
+      };
+      setOptionsPrice(optionsPrice);
     } catch (e) {
       console.log(e.response.data.message);
     }
@@ -205,7 +207,26 @@ export function DraggableCardDetail({
       console.log("people", res);
       const { data } = res.data;
       // setPeople(data);
-      setSeriesPeople(Object.values(data));
+      const seriesPeople = Object.values(data);
+      setSeriesPeople(seriesPeople);
+      const optionsPeople = {
+        colors: ["#FF823C", "#FFA36F", "#FFD4BB", "#FFE4D5"],
+        labels: ["5명 이하", "10명 이하", "20명 이하", "20명 이상"],
+        legend: {
+          formatter: function (seriesName, opts) {
+            return `${seriesName} ${Math.round(
+              (opts.w.globals.series[opts.seriesIndex] /
+                seriesPeople.reduce((p, c) => p + c, 0)) *
+                100
+            )}%`;
+          },
+          fontFamily: "Pretendard-Regular",
+          fontSize: "14px",
+          labels: { colors: "#3B3F4A" },
+        },
+        stroke: { show: false },
+      };
+      setOptionsPeople(optionsPeople);
     } catch (e) {
       console.log(e.response.data.message);
     }
@@ -449,11 +470,13 @@ export function DraggableCardDetail({
               계절별 방문자 비율
             </span>
             <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[30px]">
-              <Chart
-                type="donut"
-                options={optionsSeason}
-                series={seriesSeason}
-              />
+              {optionsSeason && (
+                <Chart
+                  type="donut"
+                  options={optionsSeason}
+                  series={seriesSeason}
+                />
+              )}
             </div>
           </div>
 
@@ -471,7 +494,13 @@ export function DraggableCardDetail({
               가격별 통계 그래프
             </span>
             <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[5px]">
-              <Chart type="donut" options={optionsPrice} series={seriesPrice} />
+              {optionsPrice && (
+                <Chart
+                  type="donut"
+                  options={optionsPrice}
+                  series={seriesPrice}
+                />
+              )}
             </div>
           </div>
 
@@ -480,11 +509,13 @@ export function DraggableCardDetail({
               인원별 통계 그래프
             </span>
             <div className="h-[170px] rounded-[8px] bg-[#EFF1F4] py-[10px] px-[20px]">
-              <Chart
-                type="donut"
-                options={optionsPeople}
-                series={seriesPeople}
-              />
+              {optionsPeople && (
+                <Chart
+                  type="donut"
+                  options={optionsPeople}
+                  series={seriesPeople}
+                />
+              )}
             </div>
           </div>
         </div>
